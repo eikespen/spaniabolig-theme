@@ -204,9 +204,11 @@ function sb_save_property_meta($post_id) {
 }
 add_action('save_post_property', 'sb_save_property_meta');
 
-/* ── Filter archive by build_type URL param ── */
-function sb_filter_archive_by_build_type($query) {
+/* ── Property archive: enforce 12/page + optional build_type filter ── */
+function sb_filter_property_archive($query) {
     if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
+        $query->set('posts_per_page', 12);
+
         $build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : '';
         if ($build_type) {
             $query->set('meta_query', [[
@@ -217,7 +219,7 @@ function sb_filter_archive_by_build_type($query) {
         }
     }
 }
-add_action('pre_get_posts', 'sb_filter_archive_by_build_type');
+add_action('pre_get_posts', 'sb_filter_property_archive');
 
 /* ── AJAX Property Search ── */
 function sb_ajax_search() {

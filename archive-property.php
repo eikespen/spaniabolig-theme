@@ -105,7 +105,23 @@
             <p><?php esc_html_e('Try adjusting your filters to see more results.', 'spaniabolig'); ?></p>
         </div>
 
-        <div id="pf-pagination" class="pf-pagination"></div>
+        <div id="pf-pagination" class="pf-pagination">
+            <?php
+            // Server-side pagination — replaced by AJAX once JS runs
+            $total_pages = $wp_query->max_num_pages;
+            if ($total_pages > 1) :
+                $paged = max(1, get_query_var('paged'));
+                echo '<div class="pf-pages pf-pages--ssr">';
+                if ($paged > 1) echo '<a class="pf-page-btn" href="' . esc_url(get_pagenum_link($paged - 1)) . '">&larr; Prev</a>';
+                for ($i = 1; $i <= $total_pages; $i++) :
+                    $cls = $i === $paged ? 'pf-page-btn pf-page-btn--active' : 'pf-page-btn';
+                    echo '<a class="' . $cls . '" href="' . esc_url(get_pagenum_link($i)) . '">' . $i . '</a>';
+                endfor;
+                if ($paged < $total_pages) echo '<a class="pf-page-btn" href="' . esc_url(get_pagenum_link($paged + 1)) . '">Next &rarr;</a>';
+                echo '</div>';
+            endif;
+            ?>
+        </div>
     </div>
 </section>
 
