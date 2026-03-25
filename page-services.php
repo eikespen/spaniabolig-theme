@@ -13,7 +13,7 @@ function sb_sv($key, $default = '') {
 ?>
 
 <section class="page-hero page-hero--dark">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <span class="page-hero-label"><?php echo esc_html(sb_sv('sb_hero_label', 'Property Management')); ?></span>
         <h1><?php echo esc_html(sb_sv('sb_hero_title', 'Services for property owners in Spain')); ?></h1>
         <p><?php echo esc_html(sb_sv('sb_hero_subtitle', 'Spaniabolig Real Estate offers a number of services to you who own a home in Spain. See below for more information and feel free to contact us if you have any questions.')); ?></p>
@@ -48,7 +48,7 @@ for ($i = 1; $i <= 6; $i++) {
 }
 ?>
 <section class="about-services">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h2><?php echo esc_html(sb_sv('sb_services_title', 'Our services')); ?></h2>
         <p style="text-align:center;color:var(--grey-500);margin-top:-24px;margin-bottom:40px;font-size:15px;"><?php echo esc_html(sb_sv('sb_services_subtitle', "From key holding to professional photography — we take care of your Spanish property so you don't have to.")); ?></p>
         <div class="services-grid">
@@ -64,7 +64,7 @@ for ($i = 1; $i <= 6; $i++) {
 </section>
 
 <section class="cta-banner">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h2><?php echo esc_html(sb_sv('sb_cta_title', 'Interested in our property services?')); ?></h2>
         <p><?php echo esc_html(sb_sv('sb_cta_text', 'Get in touch with our team to discuss how we can help look after your Spanish property.')); ?></p>
         <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-white btn-lg"><?php echo esc_html(sb_sv('sb_cta_btn_text', 'Contact us today')); ?></a>

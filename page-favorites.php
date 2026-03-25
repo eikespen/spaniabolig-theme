@@ -9,14 +9,14 @@ get_header();
 ?>
 
 <section class="fav-hero">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h1>Your Saved Properties</h1>
         <p>Properties you&rsquo;ve saved while browsing. Stored in your browser — no account needed.</p>
     </div>
 </section>
 
 <section class="fav-results">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <div id="fav-loading" class="fav-loading">
             <span class="fav-spinner"></span>
             Loading your saved properties&hellip;

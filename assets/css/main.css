@@ -40,6 +40,12 @@ input, select, textarea, button { font: inherit; }
     margin: 0 auto;
     padding: 0 24px;
 }
+/* Narrower container for text/content pages (~896px like reference site) */
+.section-inner--narrow {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
 
 /* ── Buttons — single consistent system ── */
 .btn {
@@ -1024,11 +1030,8 @@ input, select, textarea, button { font: inherit; }
 }
 
 /* ── Section Inner (shared container) ── */
-.section-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
+.section-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.section-inner--narrow { max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
 /* ── Search CTA row ── */
 .search-cta-row {

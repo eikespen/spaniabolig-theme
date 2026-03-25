@@ -13,7 +13,7 @@ function sb_hiw($key, $default = '') {
 ?>
 
 <section class="page-hero">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h1><?php echo esc_html(sb_hiw('sb_hero_title', 'How it works')); ?></h1>
         <p><?php echo esc_html(sb_hiw('sb_hero_subtitle', 'Finding your perfect property in Ciudad Quesada is easy with our step-by-step process.')); ?></p>
     </div>
@@ -43,7 +43,7 @@ for ($i = 1; $i <= 4; $i++) {
 }
 ?>
 <section class="how-it-works-steps">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <div class="steps-stack">
             <?php foreach ($steps as $i => $step) : ?>
             <div class="step-card">
@@ -78,7 +78,7 @@ for ($i = 1; $i <= 4; $i++) {
 }
 ?>
 <section class="about-services">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h2><?php echo esc_html(sb_hiw('sb_included_title', "What's included in our service")); ?></h2>
         <div class="services-grid">
             <?php foreach ($included_items as $item) : ?>
@@ -92,7 +92,7 @@ for ($i = 1; $i <= 4; $i++) {
 </section>
 
 <section class="cta-banner">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h2><?php echo esc_html(sb_hiw('sb_cta_title', 'Ready to start your property search?')); ?></h2>
         <p><?php echo esc_html(sb_hiw('sb_cta_text', 'Browse our current listings or get in touch with our local team to discuss your requirements.')); ?></p>
         <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">

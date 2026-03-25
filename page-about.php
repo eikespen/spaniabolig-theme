@@ -13,7 +13,7 @@ function sb_ab($key, $default = '') {
 ?>
 
 <section class="page-hero">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h1><?php echo esc_html(sb_ab('sb_hero_title', 'About Spaniabolig')); ?></h1>
         <p><?php echo esc_html(sb_ab('sb_hero_subtitle', 'We help foreign buyers find their dream properties exclusively in Ciudad Quesada and the urbanizations of Rojales, with a focus on villas, apartments, and townhouses.')); ?></p>
     </div>
@@ -21,7 +21,7 @@ function sb_ab($key, $default = '') {
 
 <!-- Mission cards -->
 <section class="about-mission">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <div class="about-stack">
             <div class="about-card">
                 <h2><?php echo esc_html(sb_ab('sb_mission_card1_title', 'Our mission')); ?></h2>
@@ -40,7 +40,7 @@ function sb_ab($key, $default = '') {
 
 <!-- Contact form -->
 <section class="about-contact-form">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <div class="about-contact-card">
             <h2>Get in touch with us</h2>
             <p>Have questions about properties in Ciudad Quesada? Send us a message and we'll get back to you as soon as possible.</p>
@@ -77,7 +77,7 @@ function sb_ab($key, $default = '') {
 
 <!-- How we help you -->
 <section class="about-services">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h2><?php echo esc_html(sb_ab('sb_services_title', 'How we help you')); ?></h2>
         <?php
         $service_defaults = [
@@ -108,7 +108,7 @@ function sb_ab($key, $default = '') {
 
 <!-- CTA -->
 <section class="cta-banner">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h2><?php echo esc_html(sb_ab('sb_cta_title', 'Ready to find your dream property in Ciudad Quesada?')); ?></h2>
         <p><?php echo esc_html(sb_ab('sb_cta_text', 'Start your journey towards owning your ideal home in Ciudad Quesada and the urbanizations of Rojales today.')); ?></p>
         <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-white btn-lg"><?php echo esc_html(sb_ab('sb_cta_btn_text', 'Browse properties')); ?></a>

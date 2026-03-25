@@ -13,14 +13,14 @@ function sb_ct($key, $default = '') {
 ?>
 
 <section class="page-hero">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
         <h1><?php echo esc_html(sb_ct('sb_hero_title', 'Contact us')); ?></h1>
         <p><?php echo esc_html(sb_ct('sb_hero_subtitle', 'Get in touch with Spaniabolig for any questions about properties in Ciudad Quesada and the urbanizations of Rojales.')); ?></p>
     </div>
 </section>
 
 <section class="contact-page">
-    <div class="section-inner">
+    <div class="section-inner--narrow">
 
         <div class="contact-form-card">
             <h2><?php echo esc_html(sb_ct('sb_form_title', 'Send us a message')); ?></h2>
