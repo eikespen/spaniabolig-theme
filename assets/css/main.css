@@ -3223,6 +3223,11 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 
 /* Properties filter bar: stack sensibly on mobile */
 @media (max-width: 768px) {
+    /* Un-stick the filter bar on mobile — takes up too much screen space when scrolling */
+    .properties-filter {
+        position: static;
+        box-shadow: none;
+    }
     .pf-bar {
         display: grid;
         grid-template-columns: 1fr 1fr;
