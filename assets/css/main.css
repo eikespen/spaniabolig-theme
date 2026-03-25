@@ -2935,3 +2935,11 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 @media (max-width: 640px) {
     .about-team__grid { grid-template-columns: 1fr; }
 }
+
+.svc-contact-card__name {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+}

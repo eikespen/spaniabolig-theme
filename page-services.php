@@ -67,17 +67,38 @@ for ($i = 1; $i <= 6; $i++) {
     <div class="section-inner--narrow">
         <div class="svc-contact-card">
 
-            <!-- Left: agent info -->
+            <!-- Left: agent info — pulled automatically from Agents CPT -->
+            <?php
+            // Find Christer by email, fallback to first agent
+            $agents = get_posts([
+                'post_type'      => 'sb_agent',
+                'post_status'    => 'publish',
+                'posts_per_page' => -1,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            ]);
+            $contact_agent = null;
+            foreach ($agents as $a) {
+                if (strpos(get_post_meta($a->ID, 'sb_agent_email', true), 'christer') !== false) {
+                    $contact_agent = $a;
+                    break;
+                }
+            }
+            if (!$contact_agent && !empty($agents)) $contact_agent = $agents[0];
+
+            $ca_name  = $contact_agent ? $contact_agent->post_title                              : 'Christer K. Flagtvedt';
+            $ca_photo = $contact_agent ? get_the_post_thumbnail_url($contact_agent->ID, 'large') : '';
+            $ca_phone = $contact_agent ? get_post_meta($contact_agent->ID, 'sb_agent_phone', true) : '+47 909 17 648';
+            $ca_email = $contact_agent ? get_post_meta($contact_agent->ID, 'sb_agent_email', true) : 'christer@spaniabolig.no';
+            ?>
             <div class="svc-contact-card__left">
                 <h2 class="svc-contact-card__heading">
                     <?php echo esc_html(sb_sv('sb_contact_heading', 'Do you want to order some of our services or have any questions? Let us know.')); ?>
                 </h2>
 
-                <?php
-                $photo_url = sb_sv('sb_contact_photo_url', '');
-                if ($photo_url): ?>
-                <img src="<?php echo esc_url($photo_url); ?>"
-                     alt="<?php echo esc_attr(sb_sv('sb_contact_name', 'Christer')); ?>"
+                <?php if ($ca_photo): ?>
+                <img src="<?php echo esc_url($ca_photo); ?>"
+                     alt="<?php echo esc_attr($ca_name); ?>"
                      class="svc-contact-card__photo">
                 <?php else: ?>
                 <div class="svc-contact-card__photo-placeholder">
@@ -89,16 +110,17 @@ for ($i = 1; $i <= 6; $i++) {
                 <?php endif; ?>
 
                 <div class="svc-contact-card__info">
-                    <?php $phone = sb_sv('sb_contact_phone', '+47 909 17 648'); if ($phone): ?>
-                    <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone)); ?>" class="svc-contact-card__info-item">
+                    <span class="svc-contact-card__name"><?php echo esc_html($ca_name); ?></span>
+                    <?php if ($ca_phone): ?>
+                    <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $ca_phone)); ?>" class="svc-contact-card__info-item">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-                        <?php echo esc_html($phone); ?>
+                        <?php echo esc_html($ca_phone); ?>
                     </a>
-                    <?php endif;
-                    $email = sb_sv('sb_contact_email', 'christer@spaniabolig.no'); if ($email): ?>
-                    <a href="mailto:<?php echo esc_attr($email); ?>" class="svc-contact-card__info-item">
+                    <?php endif; ?>
+                    <?php if ($ca_email): ?>
+                    <a href="mailto:<?php echo esc_attr($ca_email); ?>" class="svc-contact-card__info-item">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        <?php echo esc_html($email); ?>
+                        <?php echo esc_html($ca_email); ?>
                     </a>
                     <?php endif; ?>
                 </div>

@@ -49,7 +49,7 @@ $team = get_posts([
 ]);
 if (!empty($team)) : ?>
 <section class="about-team">
-    <div class="section-inner--narrow">
+    <div class="section-inner">
         <div class="about-team__header">
             <h2>Meet the team</h2>
             <p>Our dedicated team of property specialists — based in Spain — are here to guide you every step of the way.</p>
