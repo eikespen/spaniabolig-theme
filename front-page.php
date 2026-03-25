@@ -10,7 +10,7 @@
         <div class="search-card">
             <h2 class="search-card-title">Find Properties</h2>
             <form class="search-form" method="get" action="<?php echo esc_url(home_url('/properties')); ?>">
-                <div class="search-grid search-grid--3col">
+                <div class="search-grid">
                     <div class="search-field">
                         <label>Build Type</label>
                         <select name="build_type">
