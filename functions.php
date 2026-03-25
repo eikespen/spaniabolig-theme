@@ -177,6 +177,20 @@ function sb_ajax_search() {
     if (!empty($_POST['status'])) {
         $args['meta_query'][] = ['key' => 'sb_status', 'value' => sanitize_text_field($_POST['status']), 'compare' => '='];
     }
+    if (!empty($_POST['keyword'])) {
+        $args['s'] = sanitize_text_field($_POST['keyword']);
+    }
+    if (!empty($_POST['sort'])) {
+        if ($_POST['sort'] === 'price-asc') {
+            $args['meta_key'] = 'sb_price';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'ASC';
+        } elseif ($_POST['sort'] === 'price-desc') {
+            $args['meta_key'] = 'sb_price';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'DESC';
+        }
+    }
 
     $query = new WP_Query($args);
     $results = [];

@@ -1,110 +1,99 @@
 <?php get_header(); ?>
 
-<section class="archive-hero">
+<section class="properties-hero">
     <div class="section-inner">
-        <h1><?php esc_html_e('Properties', 'spaniabolig'); ?></h1>
-        <p><?php esc_html_e('Browse all available properties', 'spaniabolig'); ?></p>
+        <h1><?php esc_html_e('Properties in Ciudad Quesada', 'spaniabolig'); ?></h1>
+        <p><?php esc_html_e('Browse our selection of villas, apartments and townhouses in Ciudad Quesada and the urbanizations of Rojales.', 'spaniabolig'); ?></p>
     </div>
 </section>
 
-<section class="archive-main">
-    <div class="section-inner archive-layout">
+<section class="properties-filter">
+    <div class="section-inner">
+        <div class="pf-bar">
+            <div class="pf-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="pf-keyword" placeholder="<?php esc_attr_e('Search properties…', 'spaniabolig'); ?>">
+            </div>
 
-        <!-- Sidebar Filter -->
-        <aside class="filter-sidebar">
-            <form class="filter-form" id="sb-filter-form" method="get" action="<?php echo esc_url(home_url('/properties')); ?>">
-                <h3><?php esc_html_e('Filter Properties', 'spaniabolig'); ?></h3>
+            <select id="pf-type" class="pf-select">
+                <option value=""><?php esc_html_e('All types', 'spaniabolig'); ?></option>
+                <?php
+                $types = get_terms(['taxonomy' => 'property_type', 'hide_empty' => false]);
+                if (!is_wp_error($types)) foreach ($types as $t) :
+                    echo '<option value="' . esc_attr($t->slug) . '">' . esc_html($t->name) . '</option>';
+                endforeach;
+                ?>
+            </select>
 
-                <div class="filter-group">
-                    <label><?php esc_html_e('Location', 'spaniabolig'); ?></label>
-                    <?php $locations = get_terms(['taxonomy' => 'property_location', 'hide_empty' => false]); ?>
-                    <select name="location">
-                        <option value=""><?php esc_html_e('Any', 'spaniabolig'); ?></option>
-                        <?php foreach ($locations as $loc) : ?>
-                            <option value="<?php echo esc_attr($loc->slug); ?>" <?php selected(get_query_var('location'), $loc->slug); ?>>
-                                <?php echo esc_html($loc->name); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+            <select id="pf-location" class="pf-select">
+                <option value=""><?php esc_html_e('Any location', 'spaniabolig'); ?></option>
+                <?php
+                $locs = get_terms(['taxonomy' => 'property_location', 'hide_empty' => false]);
+                if (!is_wp_error($locs)) foreach ($locs as $l) :
+                    echo '<option value="' . esc_attr($l->slug) . '">' . esc_html($l->name) . '</option>';
+                endforeach;
+                ?>
+            </select>
 
-                <div class="filter-group">
-                    <label><?php esc_html_e('Property Type', 'spaniabolig'); ?></label>
-                    <?php $types = get_terms(['taxonomy' => 'property_type', 'hide_empty' => false]); ?>
-                    <select name="property_type">
-                        <option value=""><?php esc_html_e('Any', 'spaniabolig'); ?></option>
-                        <?php foreach ($types as $type) : ?>
-                            <option value="<?php echo esc_attr($type->slug); ?>" <?php selected(get_query_var('property_type'), $type->slug); ?>>
-                                <?php echo esc_html($type->name); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+            <select id="pf-price" class="pf-select">
+                <option value=""><?php esc_html_e('Any price', 'spaniabolig'); ?></option>
+                <option value="0-150000"><?php esc_html_e('Under €150,000', 'spaniabolig'); ?></option>
+                <option value="150000-300000"><?php esc_html_e('€150k – €300k', 'spaniabolig'); ?></option>
+                <option value="300000-500000"><?php esc_html_e('€300k – €500k', 'spaniabolig'); ?></option>
+                <option value="500000-"><?php esc_html_e('€500,000+', 'spaniabolig'); ?></option>
+            </select>
 
-                <div class="filter-group">
-                    <label><?php esc_html_e('Status', 'spaniabolig'); ?></label>
-                    <select name="status">
-                        <option value=""><?php esc_html_e('Any', 'spaniabolig'); ?></option>
-                        <option value="for-sale" <?php selected($_GET['status'] ?? '', 'for-sale'); ?>><?php esc_html_e('For Sale', 'spaniabolig'); ?></option>
-                        <option value="for-rent" <?php selected($_GET['status'] ?? '', 'for-rent'); ?>><?php esc_html_e('For Rent', 'spaniabolig'); ?></option>
-                    </select>
-                </div>
+            <select id="pf-beds" class="pf-select">
+                <option value=""><?php esc_html_e('Any beds', 'spaniabolig'); ?></option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+            </select>
 
-                <div class="filter-group">
-                    <label><?php esc_html_e('Min Bedrooms', 'spaniabolig'); ?></label>
-                    <select name="bedrooms">
-                        <option value=""><?php esc_html_e('Any', 'spaniabolig'); ?></option>
-                        <?php foreach ([1,2,3,4,5] as $n) : ?>
-                            <option value="<?php echo $n; ?>" <?php selected($_GET['bedrooms'] ?? '', $n); ?>><?php echo $n; ?>+</option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+            <select id="pf-status" class="pf-select">
+                <option value=""><?php esc_html_e('Buy or rent', 'spaniabolig'); ?></option>
+                <option value="for-sale"><?php esc_html_e('For sale', 'spaniabolig'); ?></option>
+                <option value="for-rent"><?php esc_html_e('For rent', 'spaniabolig'); ?></option>
+            </select>
 
-                <div class="filter-group filter-group--price">
-                    <label><?php esc_html_e('Price Range (€)', 'spaniabolig'); ?></label>
-                    <div class="price-range">
-                        <input type="number" name="min_price" placeholder="<?php esc_attr_e('Min', 'spaniabolig'); ?>" value="<?php echo esc_attr($_GET['min_price'] ?? ''); ?>" min="0" step="10000">
-                        <span>–</span>
-                        <input type="number" name="max_price" placeholder="<?php esc_attr_e('Max', 'spaniabolig'); ?>" value="<?php echo esc_attr($_GET['max_price'] ?? ''); ?>" min="0" step="10000">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block"><?php esc_html_e('Apply Filters', 'spaniabolig'); ?></button>
-                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-ghost btn-block"><?php esc_html_e('Clear All', 'spaniabolig'); ?></a>
-            </form>
-        </aside>
-
-        <!-- Results -->
-        <div class="archive-results">
-            <?php if (have_posts()) : ?>
-                <div class="results-header">
-                    <span class="results-count">
-                        <?php
-                        global $wp_query;
-                        printf(esc_html(_n('%s property found', '%s properties found', $wp_query->found_posts, 'spaniabolig')), number_format_i18n($wp_query->found_posts));
-                        ?>
-                    </span>
-                    <select class="sort-select" id="sb-sort">
-                        <option value="date"><?php esc_html_e('Newest first', 'spaniabolig'); ?></option>
-                        <option value="price-asc"><?php esc_html_e('Price: Low to High', 'spaniabolig'); ?></option>
-                        <option value="price-desc"><?php esc_html_e('Price: High to Low', 'spaniabolig'); ?></option>
-                    </select>
-                </div>
-                <div class="property-grid">
-                    <?php while (have_posts()) : the_post(); ?>
-                        <?php get_template_part('template-parts/property-card'); ?>
-                    <?php endwhile; ?>
-                </div>
-                <div class="archive-pagination">
-                    <?php the_posts_pagination(['prev_text' => '&larr; Previous', 'next_text' => 'Next &rarr;']); ?>
-                </div>
-            <?php else : ?>
-                <div class="no-results">
-                    <h2><?php esc_html_e('No properties found', 'spaniabolig'); ?></h2>
-                    <p><?php esc_html_e('Try adjusting your filters or', 'spaniabolig'); ?> <a href="<?php echo esc_url(home_url('/properties')); ?>"><?php esc_html_e('view all properties', 'spaniabolig'); ?></a>.</p>
-                </div>
-            <?php endif; ?>
+            <button class="pf-clear" id="pf-clear">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                <?php esc_html_e('Clear', 'spaniabolig'); ?>
+            </button>
         </div>
+    </div>
+</section>
+
+<section class="properties-results">
+    <div class="section-inner">
+        <div class="results-header">
+            <span id="pf-count" class="results-count">
+                <?php
+                global $wp_query;
+                $n = $wp_query->found_posts;
+                echo esc_html(sprintf(_n('%s property found', '%s properties found', $n, 'spaniabolig'), number_format_i18n($n)));
+                ?>
+            </span>
+            <select id="pf-sort" class="sort-select">
+                <option value="date"><?php esc_html_e('Newest first', 'spaniabolig'); ?></option>
+                <option value="price-asc"><?php esc_html_e('Price: Low → High', 'spaniabolig'); ?></option>
+                <option value="price-desc"><?php esc_html_e('Price: High → Low', 'spaniabolig'); ?></option>
+            </select>
+        </div>
+
+        <div id="pf-grid" class="property-grid">
+            <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                <?php get_template_part('template-parts/property-card'); ?>
+            <?php endwhile; endif; ?>
+        </div>
+
+        <div id="pf-no-results" class="no-results" style="display:none;">
+            <h2><?php esc_html_e('No properties found', 'spaniabolig'); ?></h2>
+            <p><?php esc_html_e('Try adjusting your filters to see more results.', 'spaniabolig'); ?></p>
+        </div>
+
+        <div id="pf-pagination" class="pf-pagination"></div>
     </div>
 </section>
 
