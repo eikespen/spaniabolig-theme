@@ -512,6 +512,93 @@ function sb_ajax_service_inquiry(): void {
 add_action('wp_ajax_sb_service_inquiry',        'sb_ajax_service_inquiry');
 add_action('wp_ajax_nopriv_sb_service_inquiry', 'sb_ajax_service_inquiry');
 
+/* ── One-time page seeder — visit /wp-admin/?sb_seed_pages=1 ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_seed_pages']) || !current_user_can('manage_options')) return;
+
+    $pages = [
+        [
+            'title'    => 'Dictionary',
+            'slug'     => 'dictionary',
+            'template' => 'page-dictionary.php',
+        ],
+        [
+            'title'    => 'Privacy Policy',
+            'slug'     => 'privacy-policy',
+            'template' => 'page-privacy-policy.php',
+        ],
+        [
+            'title'    => 'Terms of Use',
+            'slug'     => 'terms-of-use',
+            'template' => 'page-terms-of-use.php',
+        ],
+        [
+            'title'    => 'Cookie Policy',
+            'slug'     => 'cookie-policy',
+            'template' => 'page-cookie-policy.php',
+        ],
+        [
+            'title'    => 'About',
+            'slug'     => 'about',
+            'template' => 'page-about.php',
+        ],
+        [
+            'title'    => 'How It Works',
+            'slug'     => 'how-it-works',
+            'template' => 'page-how-it-works.php',
+        ],
+        [
+            'title'    => 'Services',
+            'slug'     => 'services',
+            'template' => 'page-services.php',
+        ],
+        [
+            'title'    => 'Contact',
+            'slug'     => 'contact',
+            'template' => 'page-contact.php',
+        ],
+    ];
+
+    $log = [];
+    foreach ($pages as $p) {
+        $existing = get_page_by_path($p['slug']);
+        if ($existing) {
+            // Page exists — make sure the template is set correctly
+            $current_tpl = get_page_template_slug($existing->ID);
+            if ($current_tpl !== $p['template']) {
+                update_post_meta($existing->ID, '_wp_page_template', $p['template']);
+                $log[] = "Updated template for: {$p['title']} (ID {$existing->ID})";
+            } else {
+                $log[] = "Already exists (template OK): {$p['title']} (ID {$existing->ID})";
+            }
+            continue;
+        }
+
+        $post_id = wp_insert_post([
+            'post_title'   => $p['title'],
+            'post_name'    => $p['slug'],
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_author'  => 1,
+        ]);
+
+        if (is_wp_error($post_id)) {
+            $log[] = "Error creating {$p['title']}: " . $post_id->get_error_message();
+        } else {
+            update_post_meta($post_id, '_wp_page_template', $p['template']);
+            $log[] = "Created: {$p['title']} (ID {$post_id}, template: {$p['template']})";
+        }
+    }
+
+    // Flush rewrite rules so new page slugs work immediately
+    flush_rewrite_rules();
+
+    wp_die(
+        '<h2>Page Seeder</h2><ul><li>' . implode('</li><li>', array_map('esc_html', $log)) . '</li></ul>'
+        . '<p><a href="' . admin_url() . '">Back to dashboard</a></p>'
+    );
+});
+
 /* ── Rewrite flush on activation ── */
 function sb_flush_rewrite() {
     sb_register_property_cpt();
