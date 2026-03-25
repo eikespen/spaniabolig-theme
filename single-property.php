@@ -16,18 +16,18 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
 
         <!-- Gallery -->
         <div class="property-gallery">
-            <?php if (has_post_thumbnail()) : ?>
+            <?php
+            $main_img   = sb_get_image_url(get_the_ID(), 'full');
+            $image_urls = get_post_meta(get_the_ID(), 'sb_image_urls', true) ?: [];
+            if ($main_img) :
+            ?>
                 <div class="gallery-main">
-                    <?php the_post_thumbnail('full', ['class' => 'gallery-main-img']); ?>
+                    <img src="<?php echo esc_url($main_img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="gallery-main-img">
                 </div>
-                <?php
-                $gallery_ids = get_post_meta(get_the_ID(), 'sb_gallery', true);
-                if ($gallery_ids) :
-                    $images = explode(',', $gallery_ids);
-                ?>
+                <?php if (count($image_urls) > 1) : ?>
                 <div class="gallery-thumbs">
-                    <?php foreach ($images as $img_id) : ?>
-                        <?php echo wp_get_attachment_image($img_id, 'medium', false, ['class' => 'gallery-thumb']); ?>
+                    <?php foreach (array_slice($image_urls, 1, 8) as $thumb_url) : ?>
+                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb" loading="lazy">
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>

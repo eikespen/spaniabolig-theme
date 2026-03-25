@@ -178,8 +178,9 @@ $resale_high = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, '
                 <div class="tier-label"><?php echo esc_html($tier['label']); ?></div>
                 <div class="tier-badge"><?php echo esc_html($tier['badge']); ?></div>
                 <a href="<?php the_permalink(); ?>" class="tier-card">
-                    <?php if (has_post_thumbnail()) : ?>
-                        <?php the_post_thumbnail('large', ['class' => 'tier-img']); ?>
+                    <?php $timg = sb_get_image_url(get_the_ID()); ?>
+                    <?php if ($timg) : ?>
+                        <img src="<?php echo esc_url($timg); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="tier-img" loading="lazy">
                     <?php else : ?>
                         <div class="tier-img tier-img--placeholder"></div>
                     <?php endif; ?>
@@ -233,8 +234,9 @@ $nb_any    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'me
                 <div class="tier-label"><?php echo esc_html($tier['label']); ?></div>
                 <div class="tier-badge"><?php echo esc_html($tier['badge']); ?></div>
                 <a href="<?php the_permalink(); ?>" class="tier-card">
-                    <?php if (has_post_thumbnail()) : ?>
-                        <?php the_post_thumbnail('large', ['class' => 'tier-img']); ?>
+                    <?php $timg = sb_get_image_url(get_the_ID()); ?>
+                    <?php if ($timg) : ?>
+                        <img src="<?php echo esc_url($timg); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="tier-img" loading="lazy">
                     <?php else : ?>
                         <div class="tier-img tier-img--placeholder"></div>
                     <?php endif; ?>

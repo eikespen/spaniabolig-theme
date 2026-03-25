@@ -10,8 +10,9 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
 ?>
 <article class="property-card">
     <a href="<?php the_permalink(); ?>" class="card-image-wrap">
-        <?php if (has_post_thumbnail()) : ?>
-            <?php the_post_thumbnail('large', ['class' => 'card-image', 'loading' => 'lazy']); ?>
+        <?php $img_url = sb_get_image_url(get_the_ID()); ?>
+        <?php if ($img_url) : ?>
+            <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="card-image" loading="lazy">
         <?php else : ?>
             <div class="card-image card-image--placeholder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5" width="48" height="48"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>

@@ -3,6 +3,21 @@ defined('ABSPATH') || exit;
 
 require_once get_template_directory() . '/inc/importer.php';
 
+/* ── Image helpers (supports external URLs from XML import) ── */
+function sb_get_image_url(int $post_id, string $size = 'large'): string {
+    if (has_post_thumbnail($post_id)) {
+        return get_the_post_thumbnail_url($post_id, $size) ?: '';
+    }
+    return (string) get_post_meta($post_id, 'sb_thumb_url', true);
+}
+
+function sb_the_image(int $post_id, string $size = 'large', string $class = 'card-image'): void {
+    $url = sb_get_image_url($post_id, $size);
+    if ($url) {
+        echo '<img src="' . esc_url($url) . '" alt="' . esc_attr(get_the_title($post_id)) . '" class="' . esc_attr($class) . '" loading="lazy">';
+    }
+}
+
 /* ── Theme Setup ── */
 function sb_setup() {
     add_theme_support('title-tag');
@@ -172,7 +187,7 @@ function sb_ajax_search() {
                 'id'        => get_the_ID(),
                 'title'     => get_the_title(),
                 'url'       => get_permalink(),
-                'image'     => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: '',
+                'image'     => sb_get_image_url(get_the_ID(), 'large'),
                 'price'     => get_post_meta(get_the_ID(), 'sb_price', true),
                 'bedrooms'  => get_post_meta(get_the_ID(), 'sb_bedrooms', true),
                 'bathrooms' => get_post_meta(get_the_ID(), 'sb_bathrooms', true),

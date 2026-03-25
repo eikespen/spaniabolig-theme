@@ -129,6 +129,8 @@ add_action('admin_post_sb_reschedule_import', function () {
    Core importer function
 ───────────────────────────────────────────── */
 function sb_run_import(string $feed_key): array {
+    @ini_set('memory_limit', '256M');
+    @set_time_limit(300);
     $result = ['created' => 0, 'updated' => 0, 'skipped' => 0, 'errors' => []];
 
     $url       = ($feed_key === 'resale') ? SB_FEED_RESALE : SB_FEED_NEWBUILD;
@@ -231,9 +233,9 @@ function sb_run_import(string $feed_key): array {
         update_post_meta($post_id, 'sb_build_type',  $build_type);
         update_post_meta($post_id, 'sb_image_urls',  $image_urls); // Store all image URLs
 
-        // Featured image — download first image if not set
-        if (!has_post_thumbnail($post_id) && !empty($image_urls)) {
-            sb_set_featured_image($post_id, $image_urls[0], $ref);
+        // Store first image URL as external thumbnail (no download during import)
+        if (!empty($image_urls)) {
+            update_post_meta($post_id, 'sb_thumb_url', $image_urls[0]);
         }
 
         // Property type taxonomy
