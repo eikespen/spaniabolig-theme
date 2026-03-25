@@ -13,6 +13,44 @@ if (!is_user_logged_in()) {
     exit;
 }
 
+// ── Edit mode: detect ?property_id= ──────────────────────────
+$edit_id   = isset($_GET['property_id']) ? absint($_GET['property_id']) : 0;
+$is_edit   = $edit_id > 0 && get_post_type($edit_id) === 'property' && current_user_can('edit_post', $edit_id);
+$edit_data = null;
+
+if ($is_edit) {
+    $ep = get_post($edit_id);
+    $raw_ids = (array) get_post_meta($edit_id, 'sb_image_ids', true);
+    $images  = [];
+    foreach ($raw_ids as $att_id) {
+        $att_id = absint($att_id);
+        if (!$att_id) continue;
+        $images[] = [
+            'id'    => $att_id,
+            'url'   => wp_get_attachment_url($att_id) ?: '',
+            'thumb' => wp_get_attachment_image_url($att_id, 'thumbnail') ?: wp_get_attachment_url($att_id) ?: '',
+        ];
+    }
+    $edit_data = [
+        'id'          => $edit_id,
+        'title'       => $ep->post_title,
+        'description' => $ep->post_content,
+        'status'      => get_post_meta($edit_id, 'sb_status',     true),
+        'build_type'  => get_post_meta($edit_id, 'sb_build_type', true),
+        'featured'    => get_post_meta($edit_id, 'sb_featured',   true),
+        'price'       => get_post_meta($edit_id, 'sb_price',      true),
+        'size'        => get_post_meta($edit_id, 'sb_size',       true),
+        'bedrooms'    => get_post_meta($edit_id, 'sb_bedrooms',   true),
+        'bathrooms'   => get_post_meta($edit_id, 'sb_bathrooms',  true),
+        'ref'         => get_post_meta($edit_id, 'sb_ref',        true),
+        'city'        => get_post_meta($edit_id, 'sb_city',       true),
+        'address'     => get_post_meta($edit_id, 'sb_address',    true),
+        'lat'         => get_post_meta($edit_id, 'sb_lat',        true),
+        'lng'         => get_post_meta($edit_id, 'sb_lng',        true),
+        'images'      => $images,
+    ];
+}
+
 get_header();
 ?>
 
@@ -21,7 +59,7 @@ get_header();
     <!-- AP Header -->
     <div class="ap-header">
         <div class="ap-header__center">
-            <span class="ap-header__title">Add New Property</span>
+            <span class="ap-header__title"><?php echo $is_edit ? 'Edit Property' : 'Add New Property'; ?></span>
             <span class="ap-header__step-label">Step <span id="ap-current-step-num">1</span> of 4</span>
         </div>
         <div class="ap-header__actions">
@@ -73,8 +111,15 @@ get_header();
 
     <!-- Form -->
     <div class="ap-form-wrap">
+        <?php if ($is_edit): ?>
+        <script>var sbEditProp = <?php echo wp_json_encode($edit_data); ?>;</script>
+        <?php endif; ?>
+
         <form id="ap-form" novalidate>
             <?php wp_nonce_field('sb_add_property', 'ap_nonce'); ?>
+            <?php if ($is_edit): ?>
+            <input type="hidden" name="ap_property_id" id="ap-property-id" value="<?php echo esc_attr($edit_id); ?>">
+            <?php endif; ?>
 
             <!-- ═══ STEP 1 — Basic Info ═══ -->
             <div class="ap-step ap-step--active" data-step="1">
@@ -381,7 +426,7 @@ get_header();
                     </button>
                     <button type="submit" id="ap-submit-btn" class="btn btn-primary btn-lg ap-submit-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        Publish Listing
+                        <?php echo $is_edit ? 'Update Listing' : 'Publish Listing'; ?>
                     </button>
                 </div>
             </div><!-- /.ap-step[4] -->
@@ -393,17 +438,22 @@ get_header();
             <div class="ap-success__icon">
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-            <h2 class="ap-success__title">Property Published!</h2>
-            <p class="ap-success__sub">Your listing is now live and visible on the site.</p>
+            <h2 class="ap-success__title"><?php echo $is_edit ? 'Listing Updated!' : 'Property Published!'; ?></h2>
+            <p class="ap-success__sub"><?php echo $is_edit ? 'Your changes have been saved successfully.' : 'Your listing is now live and visible on the site.'; ?></p>
             <div class="ap-success__actions">
                 <a href="#" id="ap-success-link" class="btn btn-primary btn-lg" target="_blank">
                     View Listing
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 </a>
+                <?php if ($is_edit): ?>
+                <a href="<?php echo esc_url(home_url('/dashboard')); ?>" class="btn btn-outline btn-lg">
+                    Back to Dashboard
+                </a>
+                <?php else: ?>
                 <a href="<?php echo esc_url(get_permalink()); ?>" class="btn btn-outline btn-lg">
                     Add Another Property
                 </a>
-            </div>
+                <?php endif; ?>
         </div>
 
     </div><!-- /.ap-form-wrap -->

@@ -147,6 +147,117 @@ add_action('wp_ajax_sb_submit_property', 'sb_ajax_submit_property');
 
 
 /* ─────────────────────────────────────────────────────────────
+   Handler: sb_update_property
+   Updates an existing property post and its meta.
+───────────────────────────────────────────────────────────── */
+function sb_ajax_update_property(): void {
+    sb_verify_property_request();
+
+    // ── Target post ───────────────────────────────────────
+    $post_id = absint($_POST['ap_property_id'] ?? 0);
+    if (!$post_id || get_post_type($post_id) !== 'property') {
+        wp_send_json_error(['message' => 'Invalid property ID.'], 422);
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        wp_send_json_error(['message' => 'You do not have permission to edit this property.'], 403);
+    }
+
+    // ── Sanitise title (required) ──────────────────────────
+    $title = sanitize_text_field(wp_unslash($_POST['ap_title'] ?? ''));
+    if (empty($title)) {
+        wp_send_json_error(['message' => 'Property title is required.', 'field' => 'ap_title'], 422);
+    }
+
+    // ── Status (required) ─────────────────────────────────
+    $allowed_statuses = ['for-sale', 'for-rent', 'sold'];
+    $status = sanitize_key(wp_unslash($_POST['ap_status'] ?? ''));
+    if (!in_array($status, $allowed_statuses, true)) {
+        wp_send_json_error(['message' => 'Please select a listing status.', 'field' => 'ap_status'], 422);
+    }
+
+    // ── Build type (required) ─────────────────────────────
+    $allowed_build_types = ['resale', 'new_build'];
+    $build_type = sanitize_key(wp_unslash($_POST['ap_build_type'] ?? ''));
+    if (!in_array($build_type, $allowed_build_types, true)) {
+        wp_send_json_error(['message' => 'Please select a build type.', 'field' => 'ap_build_type'], 422);
+    }
+
+    // ── Price (required) ──────────────────────────────────
+    $price_raw = wp_unslash($_POST['ap_price'] ?? '');
+    if ($price_raw === '' || !is_numeric($price_raw) || (float)$price_raw < 0) {
+        wp_send_json_error(['message' => 'A valid price is required.', 'field' => 'ap_price'], 422);
+    }
+    $price = (string) abs((float) $price_raw);
+
+    // ── Other text fields ─────────────────────────────────
+    $description = sanitize_textarea_field(wp_unslash($_POST['ap_description'] ?? ''));
+    $bedrooms    = absint($_POST['ap_bedrooms']  ?? 0);
+    $bathrooms   = absint($_POST['ap_bathrooms'] ?? 0);
+    $size        = sanitize_text_field(wp_unslash($_POST['ap_size']    ?? ''));
+    $ref         = sanitize_text_field(wp_unslash($_POST['ap_ref']     ?? ''));
+    $city        = sanitize_text_field(wp_unslash($_POST['ap_city']    ?? ''));
+    $address     = sanitize_text_field(wp_unslash($_POST['ap_address'] ?? ''));
+    $lat         = sanitize_text_field(wp_unslash($_POST['ap_lat']     ?? ''));
+    $lng         = sanitize_text_field(wp_unslash($_POST['ap_lng']     ?? ''));
+    $featured    = (isset($_POST['ap_featured']) && $_POST['ap_featured'] === '1') ? '1' : '0';
+
+    if ($lat !== '' && (!is_numeric($lat) || (float)$lat < -90  || (float)$lat > 90))   $lat = '';
+    if ($lng !== '' && (!is_numeric($lng) || (float)$lng < -180 || (float)$lng > 180)) $lng = '';
+
+    // ── Attachment IDs ────────────────────────────────────
+    $raw_ids   = isset($_POST['ap_image_ids']) ? (array) $_POST['ap_image_ids'] : [];
+    $image_ids = array_values(array_filter(array_map('absint', $raw_ids)));
+
+    // ── Update post ───────────────────────────────────────
+    $result = wp_update_post([
+        'ID'           => $post_id,
+        'post_title'   => $title,
+        'post_content' => $description,
+    ], true);
+
+    if (is_wp_error($result)) {
+        wp_send_json_error(['message' => 'Could not update property: ' . $result->get_error_message()], 500);
+    }
+
+    // ── Save meta ─────────────────────────────────────────
+    $meta_map = [
+        'sb_price'      => $price,
+        'sb_bedrooms'   => (string) $bedrooms,
+        'sb_bathrooms'  => (string) $bathrooms,
+        'sb_size'       => $size,
+        'sb_ref'        => $ref,
+        'sb_city'       => $city,
+        'sb_address'    => $address,
+        'sb_lat'        => $lat,
+        'sb_lng'        => $lng,
+        'sb_status'     => $status,
+        'sb_build_type' => $build_type,
+        'sb_featured'   => $featured,
+    ];
+    foreach ($meta_map as $key => $value) {
+        update_post_meta($post_id, $key, $value);
+    }
+
+    // ── Handle images ─────────────────────────────────────
+    if (!empty($image_ids)) {
+        set_post_thumbnail($post_id, $image_ids[0]);
+        foreach ($image_ids as $att_id) {
+            wp_update_post(['ID' => $att_id, 'post_parent' => $post_id]);
+        }
+        $image_urls = array_map('wp_get_attachment_url', $image_ids);
+        update_post_meta($post_id, 'sb_image_ids',  $image_ids);
+        update_post_meta($post_id, 'sb_image_urls', array_filter($image_urls));
+    }
+
+    wp_send_json_success([
+        'id'  => $post_id,
+        'url' => get_permalink($post_id),
+    ]);
+}
+add_action('wp_ajax_sb_update_property', 'sb_ajax_update_property');
+
+
+/* ─────────────────────────────────────────────────────────────
    Handler: sb_upload_image
    Uploads a single image via wp_handle_upload and returns the
    attachment ID + URLs.

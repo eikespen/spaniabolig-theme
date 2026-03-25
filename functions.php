@@ -374,7 +374,10 @@ function sb_ajax_dash_search() {
             $status    = get_post_meta($id, 'sb_status', true);
             $status_k  = str_replace('_','-',(string)$status);
             $img       = sb_get_image_url($id);
-            $edit_url  = get_edit_post_link($id);
+            $add_prop_page = get_page_by_path('add-property');
+            $edit_url  = $add_prop_page
+                ? add_query_arg('property_id', $id, get_permalink($add_prop_page->ID))
+                : home_url('/add-property/?property_id=' . $id);
             $view_url  = get_permalink($id);
             $date      = get_the_date('d M Y');
             $label     = $status_labels[$status_k] ?? ucwords(str_replace(['-','_'],' ',$status));

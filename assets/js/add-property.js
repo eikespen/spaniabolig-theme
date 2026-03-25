@@ -533,6 +533,75 @@
   }
 
   /* ══════════════════════════════════════════════════════
+     EDIT MODE: pre-populate fields from sbEditProp
+  ══════════════════════════════════════════════════════ */
+  if (typeof sbEditProp !== 'undefined' && sbEditProp && sbEditProp.id) {
+
+    // Basic Info
+    var titleEl2 = document.getElementById('ap-title');
+    if (titleEl2) titleEl2.value = sbEditProp.title || '';
+
+    var descEl = document.getElementById('ap-description');
+    if (descEl) descEl.value = sbEditProp.description || '';
+
+    // Status radio
+    if (sbEditProp.status) {
+      var statusInp = document.querySelector('input[name="ap_status"][value="' + sbEditProp.status + '"]');
+      if (statusInp) {
+        statusInp.checked = true;
+        statusInp.closest('.ap-radio-card').classList.add('selected');
+      }
+    }
+
+    // Build type radio
+    if (sbEditProp.build_type) {
+      var buildInp = document.querySelector('input[name="ap_build_type"][value="' + sbEditProp.build_type + '"]');
+      if (buildInp) {
+        buildInp.checked = true;
+        buildInp.closest('.ap-radio-card').classList.add('selected');
+      }
+    }
+
+    // Featured toggle
+    var featuredEl2 = document.getElementById('ap-featured');
+    if (featuredEl2) featuredEl2.checked = sbEditProp.featured === '1';
+
+    // Details
+    var priceEl2 = document.getElementById('ap-price');
+    if (priceEl2 && sbEditProp.price) priceEl2.value = sbEditProp.price;
+
+    var sizeEl = document.getElementById('ap-size');
+    if (sizeEl && sbEditProp.size) sizeEl.value = sbEditProp.size;
+
+    var bedroomsEl2 = document.getElementById('ap-bedrooms');
+    if (bedroomsEl2 && sbEditProp.bedrooms !== undefined) bedroomsEl2.value = sbEditProp.bedrooms;
+
+    var bathroomsEl2 = document.getElementById('ap-bathrooms');
+    if (bathroomsEl2 && sbEditProp.bathrooms !== undefined) bathroomsEl2.value = sbEditProp.bathrooms;
+
+    var refEl = document.getElementById('ap-ref');
+    if (refEl) refEl.value = sbEditProp.ref || '';
+
+    var cityEl = document.getElementById('ap-city');
+    if (cityEl) cityEl.value = sbEditProp.city || 'Ciudad Quesada';
+
+    // Location
+    var addressEl2 = document.getElementById('ap-address');
+    if (addressEl2) addressEl2.value = sbEditProp.address || '';
+
+    if (latField && sbEditProp.lat) latField.value = sbEditProp.lat;
+    if (lngField && sbEditProp.lng) lngField.value = sbEditProp.lng;
+
+    // Existing photos — seed attachmentIds and render thumbs
+    if (sbEditProp.images && sbEditProp.images.length) {
+      sbEditProp.images.forEach(function (img) {
+        attachmentIds.push(img.id);
+        addThumb(img.id, img.thumb || img.url);
+      });
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
      FORM SUBMIT
   ══════════════════════════════════════════════════════ */
   form && form.addEventListener('submit', function (e) {
@@ -546,9 +615,12 @@
     setSubmitLoading(true);
     submitError.style.display = 'none';
 
+    var isEditMode = typeof sbEditProp !== 'undefined' && sbEditProp && sbEditProp.id;
+
     const data = new FormData();
-    data.append('action',         'sb_submit_property');
-    data.append('nonce',          sbAddProp.nonce);
+    data.append('action', isEditMode ? 'sb_update_property' : 'sb_submit_property');
+    data.append('nonce',  sbAddProp.nonce);
+    if (isEditMode) data.append('ap_property_id', sbEditProp.id);
     data.append('ap_title',       document.getElementById('ap-title').value.trim());
     data.append('ap_description', document.getElementById('ap-description').value);
     data.append('ap_status',      (document.querySelector('input[name="ap_status"]:checked') || {}).value || '');
@@ -603,9 +675,10 @@
     submitBtn.disabled = loading;
     if (loading) {
       submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+      var loadingLabel = (typeof sbEditProp !== 'undefined' && sbEditProp && sbEditProp.id) ? ' Updating…' : ' Publishing…';
       submitBtn.innerHTML =
         '<svg class="ap-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>' +
-        ' Publishing…';
+        loadingLabel;
     } else if (submitBtn.dataset.originalHtml) {
       submitBtn.innerHTML = submitBtn.dataset.originalHtml;
     }
