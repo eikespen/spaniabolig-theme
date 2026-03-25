@@ -13,6 +13,37 @@
         });
     }
 
+    /* ── Favourite heart buttons ── */
+    function getFavs() {
+        try { return JSON.parse(localStorage.getItem('sb_favorites') || '[]'); } catch(e) { return []; }
+    }
+    function saveFavs(arr) { localStorage.setItem('sb_favorites', JSON.stringify(arr)); }
+
+    function initFavBtns() {
+        const favs = getFavs();
+        document.querySelectorAll('.fav-btn').forEach(btn => {
+            const id = btn.dataset.id;
+            if (favs.includes(id)) btn.classList.add('is-fav');
+
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                let stored = getFavs();
+                if (stored.includes(id)) {
+                    stored = stored.filter(i => i !== id);
+                    btn.classList.remove('is-fav');
+                    btn.title = 'Save to favourites';
+                } else {
+                    stored.push(id);
+                    btn.classList.add('is-fav');
+                    btn.title = 'Remove from favourites';
+                }
+                saveFavs(stored);
+            });
+        });
+    }
+    initFavBtns();
+
     /* ── Gallery thumbnail click-to-swap ── */
     const mainImg = document.getElementById('gallery-main-img');
     if (mainImg) {

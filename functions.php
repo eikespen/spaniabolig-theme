@@ -296,6 +296,40 @@ function sb_ajax_search() {
 add_action('wp_ajax_sb_search', 'sb_ajax_search');
 add_action('wp_ajax_nopriv_sb_search', 'sb_ajax_search');
 
+/* ── AJAX: Get Favourites by ID ── */
+function sb_ajax_get_favorites() {
+    check_ajax_referer('sb_search', 'nonce');
+
+    $ids = isset($_POST['ids']) ? array_map('intval', (array) $_POST['ids']) : [];
+    $ids = array_filter($ids);
+
+    if (empty($ids)) {
+        wp_send_json_success(['html' => '']);
+    }
+
+    $query = new WP_Query([
+        'post_type'      => 'property',
+        'post__in'       => $ids,
+        'orderby'        => 'post__in',
+        'posts_per_page' => count($ids),
+        'post_status'    => 'publish',
+    ]);
+
+    ob_start();
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            get_template_part('template-parts/property-card');
+        }
+        wp_reset_postdata();
+    }
+    $html = ob_get_clean();
+
+    wp_send_json_success(['html' => $html]);
+}
+add_action('wp_ajax_sb_get_favorites', 'sb_ajax_get_favorites');
+add_action('wp_ajax_nopriv_sb_get_favorites', 'sb_ajax_get_favorites');
+
 /* ── Helper: Format Price ── */
 function sb_format_price($price) {
     if (!$price) return '';
