@@ -830,9 +830,10 @@ input, select, textarea, button { font: inherit; }
 /* ── Search CTA row ── */
 .search-cta-row {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 16px;
+    margin-top: 32px;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 /* ── Quick Links ── */

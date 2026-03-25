@@ -94,10 +94,10 @@
                     </button>
                 </div>
             </form>
-            <div class="search-cta-row">
-                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-primary btn-pill">Browse properties</a>
-                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-outline btn-pill">View all properties</a>
-            </div>
+        </div>
+        <div class="search-cta-row">
+            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-lg btn-pill">Contact an agent</a>
+            <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-outline btn-lg btn-pill">View all properties</a>
         </div>
     </div>
 </section>
