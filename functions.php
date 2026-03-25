@@ -210,6 +210,35 @@ function sb_format_price($price) {
     return '€ ' . number_format((float)$price, 0, ',', ' ');
 }
 
+/* ── Contact Form Handler ── */
+function sb_handle_contact_form() {
+    if (!isset($_POST['sb_contact_nonce']) || !wp_verify_nonce($_POST['sb_contact_nonce'], 'sb_contact')) {
+        wp_redirect(home_url('/contact/?error=1'));
+        exit;
+    }
+    $name    = sanitize_text_field($_POST['contact_name'] ?? '');
+    $email   = sanitize_email($_POST['contact_email'] ?? '');
+    $phone   = sanitize_text_field($_POST['contact_phone'] ?? '');
+    $subject = sanitize_text_field($_POST['contact_subject'] ?? 'General enquiry');
+    $message = sanitize_textarea_field($_POST['contact_message'] ?? '');
+    if (!$name || !$email || !$message) {
+        wp_redirect(home_url('/contact/?error=1'));
+        exit;
+    }
+    $to      = get_option('admin_email');
+    $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
+    $body    = '<p><strong>Name:</strong> ' . esc_html($name) . '</p>'
+             . '<p><strong>Email:</strong> ' . esc_html($email) . '</p>'
+             . '<p><strong>Phone:</strong> ' . esc_html($phone) . '</p>'
+             . '<p><strong>Subject:</strong> ' . esc_html($subject) . '</p>'
+             . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
+    wp_mail($to, 'New enquiry from ' . $name, $body, $headers);
+    wp_redirect(home_url('/contact/?sent=1'));
+    exit;
+}
+add_action('admin_post_sb_contact_form', 'sb_handle_contact_form');
+add_action('admin_post_nopriv_sb_contact_form', 'sb_handle_contact_form');
+
 /* ── Rewrite flush on activation ── */
 function sb_flush_rewrite() {
     sb_register_property_cpt();

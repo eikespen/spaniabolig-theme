@@ -96,7 +96,7 @@
             </form>
             <div class="search-cta-row">
                 <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-primary btn-pill">Browse properties</a>
-                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-outline-dark btn-pill">View all properties</a>
+                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-outline btn-pill">View all properties</a>
             </div>
         </div>
     </div>
