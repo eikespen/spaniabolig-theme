@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <?php wp_head(); ?>
-    <style>.site-header{background:#001d3d!important;border-bottom:1px solid rgba(255,255,255,.1)!important}.nav-list li a{color:rgba(255,255,255,.85)!important}.nav-list li a:hover{background:rgba(255,255,255,.1)!important;color:#fff!important}</style>
+    <style>.site-header{background:#001d3d!important;border-bottom:1px solid rgba(255,255,255,.1)!important}.header-inner{height:76px!important}.nav-list li a{color:rgba(255,255,255,.85)!important}.nav-list li a:hover{background:rgba(255,255,255,.1)!important;color:#fff!important}.btn-header{background:transparent!important;color:#fff!important;border:2px solid rgba(255,255,255,.6)!important;padding:9px 22px!important;border-radius:100px!important;font-size:14px!important;font-weight:600!important;text-decoration:none!important}.btn-header:hover{background:#fff!important;color:#001d3d!important}</style>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
@@ -64,11 +64,15 @@
                 <li <?php if (is_page('how-it-works')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/how-it-works')); ?>">How it works</a></li>
                 <li <?php if (is_page('services')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/services')); ?>">Services</a></li>
                 <li <?php if (is_page('contact')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/contact')); ?>">Contact</a></li>
+                <li><a href="<?php echo esc_url(home_url('/favorites')); ?>" class="nav-favorites">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Favorites
+                </a></li>
             </ul>
         </nav>
 
         <div class="header-actions">
-            <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-header">View properties</a>
+            <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn-header">View properties</a>
         </div>
 
         <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">

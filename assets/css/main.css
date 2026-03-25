@@ -346,37 +346,59 @@ input, select, textarea, button { font: inherit; }
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 24px;
-    height: 68px;
+    height: 76px;
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 40px;
 }
 
-.site-logo { display: flex; align-items: center; }
-.site-logo img { height: 36px; width: auto; }
+.site-logo { display: flex; align-items: center; flex-shrink: 0; }
+.site-logo img, .site-logo .custom-logo { height: 48px !important; width: auto !important; }
 .logo-text {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 800;
-    color: var(--navy);
+    color: var(--white);
     letter-spacing: -0.03em;
 }
 
 .site-nav { flex: 1; }
 .nav-list {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     align-items: center;
 }
 .nav-list li a {
-    padding: 6px 14px;
+    padding: 7px 14px;
     border-radius: 8px;
     font-size: 15px;
     font-weight: 500;
     color: rgba(255,255,255,0.85);
     transition: background .15s, color .15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 .nav-list li a:hover,
 .nav-list li.current-menu-item a { background: rgba(255,255,255,0.1); color: #fff; }
+
+/* Favorites link */
+.nav-favorites svg { flex-shrink: 0; }
+
+/* View properties button */
+.btn-header {
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.6);
+    padding: 9px 22px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all .2s;
+    flex-shrink: 0;
+}
+.btn-header:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
 
 /* ── Dropdown nav ── */
 .has-dropdown { position: relative; }
