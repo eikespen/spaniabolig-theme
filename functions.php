@@ -330,6 +330,95 @@ function sb_ajax_get_favorites() {
 add_action('wp_ajax_sb_get_favorites', 'sb_ajax_get_favorites');
 add_action('wp_ajax_nopriv_sb_get_favorites', 'sb_ajax_get_favorites');
 
+/* ── AJAX: Property Dashboard Search ── */
+function sb_ajax_dash_search() {
+    check_ajax_referer('sb_search', 'nonce');
+    if (!current_user_can('edit_posts')) wp_send_json_error('Unauthorized', 403);
+
+    $args = [
+        'post_type'      => 'property',
+        'posts_per_page' => isset($_POST['per_page']) ? intval($_POST['per_page']) : 25,
+        'paged'          => isset($_POST['paged']) ? intval($_POST['paged']) : 1,
+        'post_status'    => 'publish',
+        'meta_query'     => [],
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ];
+
+    // Sort
+    $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'date';
+    switch ($sort) {
+        case 'price-asc':  $args['meta_key'] = 'sb_price'; $args['orderby'] = 'meta_value_num'; $args['order'] = 'ASC'; break;
+        case 'price-desc': $args['meta_key'] = 'sb_price'; $args['orderby'] = 'meta_value_num'; $args['order'] = 'DESC'; break;
+        case 'title-asc':  $args['orderby'] = 'title'; $args['order'] = 'ASC'; break;
+    }
+
+    if (!empty($_POST['status']))     $args['meta_query'][] = ['key'=>'sb_status',     'value'=>sanitize_text_field($_POST['status']),   'compare'=>'='];
+    if (!empty($_POST['build_type'])) $args['meta_query'][] = ['key'=>'sb_build_type', 'value'=>sanitize_key($_POST['build_type']),      'compare'=>'='];
+    if (!empty($_POST['keyword']))    $args['s'] = sanitize_text_field($_POST['keyword']);
+
+    $query = new WP_Query($args);
+
+    $status_labels = ['for-sale'=>'For Sale','for-rent'=>'For Rent','sold'=>'Sold'];
+    $status_colors = ['for-sale'=>'#001d3d','for-rent'=>'#0057b7','sold'=>'#6b7280'];
+
+    ob_start();
+    if ($query->have_posts()):
+        while ($query->have_posts()): $query->the_post();
+            $id        = get_the_ID();
+            $price     = get_post_meta($id, 'sb_price', true);
+            $beds      = get_post_meta($id, 'sb_bedrooms', true);
+            $baths     = get_post_meta($id, 'sb_bathrooms', true);
+            $city      = get_post_meta($id, 'sb_city', true);
+            $ref       = get_post_meta($id, 'sb_ref', true);
+            $status    = get_post_meta($id, 'sb_status', true);
+            $status_k  = str_replace('_','-',(string)$status);
+            $img       = sb_get_image_url($id);
+            $edit_url  = get_edit_post_link($id);
+            $view_url  = get_permalink($id);
+            $date      = get_the_date('d M Y');
+            $label     = $status_labels[$status_k] ?? ucwords(str_replace(['-','_'],' ',$status));
+            $color     = $status_colors[$status_k] ?? '#6b7280';
+            ?>
+            <tr class="dash-row" data-id="<?php echo $id; ?>">
+                <td class="dash-cell dash-cell--thumb">
+                    <?php if ($img): ?>
+                        <img src="<?php echo esc_url($img); ?>" alt="" class="dash-thumb">
+                    <?php else: ?>
+                        <div class="dash-thumb dash-thumb--empty"></div>
+                    <?php endif; ?>
+                </td>
+                <td class="dash-cell dash-cell--title">
+                    <a href="<?php echo esc_url($edit_url); ?>" class="dash-title"><?php the_title(); ?></a>
+                    <?php if ($ref): ?><span class="dash-ref"><?php echo esc_html($ref); ?></span><?php endif; ?>
+                </td>
+                <td class="dash-cell dash-cell--price"><?php echo $price ? esc_html(sb_format_price($price)) : '—'; ?></td>
+                <td class="dash-cell">
+                    <span class="dash-badge" style="background:<?php echo esc_attr($color); ?>"><?php echo esc_html($label); ?></span>
+                </td>
+                <td class="dash-cell dash-cell--city"><?php echo $city ? esc_html($city) : '—'; ?></td>
+                <td class="dash-cell dash-cell--meta">
+                    <?php if ($beds):  ?><span class="dash-meta-item">🛏 <?php echo esc_html($beds); ?></span><?php endif; ?>
+                    <?php if ($baths): ?><span class="dash-meta-item">🚿 <?php echo esc_html($baths); ?></span><?php endif; ?>
+                </td>
+                <td class="dash-cell dash-cell--date"><?php echo esc_html($date); ?></td>
+                <td class="dash-cell dash-cell--actions">
+                    <a href="<?php echo esc_url($edit_url); ?>" class="dash-action-btn dash-action-btn--edit">Edit</a>
+                    <a href="<?php echo esc_url($view_url); ?>" class="dash-action-btn" target="_blank">View</a>
+                </td>
+            </tr>
+            <?php
+        endwhile;
+        wp_reset_postdata();
+    else:
+        echo '<tr><td colspan="8" class="dash-empty">No properties found.</td></tr>';
+    endif;
+    $rows = ob_get_clean();
+
+    wp_send_json_success(['rows' => $rows, 'total' => $query->found_posts, 'pages' => $query->max_num_pages]);
+}
+add_action('wp_ajax_sb_dash_search', 'sb_ajax_dash_search');
+
 /* ── Helper: Format Price ── */
 function sb_format_price($price) {
     if (!$price) return '';
