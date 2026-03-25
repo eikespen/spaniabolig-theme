@@ -407,6 +407,47 @@ input, select, textarea, button { font: inherit; }
 .dropdown li a:hover { background: var(--grey-50) !important; color: var(--navy) !important; }
 .has-dropdown:hover .dropdown { display: block; }
 
+/* Rich dropdown */
+.dropdown--rich { min-width: 280px; padding: 8px; }
+.dropdown--rich li + li { border-top: 1px solid var(--grey-100); }
+.dropdown-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    padding: 12px 10px !important;
+    border-radius: 8px;
+}
+.dropdown-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--grey-100);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--navy);
+}
+.dropdown-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.dropdown-text strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--grey-900);
+    display: block;
+}
+.dropdown-text span {
+    font-size: 12.5px;
+    color: var(--grey-500);
+    font-weight: 400;
+    line-height: 1.4;
+    display: block;
+}
+.dropdown--rich .dropdown-item:hover .dropdown-icon { background: var(--navy); color: var(--white); }
+
 .header-actions { display: flex; gap: 10px; align-items: center; margin-left: auto; }
 .nav-toggle {
     display: none;

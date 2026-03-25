@@ -29,13 +29,35 @@
                 <li <?php if (is_front_page()) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
                 <li class="has-dropdown <?php if (is_post_type_archive('property') || is_singular('property')) echo 'current'; ?>">
                     <a href="<?php echo esc_url(home_url('/properties')); ?>">Properties <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></a>
-                    <ul class="dropdown">
-                        <li><a href="<?php echo esc_url(home_url('/properties')); ?>">All Properties</a></li>
-                        <li><a href="<?php echo esc_url(home_url('/properties/?build_type=resale')); ?>">Resale</a></li>
-                        <li><a href="<?php echo esc_url(home_url('/properties/?build_type=new')); ?>">New Build</a></li>
-                        <li><a href="<?php echo esc_url(home_url('/properties/?property_type=villa')); ?>">Villas</a></li>
-                        <li><a href="<?php echo esc_url(home_url('/properties/?property_type=apartment')); ?>">Apartments</a></li>
-                        <li><a href="<?php echo esc_url(home_url('/properties/?property_type=townhouse')); ?>">Townhouses</a></li>
+                    <ul class="dropdown dropdown--rich">
+                        <li><a href="<?php echo esc_url(home_url('/properties/?property_type=villa')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                            <span class="dropdown-text"><strong>Villas</strong><span>Explore standalone villas with private pools</span></span>
+                        </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties/?property_type=apartment')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M9 3v18M15 3v18M2 9h20M2 15h20"/></svg></span>
+                            <span class="dropdown-text"><strong>Apartments</strong><span>Browse apartments with fantastic views</span></span>
+                        </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties/?property_type=townhouse')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+                            <span class="dropdown-text"><strong>Townhouses</strong><span>Community living with exclusive amenities</span></span>
+                        </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties/?build_type=new')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+                            <span class="dropdown-text"><strong>New builds</strong><span>Brand new properties with modern features</span></span>
+                        </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties/?build_type=resale')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+                            <span class="dropdown-text"><strong>Second hand</strong><span>Resale properties ready to move in</span></span>
+                        </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties/?features=pool')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                            <span class="dropdown-text"><strong>Properties with pool</strong><span>Find your perfect home with a swimming pool</span></span>
+                        </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+                            <span class="dropdown-text"><strong>Investment properties</strong><span>High-yield rental investment opportunities</span></span>
+                        </a></li>
                     </ul>
                 </li>
                 <li <?php if (is_page('about')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/about')); ?>">About</a></li>
