@@ -59,48 +59,105 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
                     <?php endif; ?>
                 </div>
 
+                <!-- Stats bar -->
+                <?php
+                $type_terms  = get_the_terms($post_id, 'property_type');
+                $type_label  = (!empty($type_terms) && !is_wp_error($type_terms)) ? implode(', ', wp_list_pluck($type_terms, 'name')) : '';
+                $features    = get_post_meta($post_id, 'sb_features', true) ?: [];
+                if (!is_array($features)) $features = [];
+                ?>
                 <div class="property-stats">
+                    <?php if ($type_label) : ?>
+                        <div class="stat">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            <span><?php echo esc_html($type_label); ?></span>
+                            <label><?php esc_html_e('Property Type', 'spaniabolig'); ?></label>
+                        </div>
+                    <?php endif; ?>
                     <?php if ($bedrooms) : ?>
                         <div class="stat">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
                             <span><?php echo esc_html($bedrooms); ?></span>
                             <label><?php esc_html_e('Bedrooms', 'spaniabolig'); ?></label>
                         </div>
                     <?php endif; ?>
                     <?php if ($bathrooms) : ?>
                         <div class="stat">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><line x1="10" y1="5" x2="8" y2="7"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><line x1="10" y1="5" x2="8" y2="7"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
                             <span><?php echo esc_html($bathrooms); ?></span>
                             <label><?php esc_html_e('Bathrooms', 'spaniabolig'); ?></label>
                         </div>
                     <?php endif; ?>
                     <?php if ($size) : ?>
                         <div class="stat">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 10v11M12 10v11M16 10v11"/></svg>
                             <span><?php echo esc_html($size); ?> m²</span>
-                            <label><?php esc_html_e('Size', 'spaniabolig'); ?></label>
+                            <label><?php esc_html_e('Area Size', 'spaniabolig'); ?></label>
                         </div>
                     <?php endif; ?>
                     <?php if ($ref) : ?>
                         <div class="stat">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="12" y2="15"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="12" y2="15"/></svg>
                             <span><?php echo esc_html($ref); ?></span>
                             <label><?php esc_html_e('Ref #', 'spaniabolig'); ?></label>
                         </div>
                     <?php endif; ?>
                 </div>
 
-                <div class="property-description">
-                    <h2><?php esc_html_e('Description', 'spaniabolig'); ?></h2>
-                    <?php the_content(); ?>
-                </div>
+                <!-- Tabbed content -->
+                <div class="prop-tabs">
+                    <div class="prop-tabs__nav">
+                        <button class="prop-tab-btn active" data-tab="description"><?php esc_html_e('Description', 'spaniabolig'); ?></button>
+                        <button class="prop-tab-btn" data-tab="details"><?php esc_html_e('Details', 'spaniabolig'); ?></button>
+                        <?php if (!empty($features)) : ?>
+                        <button class="prop-tab-btn" data-tab="features"><?php esc_html_e('Features', 'spaniabolig'); ?></button>
+                        <?php endif; ?>
+                        <?php if ($lat && $lng) : ?>
+                        <button class="prop-tab-btn" data-tab="location"><?php esc_html_e('Location', 'spaniabolig'); ?></button>
+                        <?php endif; ?>
+                    </div>
 
-                <?php if ($lat && $lng) : ?>
-                <div class="property-map">
-                    <h2><?php esc_html_e('Location', 'spaniabolig'); ?></h2>
-                    <div id="sb-map" data-lat="<?php echo esc_attr($lat); ?>" data-lng="<?php echo esc_attr($lng); ?>" style="height:360px;border-radius:12px;overflow:hidden;"></div>
+                    <!-- Description -->
+                    <div class="prop-tab-panel active" id="tab-description">
+                        <div class="property-description">
+                            <?php the_content(); ?>
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="prop-tab-panel" id="tab-details">
+                        <table class="prop-details-table">
+                            <?php if ($type_label) : ?><tr><th><?php esc_html_e('Property Type', 'spaniabolig'); ?></th><td><?php echo esc_html($type_label); ?></td></tr><?php endif; ?>
+                            <?php if ($bedrooms)   : ?><tr><th><?php esc_html_e('Bedrooms', 'spaniabolig'); ?></th><td><?php echo esc_html($bedrooms); ?></td></tr><?php endif; ?>
+                            <?php if ($bathrooms)  : ?><tr><th><?php esc_html_e('Bathrooms', 'spaniabolig'); ?></th><td><?php echo esc_html($bathrooms); ?></td></tr><?php endif; ?>
+                            <?php if ($size)       : ?><tr><th><?php esc_html_e('Area Size', 'spaniabolig'); ?></th><td><?php echo esc_html($size); ?> m²</td></tr><?php endif; ?>
+                            <?php if ($city)       : ?><tr><th><?php esc_html_e('Location', 'spaniabolig'); ?></th><td><?php echo esc_html($city); ?></td></tr><?php endif; ?>
+                            <?php if ($status)     : ?><tr><th><?php esc_html_e('Status', 'spaniabolig'); ?></th><td><?php echo esc_html(ucwords(str_replace('_', ' ', $status))); ?></td></tr><?php endif; ?>
+                            <?php if ($ref)        : ?><tr><th><?php esc_html_e('Reference', 'spaniabolig'); ?></th><td><?php echo esc_html($ref); ?></td></tr><?php endif; ?>
+                        </table>
+                    </div>
+
+                    <!-- Features -->
+                    <?php if (!empty($features)) : ?>
+                    <div class="prop-tab-panel" id="tab-features">
+                        <div class="prop-features-grid">
+                            <?php foreach ($features as $feature) : ?>
+                                <div class="prop-feature">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+                                    <?php echo esc_html($feature); ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
+                    <!-- Location -->
+                    <?php if ($lat && $lng) : ?>
+                    <div class="prop-tab-panel" id="tab-location">
+                        <div id="sb-map" data-lat="<?php echo esc_attr($lat); ?>" data-lng="<?php echo esc_attr($lng); ?>" style="height:400px;border-radius:12px;overflow:hidden;"></div>
+                    </div>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
 
                 <!-- Full-width enquiry section -->
                 <div class="property-enquiry">

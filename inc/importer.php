@@ -192,6 +192,19 @@ function sb_run_import(string $feed_key): array {
             }
         }
 
+        // Features / amenities — try common XML patterns
+        $features = [];
+        if (!empty($prop->features)) {
+            foreach ($prop->features->feature as $f) {
+                $val = trim((string) $f);
+                if ($val) $features[] = $val;
+            }
+        }
+        if (empty($features) && !empty($prop->options)) {
+            // Some feeds use comma-separated options string
+            $features = array_filter(array_map('trim', explode(',', (string) $prop->options)));
+        }
+
         // Check if property already exists by ref
         $existing = get_posts([
             'post_type'      => 'property',
@@ -232,6 +245,9 @@ function sb_run_import(string $feed_key): array {
         update_post_meta($post_id, 'sb_status',      $status);
         update_post_meta($post_id, 'sb_build_type',  $build_type);
         update_post_meta($post_id, 'sb_image_urls',  $image_urls); // Store all image URLs
+        if (!empty($features)) {
+            update_post_meta($post_id, 'sb_features', $features);
+        }
 
         // Store first image URL as external thumbnail (no download during import)
         if (!empty($image_urls)) {

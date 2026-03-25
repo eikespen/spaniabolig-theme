@@ -127,6 +127,18 @@
         });
     });
 
+    /* ── Property tabs ── */
+    document.querySelectorAll('.prop-tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tab = this.dataset.tab;
+            this.closest('.prop-tabs').querySelectorAll('.prop-tab-btn').forEach(b => b.classList.remove('active'));
+            this.closest('.prop-tabs').querySelectorAll('.prop-tab-panel').forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            const panel = document.getElementById('tab-' + tab);
+            if (panel) panel.classList.add('active');
+        });
+    });
+
     /* ── Sticky header shadow ── */
     const header = document.querySelector('.site-header');
     if (header) {
