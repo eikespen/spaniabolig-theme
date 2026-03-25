@@ -214,6 +214,13 @@
             sortEl.value = 'date';
             doSearch(1);
         });
+
+        // If URL params are active on page load, trigger AJAX immediately so
+        // pagination renders correctly (SSR only shows one page of results).
+        const _urlP = new URLSearchParams(window.location.search);
+        if (_urlP.has('build_type') || _urlP.has('status') || _urlP.has('location') || _urlP.has('keyword')) {
+            doSearch(1);
+        }
     }
 
 })();
