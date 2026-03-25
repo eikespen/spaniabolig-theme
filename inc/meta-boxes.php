@@ -410,7 +410,7 @@ function sb_mb_contact($post) {
         sb_grid_end();
         sb_grid_start(3);
             sb_field($post, 'sb_info_email',    'Email address', 'text', 'post@spaniabolig.no');
-            sb_field($post, 'sb_info_phone',    'Phone number',  'text', '+34 696 039 621');
+            sb_field($post, 'sb_info_phone',    'Phone number',  'text', '+34 681 914 891');
             sb_field($post, 'sb_info_location', 'Location text', 'text', 'Ciudad Quesada, Rojales, Alicante, Spain');
         sb_grid_end();
     sb_section_end();

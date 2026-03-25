@@ -75,7 +75,7 @@ function sb_ct($key, $default = '') {
                 </div>
                 <div>
                     <strong><?php echo esc_html(sb_ct('sb_info_phone_label', 'Call us')); ?></strong>
-                    <span><?php echo esc_html(sb_ct('sb_info_phone', '+34 696 039 621')); ?></span>
+                    <span><?php echo esc_html(sb_ct('sb_info_phone', '+34 681 914 891')); ?></span>
                 </div>
             </div>
             <div class="contact-info-card">

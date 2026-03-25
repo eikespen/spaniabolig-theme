@@ -48,7 +48,7 @@
                 <h4>Contact us</h4>
                 <ul>
                     <li><a href="mailto:post@spaniabolig.no">post@spaniabolig.no</a></li>
-                    <li><a href="tel:+34696039621">+34 696 039 621</a></li>
+                    <li><a href="tel:+34681914891">+34 681 914 891</a></li>
                     <li><span>Ciudad Quesada, Spain</span></li>
                 </ul>
             </div>
