@@ -839,33 +839,39 @@ input, select, textarea, button { font: inherit; }
 /* ── Quick Links ── */
 .quick-links {
     background: var(--white);
-    border-bottom: 1px solid var(--grey-200);
-    padding: 0;
+    padding: 48px 0;
 }
 .quick-links-grid {
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
 }
-.quick-links-grid::-webkit-scrollbar { display: none; }
 .quick-link {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 16px 20px;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px 16px;
     font-size: 14px;
     font-weight: 500;
     color: var(--grey-700);
-    white-space: nowrap;
-    border-right: 1px solid var(--grey-200);
-    transition: background .15s, color .15s;
-    flex-shrink: 0;
+    text-align: center;
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    background: var(--white);
+    transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
+    text-decoration: none;
 }
-.quick-link svg { color: var(--grey-400); flex-shrink: 0; }
-.quick-link:hover { background: var(--grey-50); color: var(--navy); }
+.quick-link svg { color: var(--grey-700); }
+.quick-link:hover {
+    background: var(--grey-50);
+    color: var(--navy);
+    border-color: var(--navy);
+    box-shadow: var(--shadow-sm);
+}
 .quick-link:hover svg { color: var(--navy); }
-.quick-link--all { font-weight: 600; color: var(--navy); }
+.quick-link--all { font-weight: 600; color: var(--navy); border-color: var(--navy); }
 
 /* ── Price Showcase (Resale + New Build) ── */
 .price-showcase {
@@ -1249,6 +1255,7 @@ input, select, textarea, button { font: inherit; }
     .search-field--keyword { grid-column: span 1; }
     .archive-layout { grid-template-columns: 240px 1fr; gap: 24px; }
     .property-layout { grid-template-columns: 1fr 320px; gap: 32px; }
+    .quick-links-grid { grid-template-columns: repeat(4, 1fr); }
     .services-grid--large { grid-template-columns: repeat(2, 1fr); }
     .contact-page-grid { grid-template-columns: 1fr 320px; gap: 40px; }
 }
