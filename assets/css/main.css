@@ -3039,65 +3039,104 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .nav-toggle span { background: var(--white) !important; }
 
 @media (max-width: 768px) {
+    /* ── Full-screen overlay ── */
     .site-nav.nav-open {
         display: flex !important;
         position: fixed;
         top: 76px;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        left: 0; right: 0; bottom: 0;
         background: var(--navy);
         z-index: 99;
-        padding: 20px 16px;
+        padding: 8px 0 24px;
         flex-direction: column;
         overflow-y: auto;
         border-top: 1px solid rgba(255,255,255,.1);
     }
     .admin-bar .site-nav.nav-open { top: 108px; }
+
+    /* ── Nav list: tight vertical stack ── */
     .site-nav.nav-open .nav-list {
         flex-direction: column;
-        gap: 4px;
+        gap: 0;
         width: 100%;
     }
+
+    /* ── Top-level links ── */
     .site-nav.nav-open .nav-list > li > a {
-        padding: 12px 16px;
-        font-size: 16px;
-        border-radius: 10px;
+        padding: 13px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 0;
         color: rgba(255,255,255,.9) !important;
         background: transparent !important;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        border-bottom: 1px solid rgba(255,255,255,.07);
     }
-    .site-nav.nav-open .nav-list > li > a:hover {
-        background: rgba(255,255,255,.1) !important;
+    .site-nav.nav-open .nav-list > li > a:hover,
+    .site-nav.nav-open .nav-list > li > a:active {
+        background: rgba(255,255,255,.07) !important;
         color: #fff !important;
     }
-    /* Sub-dropdown in mobile */
+
+    /* ── Chevron on dropdown trigger ── */
+    .site-nav.nav-open .has-dropdown > a::after {
+        content: '›';
+        font-size: 20px;
+        line-height: 1;
+        color: rgba(255,255,255,.4);
+        transform: rotate(90deg);
+        display: inline-block;
+        transition: transform .2s;
+    }
+    .site-nav.nav-open .has-dropdown.is-open > a::after {
+        transform: rotate(270deg);
+    }
+
+    /* ── Sub-menu: hidden by default, shown when .is-open ── */
     .site-nav.nav-open .has-dropdown .dropdown {
-        display: block !important;
+        display: none;
         position: static;
-        background: rgba(255,255,255,.06);
+        background: rgba(0,0,0,.2);
         border: none;
-        border-radius: 10px;
+        border-radius: 0;
         box-shadow: none;
-        padding: 6px 8px;
-        margin: 4px 0 8px 8px;
+        padding: 4px 0;
+        margin: 0;
+        min-width: 0;
     }
-    .site-nav.nav-open .has-dropdown .dropdown li a {
-        color: rgba(255,255,255,.75) !important;
-        font-size: 14px;
-        padding: 8px 12px !important;
+    .site-nav.nav-open .has-dropdown.is-open .dropdown {
+        display: block;
     }
-    .site-nav.nav-open .has-dropdown .dropdown li a:hover {
-        background: rgba(255,255,255,.08) !important;
+
+    /* ── Sub-menu items: plain compact text rows, no icons/descriptions ── */
+    .site-nav.nav-open .has-dropdown .dropdown li a,
+    .site-nav.nav-open .has-dropdown .dropdown li a.dropdown-item {
+        display: block !important;
+        padding: 11px 24px 11px 36px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: rgba(255,255,255,.7) !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+        gap: 0 !important;
+    }
+    .site-nav.nav-open .has-dropdown .dropdown li:last-child a { border-bottom: none; }
+    .site-nav.nav-open .has-dropdown .dropdown li a:hover,
+    .site-nav.nav-open .has-dropdown .dropdown li a:active {
+        background: rgba(255,255,255,.07) !important;
         color: #fff !important;
     }
-    /* Add "View Properties" button at bottom of mobile menu */
-    .site-nav.nav-open::after {
-        content: '';
-        flex: 1;
-        min-height: 20px;
+
+    /* Hide the icon box and description text inside dropdown items on mobile */
+    .site-nav.nav-open .dropdown-icon { display: none !important; }
+    .site-nav.nav-open .dropdown-text span { display: none !important; }
+    .site-nav.nav-open .dropdown-text strong {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: rgba(255,255,255,.75) !important;
     }
 }
 

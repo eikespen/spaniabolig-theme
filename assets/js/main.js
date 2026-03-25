@@ -10,8 +10,26 @@
             const open = toggle.getAttribute('aria-expanded') === 'true';
             toggle.setAttribute('aria-expanded', !open);
             nav.classList.toggle('nav-open', !open);
+            // Close any open sub-menus when closing the nav
+            if (open) {
+                nav.querySelectorAll('.has-dropdown.is-open').forEach(el => el.classList.remove('is-open'));
+            }
         });
     }
+
+    /* ── Mobile: tap to toggle sub-menus ── */
+    document.querySelectorAll('.has-dropdown > a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Only intercept on mobile (nav-toggle visible)
+            if (!toggle || getComputedStyle(toggle).display === 'none') return;
+            e.preventDefault();
+            const parent = this.closest('.has-dropdown');
+            const wasOpen = parent.classList.contains('is-open');
+            // Close all open dropdowns first
+            nav.querySelectorAll('.has-dropdown.is-open').forEach(el => el.classList.remove('is-open'));
+            if (!wasOpen) parent.classList.add('is-open');
+        });
+    });
 
     /* ── Favourite heart buttons ── */
     function getFavs() {
