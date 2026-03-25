@@ -851,6 +851,7 @@ input, select, textarea, button { font: inherit; }
 .gallery-thumbs { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; }
 .gallery-thumb { width: 100px; height: 72px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: 0.8; transition: opacity .15s; flex-shrink: 0; }
 .gallery-thumb:hover { opacity: 1; }
+.gallery-thumb.active { opacity: 1; outline: 3px solid var(--primary); outline-offset: 2px; }
 
 .property-layout { display: grid; grid-template-columns: 1fr 360px; gap: 48px; align-items: start; }
 

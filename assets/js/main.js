@@ -27,6 +27,18 @@
         });
     }
 
+    /* ── Gallery thumbnail click-to-swap ── */
+    const mainImg = document.getElementById('gallery-main-img');
+    if (mainImg) {
+        document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                mainImg.src = this.dataset.full || this.src;
+                document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    }
+
     /* ── Leaflet map (if lat/lng set) ── */
     const mapEl = document.getElementById('sb-map');
     if (mapEl && window.L) {

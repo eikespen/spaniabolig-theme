@@ -41,8 +41,21 @@ function sb_enqueue() {
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce'   => wp_create_nonce('sb_search'),
     ]);
+    // Leaflet — only on single property pages
+    if (is_singular('property')) {
+        wp_enqueue_style('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4');
+        wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true);
+    }
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
+
+/* ── Strip &#13; carriage returns from XML-imported property descriptions ── */
+add_filter('the_content', function($content) {
+    if (is_singular('property')) {
+        $content = str_replace(['&#13;', "\r"], '', $content);
+    }
+    return $content;
+});
 
 /* ── Property CPT ── */
 function sb_register_property_cpt() {

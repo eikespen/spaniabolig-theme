@@ -8,6 +8,7 @@ $city      = get_post_meta(get_the_ID(), 'sb_city', true);
 $ref       = get_post_meta(get_the_ID(), 'sb_ref', true);
 $lat       = get_post_meta(get_the_ID(), 'sb_lat', true);
 $lng       = get_post_meta(get_the_ID(), 'sb_lng', true);
+$status_key    = str_replace('_', '-', (string) $status);
 $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 'Sold'];
 ?>
 
@@ -19,15 +20,16 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
             <?php
             $main_img   = sb_get_image_url(get_the_ID(), 'full');
             $image_urls = get_post_meta(get_the_ID(), 'sb_image_urls', true) ?: [];
+            if (!is_array($image_urls)) $image_urls = [];
             if ($main_img) :
             ?>
                 <div class="gallery-main">
-                    <img src="<?php echo esc_url($main_img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="gallery-main-img">
+                    <img id="gallery-main-img" src="<?php echo esc_url($main_img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="gallery-main-img">
                 </div>
                 <?php if (count($image_urls) > 1) : ?>
                 <div class="gallery-thumbs">
-                    <?php foreach (array_slice($image_urls, 1, 8) as $thumb_url) : ?>
-                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb" loading="lazy">
+                    <?php foreach (array_slice($image_urls, 0, 9) as $i => $thumb_url) : ?>
+                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb<?php echo $i === 0 ? ' active' : ''; ?>" loading="lazy" data-full="<?php echo esc_url($thumb_url); ?>">
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
@@ -38,9 +40,9 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
             <!-- Main Content -->
             <div class="property-content">
                 <div class="property-header">
-                    <?php if ($status) : ?>
-                        <span class="card-badge card-badge--<?php echo esc_attr($status); ?>">
-                            <?php echo esc_html($status_labels[$status] ?? ucfirst($status)); ?>
+                    <?php if ($status_key) : ?>
+                        <span class="card-badge card-badge--<?php echo esc_attr($status_key); ?>">
+                            <?php echo esc_html($status_labels[$status_key] ?? ucwords(str_replace(['-','_'], ' ', $status))); ?>
                         </span>
                     <?php endif; ?>
                     <h1 class="property-title"><?php the_title(); ?></h1>
