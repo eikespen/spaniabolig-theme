@@ -126,9 +126,6 @@ add_action('user_register', function (int $user_id) {
       </div>
     </div>
 
-    <div class='tip'>
-      💡 <strong>First time tip:</strong> Visit <strong>{$admin_url}?sb_seed_pages=1</strong> to auto-create all required pages (About, Services, Dictionary, Privacy Policy, etc.) with the correct templates assigned — only needed once on a fresh install.
-    </div>
   </div>
   <div class='footer'>
     <p>{$site_name} &mdash; <a href='{$site_url}'>{$site_url}</a></p>
