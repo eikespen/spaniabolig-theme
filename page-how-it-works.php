@@ -7,39 +7,58 @@ get_header(); ?>
 <section class="page-hero">
     <div class="section-inner">
         <h1>How it works</h1>
-        <p>Finding your dream property in Ciudad Quesada is simple. We guide you through every step of the process.</p>
+        <p>Finding your perfect property in Ciudad Quesada is easy with our step-by-step process.</p>
     </div>
 </section>
 
 <section class="how-it-works-steps">
     <div class="section-inner">
-        <h2>Your journey to a Spanish property</h2>
-        <div class="steps-grid">
+        <div class="steps-stack">
             <div class="step-card">
-                <div class="step-number">1</div>
-                <h3>Search &amp; browse</h3>
-                <p>Use our search tool to filter properties by type, location, price and features. Browse hundreds of listings in Ciudad Quesada and the surrounding urbanizations.</p>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                    <p class="step-label">Step 1</p>
+                    <h3>Search for your ideal property</h3>
+                    <p>Use our advanced property search features to find properties that match your requirements. Filter by property type, location, price range, and specific features to narrow down your options in Ciudad Quesada.</p>
+                </div>
             </div>
             <div class="step-card">
-                <div class="step-number">2</div>
-                <h3>Contact us</h3>
-                <p>Found something you like? Get in touch with our local team. We'll answer your questions and arrange viewings at times that suit you — including virtual tours.</p>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                    <p class="step-label">Step 2</p>
+                    <h3>Browse detailed property listings</h3>
+                    <p>View comprehensive information about each property including detailed descriptions, high-quality photos, floor plans, and key features. Our property listings provide all the details you need to make an informed decision about whether a property meets your requirements.</p>
+                </div>
             </div>
             <div class="step-card">
-                <div class="step-number">3</div>
-                <h3>View properties</h3>
-                <p>Visit properties in person or virtually. Our local experts will accompany you and give you honest, unbiased advice about each property and the surrounding area.</p>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div>
+                    <p class="step-label">Step 3</p>
+                    <h3>Contact us about your favourite properties</h3>
+                    <p>When you find properties that interest you, contact our team directly to learn more, arrange viewings, or get expert advice about the local market and buying process in Ciudad Quesada.</p>
+                </div>
             </div>
             <div class="step-card">
-                <div class="step-number">4</div>
-                <h3>Complete your purchase</h3>
-                <p>We connect you with trusted local lawyers, NIE number assistance, and mortgage specialists to ensure your purchase goes smoothly from offer to keys.</p>
+                <div class="step-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div>
+                    <p class="step-label">Step 4</p>
+                    <h3>We help you through the buying process</h3>
+                    <p>Our experienced team guides you through every step of the property purchase process in Spain, from making an offer and legal checks to signing at the notary. We connect you with trusted local lawyers, NIE assistance, and mortgage specialists.</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="about-services" style="background: var(--grey-50);">
+<section class="about-services">
     <div class="section-inner">
         <h2>What's included in our service</h2>
         <div class="services-grid">

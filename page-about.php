@@ -12,17 +12,19 @@ get_header(); ?>
 </section>
 
 <section class="about-mission">
-    <div class="section-inner about-grid">
-        <div>
-            <h2>Our mission</h2>
-            <p>At Spaniabolig, we understand that finding the right property in a foreign country can be challenging. Our mission is to simplify this process for international buyers by providing a transparent property listing service that showcases the best properties in Ciudad Quesada and the surrounding urbanizations suited to your specific needs and budget.</p>
-            <p>We believe that everyone deserves clear, unbiased information when making important property investment decisions, especially when buying abroad. That's why we've developed a platform that cuts through the complexity and presents your options in a straightforward, easy-to-understand way.</p>
-        </div>
-        <div>
-            <h2>Your trusted partner for Spanish property</h2>
-            <p>Spaniabolig is your professional property partner specializing exclusively in Ciudad Quesada and the surrounding urbanizations of Rojales on the Costa Blanca. We are dedicated to helping international buyers find their perfect Spanish home in this beautiful Mediterranean community.</p>
-            <p>Our deep connection to Ciudad Quesada goes beyond business. Living and working in this vibrant community has allowed us to build strong relationships with local real estate professionals, developers, and property owners. This insider knowledge gives us invaluable insights into the local housing market and upcoming opportunities.</p>
-            <p>We have successfully helped numerous international clients from across Europe find their dream properties in Ciudad Quesada and the surrounding areas.</p>
+    <div class="section-inner">
+        <div class="about-stack">
+            <div class="about-card">
+                <h2>Our mission</h2>
+                <p>At Spaniabolig, we understand that finding the right property in a foreign country can be challenging. Our mission is to simplify this process for international buyers by providing a transparent property listing service that showcases the best properties in Ciudad Quesada and the surrounding urbanizations suited to your specific needs and budget.</p>
+                <p>We believe that everyone deserves clear, unbiased information when making important property investment decisions, especially when buying abroad. That's why we've developed a platform that cuts through the complexity and presents your options in a straightforward, easy-to-understand way.</p>
+            </div>
+            <div class="about-card">
+                <h2>Your trusted partner for Spanish property</h2>
+                <p>Spaniabolig is your professional property partner specializing exclusively in Ciudad Quesada and the surrounding urbanizations of Rojales on the Costa Blanca. We are dedicated to helping international buyers find their perfect Spanish home in this beautiful Mediterranean community.</p>
+                <p>Our deep connection to Ciudad Quesada goes beyond business. Living and working in this vibrant community has allowed us to build strong relationships with local real estate professionals, developers, and property owners. This insider knowledge gives us invaluable insights into the local housing market and upcoming opportunities.</p>
+                <p>We have successfully helped numerous international clients from across Europe find their dream properties in Ciudad Quesada and the surrounding areas.</p>
+            </div>
         </div>
     </div>
 </section>

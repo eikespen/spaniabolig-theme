@@ -4,108 +4,45 @@
  */
 get_header(); ?>
 
-<section class="page-hero">
+<section class="page-hero page-hero--dark">
     <div class="section-inner">
-        <h1>Our services</h1>
-        <p>Everything you need to buy, rent or invest in property on the Costa Blanca — from first search to final handover.</p>
+        <span class="page-hero-label">Property Management</span>
+        <h1>Services for property owners in Spain</h1>
+        <p>Spaniabolig Real Estate offers a number of services to you who own a home in Spain. See below for more information and feel free to contact us if you have any questions.</p>
+        <a href="<?php echo esc_url(home_url('/contact')); ?>">Contact us today &rarr;</a>
     </div>
 </section>
 
-<section class="about-services" style="background: var(--white);">
+<section class="about-services">
     <div class="section-inner">
-        <h2>What we offer</h2>
-        <div class="services-grid services-grid--large">
+        <h2>Our services</h2>
+        <p style="text-align:center;color:var(--grey-500);margin-top:-24px;margin-bottom:40px;font-size:15px;">From key holding to professional photography — we take care of your Spanish property so you don't have to.</p>
+        <div class="services-grid">
             <?php
             $services = [
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-                    'title' => 'Property search & matching',
-                    'desc'  => 'Tell us what you are looking for and we will shortlist properties that match your requirements, budget and preferred location — saving you hours of searching.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-                    'title' => 'Property viewings',
-                    'desc'  => 'We arrange and accompany you on viewings — in person or by video call. Our local team provides honest commentary on every property and its surroundings.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-                    'title' => 'Legal guidance',
-                    'desc'  => 'We connect you with trusted, English-speaking Spanish lawyers who handle purchase contracts, NIE numbers, due diligence and all legal aspects of your transaction.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-                    'title' => 'Mortgage assistance',
-                    'desc'  => 'Our network of specialist mortgage brokers helps foreign buyers secure competitive Spanish mortgage rates and navigate the application process smoothly.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-                    'title' => 'Currency exchange',
-                    'desc'  => 'We work with specialist currency providers who offer better rates than high-street banks, potentially saving you thousands on international money transfers.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.37h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
-                    'title' => 'After-sales support',
-                    'desc'  => 'Our service does not end at the notary. We help with utility connections, internet setup, furniture recommendations and trusted tradespeople for any renovations.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-                    'title' => 'Rental management',
-                    'desc'  => 'If you plan to rent out your property when not in use, we can connect you with reputable local management companies to handle bookings, guests and maintenance.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-                    'title' => 'New build & off-plan',
-                    'desc'  => 'Access exclusive new build developments in Ciudad Quesada and Rojales. We guide you through payment plans, developer contracts and construction timelines.',
-                ],
-                [
-                    'icon' => '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-                    'title' => 'Investment advice',
-                    'desc'  => 'Looking for buy-to-let or capital growth opportunities? Our team has deep local market knowledge and can identify properties with strong rental yields and appreciation potential.',
-                ],
+                ['icon' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', 'title' => 'Meet &amp; Greet', 'desc' => 'We offer a first-class meet and greet service, ensuring a smooth key handover upon both arrival and departure. We make sure your property is clean, stocked with essentials, and ready for your arrival.'],
+                ['icon' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>', 'title' => 'Key holding', 'desc' => 'It is always a good idea to have someone have access to the property in case something happens. We are happy to take care of your keys and look after your property year round.'],
+                ['icon' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', 'title' => 'Pool services / Pool boy', 'desc' => 'We have several teams that help you keep your pool in top quality so that it can be used all year round — either by yourself or by rental guests.'],
+                ['icon' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>', 'title' => 'Cleaning services', 'desc' => 'We provide professional cleaning services for your Spanish property, whether for regular maintenance, after a rental period, or to prepare your home for your own stay.'],
+                ['icon' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>', 'title' => 'Property photography', 'desc' => 'High-quality professional photography to showcase your property at its best — perfect for rental listings, sales, or simply capturing your Spanish home in beautiful light.'],
+                ['icon' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>', 'title' => 'Maintenance &amp; repairs', 'desc' => 'From minor repairs to larger maintenance tasks, our trusted network of local tradespeople ensures your Spanish property is always well-maintained and in excellent condition.'],
             ];
-            foreach ($services as $svc) : ?>
+            foreach ($services as $s) : ?>
             <div class="service-card service-card--icon">
-                <div class="service-icon"><?php echo $svc['icon']; ?></div>
-                <h3><?php echo esc_html($svc['title']); ?></h3>
-                <p><?php echo esc_html($svc['desc']); ?></p>
+                <div class="service-card-icon"><?php echo $s['icon']; ?></div>
+                <h3><?php echo $s['title']; ?></h3>
+                <p><?php echo esc_html($s['desc']); ?></p>
             </div>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
 
-<section class="why-buy" style="background: var(--grey-50);">
-    <div class="section-inner">
-        <h2>Why use a local agent?</h2>
-        <div class="why-buy-grid">
-            <div class="why-buy-col">
-                <ul class="check-list">
-                    <li>Local knowledge you cannot get from a website</li>
-                    <li>Genuine understanding of price levels in each urbanization</li>
-                    <li>We know which developments have community fee issues</li>
-                    <li>Access to off-market properties before they are listed</li>
-                </ul>
-            </div>
-            <div class="why-buy-col">
-                <ul class="check-list">
-                    <li>English-speaking team — no language barrier</li>
-                    <li>We work for you, not the developer or seller</li>
-                    <li>No hidden fees — transparent pricing from the start</li>
-                    <li>Years of experience helping British and Irish buyers</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
 <section class="cta-banner">
     <div class="section-inner">
-        <h2>Ready to find your Spanish home?</h2>
-        <p>Whether you are buying, renting or investing — our team is here to help every step of the way.</p>
-        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-            <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-white btn-lg">Browse properties</a>
-            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-lg" style="background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5);">Get in touch</a>
-        </div>
+        <h2>Interested in our property services?</h2>
+        <p>Get in touch with our team to discuss how we can help look after your Spanish property.</p>
+        <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-white btn-lg">Contact us today</a>
     </div>
 </section>
 

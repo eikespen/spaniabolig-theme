@@ -100,48 +100,88 @@ input, select, textarea, button { font: inherit; }
 
 /* ── Page Hero (subpages) ── */
 .page-hero {
-    background: var(--navy);
-    padding: 64px 0;
+    background: var(--grey-50);
+    padding: 64px 0 48px;
     text-align: center;
 }
 .page-hero h1 {
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(2rem, 4vw, 2.75rem);
     font-weight: 800;
-    color: var(--white);
+    color: var(--grey-900);
     letter-spacing: -0.03em;
     margin-bottom: 16px;
 }
 .page-hero p {
     font-size: 17px;
-    color: rgba(255,255,255,.75);
+    color: var(--grey-500);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.65;
 }
+/* Dark variant for Services page */
+.page-hero--dark {
+    background: var(--navy);
+    padding: 80px 0;
+}
+.page-hero--dark .page-hero-label {
+    display: inline-block;
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+}
+.page-hero--dark h1 {
+    color: var(--white);
+}
+.page-hero--dark p {
+    color: rgba(255,255,255,.75);
+}
+.page-hero--dark a {
+    color: var(--white);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 15px;
+}
 
 /* ── About page ── */
 .about-mission {
-    padding: 80px 0;
+    padding: 48px 0 80px;
+    background: var(--grey-50);
+}
+.about-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 740px;
+    margin: 0 auto;
+}
+.about-card {
     background: var(--white);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    border: 1px solid var(--grey-200);
+    box-shadow: var(--shadow-sm);
 }
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 56px;
-}
-.about-grid h2 {
-    font-size: 1.4rem;
+.about-card h2 {
+    font-size: 1.25rem;
     font-weight: 800;
     color: var(--grey-900);
     margin-bottom: 16px;
     letter-spacing: -0.02em;
 }
-.about-grid p {
+.about-card p {
     font-size: 15px;
     color: var(--grey-500);
     line-height: 1.75;
     margin-bottom: 14px;
 }
+.about-card p:last-child { margin-bottom: 0; }
 .about-contact-form {
     background: var(--grey-50);
     padding: 80px 0;
@@ -210,42 +250,47 @@ input, select, textarea, button { font: inherit; }
 
 /* ── How it works / Services / Contact pages ── */
 .how-it-works-steps {
-    padding: 80px 0;
-    background: var(--white);
+    padding: 48px 0 80px;
+    background: var(--grey-50);
 }
-.how-it-works-steps h2 {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--grey-900);
-    letter-spacing: -0.03em;
-    margin-bottom: 48px;
-    text-align: center;
-}
-.steps-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
-    counter-reset: steps;
+.steps-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 740px;
+    margin: 0 auto;
 }
 .step-card {
-    text-align: center;
-    counter-increment: steps;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--grey-200);
+    box-shadow: var(--shadow-sm);
+    padding: 28px 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
 }
-.step-number {
-    width: 56px;
-    height: 56px;
+.step-icon {
+    width: 52px;
+    height: 52px;
     background: var(--navy);
     color: var(--white);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    font-weight: 800;
-    margin: 0 auto 20px;
+    flex-shrink: 0;
+}
+.step-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--grey-400);
+    margin-bottom: 4px;
 }
 .step-card h3 {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: var(--grey-900);
     margin-bottom: 10px;
@@ -1095,11 +1140,38 @@ input, select, textarea, button { font: inherit; }
 /* ── Services page ── */
 .services-grid--large { grid-template-columns: repeat(3, 1fr); }
 .service-card--icon { display: flex; flex-direction: column; gap: 12px; }
-.service-icon { color: var(--primary); }
-.service-icon svg { display: block; }
+.service-card-icon { color: var(--navy); }
+.service-card-icon svg { display: block; }
 
 /* ── Contact page ── */
-.contact-page { padding: 72px 0; }
+.contact-page { padding: 48px 0 80px; background: var(--grey-50); }
+.contact-form-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--grey-200);
+    box-shadow: var(--shadow-sm);
+    padding: 40px 48px;
+    max-width: 740px;
+    margin: 0 auto;
+}
+.contact-form-card h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+.contact-form-card > p {
+    color: var(--grey-500);
+    font-size: 15px;
+    margin-bottom: 28px;
+}
+.form-privacy-note {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--grey-400);
+    margin-top: 12px;
+}
 .contact-page-grid { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
 .contact-form-wrap h2, .contact-info h2 { font-size: 1.5rem; margin-bottom: 24px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
