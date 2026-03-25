@@ -95,23 +95,32 @@
         }
     }
 
-    /* ── Dropdown with hover delay ── */
+    /* ── Dropdown with hover delay (desktop only) ── */
+    function isMobile() {
+        return toggle && getComputedStyle(toggle).display !== 'none';
+    }
     document.querySelectorAll('.has-dropdown').forEach(item => {
         let timer;
         const dropdown = item.querySelector('.dropdown');
         if (!dropdown) return;
 
         item.addEventListener('mouseenter', () => {
+            if (isMobile()) return; // handled by tap on mobile
             clearTimeout(timer);
             dropdown.style.display = 'block';
         });
         item.addEventListener('mouseleave', () => {
+            if (isMobile()) return;
             timer = setTimeout(() => {
                 dropdown.style.display = '';
             }, 150);
         });
-        dropdown.addEventListener('mouseenter', () => clearTimeout(timer));
+        dropdown.addEventListener('mouseenter', () => {
+            if (isMobile()) return;
+            clearTimeout(timer);
+        });
         dropdown.addEventListener('mouseleave', () => {
+            if (isMobile()) return;
             timer = setTimeout(() => {
                 dropdown.style.display = '';
             }, 150);

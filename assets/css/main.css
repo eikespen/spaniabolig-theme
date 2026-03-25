@@ -3096,9 +3096,9 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
         opacity: .9;
     }
 
-    /* ── Sub-menu: hidden by default, shown when .is-open ── */
+    /* ── Sub-menu: hidden by default, shown only when .is-open ── */
     .site-nav.nav-open .has-dropdown .dropdown {
-        display: none;
+        display: none !important; /* !important beats inline style set by hover JS */
         position: static;
         background: rgba(0,0,0,.2);
         border: none;
@@ -3109,7 +3109,7 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
         min-width: 0;
     }
     .site-nav.nav-open .has-dropdown.is-open .dropdown {
-        display: block;
+        display: block !important;
     }
 
     /* ── Sub-menu items: plain compact text rows, left-aligned ── */
