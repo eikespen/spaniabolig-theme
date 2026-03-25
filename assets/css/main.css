@@ -84,9 +84,8 @@ input, select, textarea, button { font: inherit; }
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255,255,255,.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--grey-200);
+    background: var(--navy);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .header-inner {
     max-width: 1280px;
@@ -118,11 +117,11 @@ input, select, textarea, button { font: inherit; }
     border-radius: 8px;
     font-size: 15px;
     font-weight: 500;
-    color: var(--grey-700);
-    transition: background .15s;
+    color: rgba(255,255,255,0.85);
+    transition: background .15s, color .15s;
 }
 .nav-list li a:hover,
-.nav-list li.current-menu-item a { background: var(--grey-100); color: var(--navy); }
+.nav-list li.current-menu-item a { background: rgba(255,255,255,0.1); color: #fff; }
 
 .header-actions { display: flex; gap: 10px; align-items: center; margin-left: auto; }
 .nav-toggle {
