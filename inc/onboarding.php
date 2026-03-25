@@ -100,11 +100,11 @@ add_action('user_register', function (int $user_id) {
     </div>
 
     <div class='section'>
-      <p class='section-title'>✏️ Editing Page Content</p>
+      <p class='section-title'>✏️ Editing Properties &amp; Content</p>
       <div class='card'>
-        <p class='card-title'>Edit Pages (About, Services, How It Works, etc.)</p>
-        <p class='card-desc'>Go to <strong>WP Admin → Pages</strong>, click any page, and look for the coloured content boxes below the main editor. All text on the About, Services, Contact, and other pages can be edited there — no coding required.</p>
-        <p class='card-url'>{$admin_url}edit.php?post_type=page</p>
+        <p class='card-title'>Edit Properties &amp; Listings</p>
+        <p class='card-desc'>Go to the <strong>Property Dashboard</strong> on the front-end. Find the listing you want to update and click <strong>Edit</strong> — this opens the step-by-step wizard where you can change all details, photos and more.</p>
+        <p class='card-url'>{$dashboard_url}</p>
       </div>
     </div>
 
@@ -265,7 +265,7 @@ add_action('admin_notices', function () {
             <li><a href="<?php echo esc_url($dashboard_url); ?>" target="_blank" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">📋 Property Dashboard</a></li>
             <li><a href="<?php echo esc_url($add_prop_url); ?>" target="_blank" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">➕ Add Property</a></li>
             <li><a href="<?php echo esc_url(admin_url('edit.php?post_type=sb_agent')); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">👥 Agents</a></li>
-            <li><a href="<?php echo esc_url(admin_url('edit.php?post_type=page')); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">✏️ Edit Pages (Admin)</a></li>
+            <li><a href="<?php echo esc_url($dashboard_url); ?>" target="_blank" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">✏️ Edit Properties</a></li>
         </ul>
         <p style="margin:0;font-size:12px;color:#6b7280;">Tip: the <strong>Property Dashboard</strong> is your main hub — edit existing listings and add new ones using the step-by-step wizard. To edit page text (About, Services, etc.) open the page in WP Admin → Pages and look for the coloured content boxes below the editor.</p>
     </div>
