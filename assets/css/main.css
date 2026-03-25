@@ -2895,27 +2895,42 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .agent-card__contacts {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 11px;
 }
 .agent-card__contact {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    align-items: flex-start;
+    gap: 9px;
     font-size: 14px;
     color: var(--grey-600);
     text-decoration: none;
     transition: color .15s;
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    min-width: 0;
 }
 .agent-card__contact:hover { color: var(--navy); }
-.agent-card__contact svg { flex-shrink: 0; color: var(--grey-300); width: 15px; height: 15px; }
-.agent-card__contact:hover svg { color: var(--navy); }
+.agent-card__contact .agent-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    color: var(--grey-400);
+}
+.agent-card__contact .agent-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+}
+.agent-card__contact:hover .agent-icon { color: var(--navy); }
 .agent-card__contact--whatsapp { color: #25d366; }
-.agent-card__contact--whatsapp svg { color: #25d366; }
+.agent-card__contact--whatsapp .agent-icon { color: #25d366; }
 .agent-card__contact--whatsapp:hover { color: #1da851; }
+.agent-card__contact--whatsapp:hover .agent-icon { color: #1da851; }
 
 /* Responsive */
 @media (max-width: 860px) {
