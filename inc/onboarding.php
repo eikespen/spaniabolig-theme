@@ -4,25 +4,30 @@
  *  1. Welcome email on new user registration
  *  2. WP Admin dashboard widget with quick-start guide
  *  3. First-login dismissible admin notice
+ *  4. "Built by" credit widget on WP dashboard
  */
 defined('ABSPATH') || exit;
+
+/* ════════════════════════════════════════════
+   HELPER — resolve front-end URLs reliably
+════════════════════════════════════════════ */
+function sb_front_url(string $slug, string $fallback_path): string {
+    $page = get_page_by_path($slug);
+    return $page ? get_permalink($page->ID) : home_url($fallback_path);
+}
+
 
 /* ════════════════════════════════════════════
    1. WELCOME EMAIL — fires when a user is created
 ════════════════════════════════════════════ */
 add_action('user_register', function (int $user_id) {
-    $user      = get_userdata($user_id);
-    $site_name = get_bloginfo('name');
-    $site_url  = home_url('/');
-    $admin_url = admin_url();
-    $login_url = wp_login_url();
-
-    // Links the user will need
-    $dashboard_page = get_page_by_path('property-dashboard');
-    $dashboard_url  = $dashboard_page ? get_permalink($dashboard_page->ID) : home_url('/property-dashboard');
-
-    $add_prop_page = get_page_by_path('add-property');
-    $add_prop_url  = $add_prop_page ? get_permalink($add_prop_page->ID) : home_url('/add-property');
+    $user          = get_userdata($user_id);
+    $site_name     = get_bloginfo('name');
+    $site_url      = home_url('/');
+    $admin_url     = admin_url();
+    $login_url     = wp_login_url();
+    $dashboard_url = sb_front_url('property-dashboard', '/property-dashboard');
+    $add_prop_url  = sb_front_url('add-property', '/add-property');
 
     $subject = "Welcome to {$site_name} — Your quick-start guide";
 
@@ -79,7 +84,7 @@ add_action('user_register', function (int $user_id) {
       <p class='section-title'>🏠 Managing Properties</p>
       <div class='card'>
         <p class='card-title'>Property Dashboard (Front-end)</p>
-        <p class='card-desc'>View all your published properties, see live listings, and click <strong>Edit</strong> on any property to update it using the easy step-by-step wizard — no coding needed.</p>
+        <p class='card-desc'>Your main hub — view all published listings, click <strong>Edit</strong> on any property to update it with the step-by-step wizard, or click <strong>Add New Property</strong> to publish a new one. No coding needed.</p>
         <p class='card-url'>{$dashboard_url}</p>
       </div>
       <div class='card'>
@@ -147,7 +152,7 @@ add_action('user_register', function (int $user_id) {
 
 
 /* ════════════════════════════════════════════
-   2. WP ADMIN DASHBOARD WIDGET
+   2. WP ADMIN DASHBOARD WIDGET — Quick Start
 ════════════════════════════════════════════ */
 add_action('wp_dashboard_setup', function () {
     wp_add_dashboard_widget(
@@ -155,14 +160,17 @@ add_action('wp_dashboard_setup', function () {
         '🏠 Spaniabolig — Quick Start',
         'sb_dashboard_widget_render'
     );
+    wp_add_dashboard_widget(
+        'sb_built_by',
+        '🛠 Theme Information',
+        'sb_built_by_widget_render'
+    );
 });
 
 function sb_dashboard_widget_render() {
-    $dashboard_page = get_page_by_path('property-dashboard');
-    $dashboard_url  = $dashboard_page ? get_permalink($dashboard_page->ID) : home_url('/property-dashboard');
-    $add_prop_page  = get_page_by_path('add-property');
-    $add_prop_url   = $add_prop_page ? get_permalink($add_prop_page->ID) : home_url('/add-property');
-    $admin_url      = admin_url();
+    $dashboard_url = sb_front_url('property-dashboard', '/property-dashboard');
+    $add_prop_url  = sb_front_url('add-property', '/add-property');
+    $admin_url     = admin_url();
     ?>
     <style>
     #sb_quick_start .qs-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
@@ -175,7 +183,7 @@ function sb_dashboard_widget_render() {
     <div class="qs-grid">
         <a href="<?php echo esc_url($dashboard_url); ?>" class="qs-card" target="_blank">
             <strong>📋 Property Dashboard</strong>
-            <span>View &amp; manage all listings on the front-end</span>
+            <span>View, edit &amp; manage all listings on the front-end</span>
         </a>
         <a href="<?php echo esc_url($add_prop_url); ?>" class="qs-card" target="_blank">
             <strong>➕ Add New Property</strong>
@@ -189,9 +197,9 @@ function sb_dashboard_widget_render() {
             <strong>👥 Agents</strong>
             <span>Add/edit team members &amp; contact details</span>
         </a>
-        <a href="<?php echo esc_url($admin_url . 'edit.php?post_type=page'); ?>" class="qs-card">
-            <strong>✏️ Edit Pages</strong>
-            <span>About, Services, Contact &amp; more — look for the coloured content boxes</span>
+        <a href="<?php echo esc_url($dashboard_url); ?>" class="qs-card" target="_blank">
+            <strong>✏️ Edit Pages &amp; Listings</strong>
+            <span>Go to front-end dashboard to edit properties &amp; page content</span>
         </a>
         <a href="<?php echo esc_url($admin_url . 'admin.php?page=wpseo_dashboard'); ?>" class="qs-card">
             <strong>🔍 Yoast SEO</strong>
@@ -199,7 +207,39 @@ function sb_dashboard_widget_render() {
         </a>
     </div>
     <div class="qs-tip">
-        💡 <strong>Editing page text:</strong> Open any page in Pages, scroll below the editor and look for the <span style="background:#2271b1;color:#fff;padding:1px 6px;border-radius:3px;font-size:11px;">coloured admin boxes</span> to edit all visible text without touching code.
+        💡 <strong>Tip:</strong> Use the <strong>Property Dashboard</strong> link above to manage listings on the front-end. To edit page text (About, Services, etc.), open the page in <strong>WP Admin → Pages</strong> and look for the <span style="background:#2271b1;color:#fff;padding:1px 6px;border-radius:3px;font-size:11px;">coloured admin boxes</span> below the editor.
+    </div>
+    <?php
+}
+
+function sb_built_by_widget_render() {
+    $year = date('Y');
+    ?>
+    <style>
+    #sb_built_by .bb-wrap{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+    #sb_built_by .bb-avatar{width:48px;height:48px;border-radius:50%;background:#001d3d;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    #sb_built_by .bb-name{font-size:14px;font-weight:700;color:#001d3d;margin:0 0 2px;}
+    #sb_built_by .bb-role{font-size:12px;color:#6b7280;margin:0;}
+    #sb_built_by .bb-meta{font-size:12px;color:#6b7280;line-height:1.7;border-top:1px solid #e5e7eb;padding-top:10px;margin-top:2px;}
+    #sb_built_by .bb-meta strong{color:#374151;}
+    #sb_built_by .bb-badge{display:inline-block;background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;margin:2px 2px 2px 0;}
+    </style>
+    <div class="bb-wrap">
+        <div class="bb-avatar">🧑‍💻</div>
+        <div>
+            <p class="bb-name">Espen T. Eik</p>
+            <p class="bb-role">Designer &amp; Developer</p>
+        </div>
+    </div>
+    <div class="bb-meta">
+        <strong>Custom WordPress theme</strong> — designed, coded and built from scratch.<br>
+        <span class="bb-badge">Custom Theme</span>
+        <span class="bb-badge">PHP</span>
+        <span class="bb-badge">CSS</span>
+        <span class="bb-badge">JavaScript</span>
+        <span class="bb-badge">WordPress</span><br><br>
+        &copy; <?php echo esc_html($year); ?> Espen T. Eik. All rights reserved.<br>
+        Unauthorised copying or redistribution of this theme is prohibited.
     </div>
     <?php
 }
@@ -213,10 +253,8 @@ add_action('admin_notices', function () {
     if (!$user_id) return;
     if (get_user_meta($user_id, 'sb_welcome_dismissed', true)) return;
 
-    $dashboard_page = get_page_by_path('property-dashboard');
-    $dashboard_url  = $dashboard_page ? get_permalink($dashboard_page->ID) : home_url('/property-dashboard');
-    $add_prop_page  = get_page_by_path('add-property');
-    $add_prop_url   = $add_prop_page ? get_permalink($add_prop_page->ID) : home_url('/add-property');
+    $dashboard_url = sb_front_url('property-dashboard', '/property-dashboard');
+    $add_prop_url  = sb_front_url('add-property', '/add-property');
     ?>
     <div class="notice notice-info is-dismissible sb-welcome-notice" style="border-left-color:#001d3d;padding:16px 20px;">
         <p style="font-size:15px;font-weight:700;color:#001d3d;margin:0 0 6px;">
@@ -224,12 +262,12 @@ add_action('admin_notices', function () {
         </p>
         <p style="margin:0 0 10px;color:#374151;">Here are the most important things to know:</p>
         <ul style="margin:0 0 12px;padding-left:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px;">
-            <li><a href="<?php echo esc_url($dashboard_url); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">📋 Property Dashboard</a></li>
-            <li><a href="<?php echo esc_url($add_prop_url); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">➕ Add Property</a></li>
+            <li><a href="<?php echo esc_url($dashboard_url); ?>" target="_blank" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">📋 Property Dashboard</a></li>
+            <li><a href="<?php echo esc_url($add_prop_url); ?>" target="_blank" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">➕ Add Property</a></li>
             <li><a href="<?php echo esc_url(admin_url('edit.php?post_type=sb_agent')); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">👥 Agents</a></li>
-            <li><a href="<?php echo esc_url(admin_url('edit.php?post_type=page')); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">✏️ Edit Pages</a></li>
+            <li><a href="<?php echo esc_url(admin_url('edit.php?post_type=page')); ?>" style="background:#001d3d;color:#fff;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">✏️ Edit Pages (Admin)</a></li>
         </ul>
-        <p style="margin:0;font-size:12px;color:#6b7280;">Tip: click <strong>Edit</strong> on any property in the dashboard to update it with the step-by-step wizard. To edit page text, open any page in WP Admin and look for the coloured content boxes below the editor.</p>
+        <p style="margin:0;font-size:12px;color:#6b7280;">Tip: the <strong>Property Dashboard</strong> is your main hub — edit existing listings and add new ones using the step-by-step wizard. To edit page text (About, Services, etc.) open the page in WP Admin → Pages and look for the coloured content boxes below the editor.</p>
     </div>
     <script>
     (function(){

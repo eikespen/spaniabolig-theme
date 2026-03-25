@@ -1,4 +1,14 @@
 <?php
+/**
+ * Spaniabolig Theme — functions.php
+ *
+ * Custom WordPress theme for Spaniabolig SL.
+ * Designed, coded and built by Espen T. Eik.
+ *
+ * © 2025 Espen T. Eik. All rights reserved.
+ * Unauthorised copying, redistribution or resale of this theme
+ * or any part of it is strictly prohibited.
+ */
 defined('ABSPATH') || exit;
 
 require_once get_template_directory() . '/inc/importer.php';
