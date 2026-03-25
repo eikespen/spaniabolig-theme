@@ -429,15 +429,22 @@ add_action('admin_menu', function() {
         'Property Dashboard',
         'edit_posts',
         'sb-property-dashboard',
-        'sb_admin_dashboard_redirect',
+        '__return_false',          // callback not used — redirect fires in admin_init
         'dashicons-admin-home',
         3
     );
 });
-function sb_admin_dashboard_redirect() {
-    wp_safe_redirect(home_url('/dashboard'));
-    exit;
-}
+// Redirect before any output so headers are not yet sent
+add_action('admin_init', function() {
+    if (!is_admin()) return;
+    $page = isset($_GET['page']) ? $_GET['page'] : '';
+    if ($page === 'sb-property-dashboard') {
+        $dashboard = get_page_by_path('property-dashboard') ?: get_page_by_path('dashboard');
+        $url = $dashboard ? get_permalink($dashboard->ID) : home_url('/property-dashboard');
+        wp_redirect($url);
+        exit;
+    }
+});
 
 /* ── Helper: Format Price ── */
 function sb_format_price($price) {
@@ -536,6 +543,11 @@ add_action('admin_init', function () {
             'title'    => 'Cookie Policy',
             'slug'     => 'cookie-policy',
             'template' => 'page-cookie-policy.php',
+        ],
+        [
+            'title'    => 'Property Dashboard',
+            'slug'     => 'property-dashboard',
+            'template' => 'page-property-dashboard.php',
         ],
         [
             'title'    => 'About',
