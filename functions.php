@@ -3,6 +3,7 @@ defined('ABSPATH') || exit;
 
 require_once get_template_directory() . '/inc/importer.php';
 require_once get_template_directory() . '/inc/meta-boxes.php';
+require_once get_template_directory() . '/inc/agents.php';
 require_once get_template_directory() . '/inc/import-featured.php';
 require_once get_template_directory() . '/inc/sideload-images.php';
 require_once get_template_directory() . '/inc/sync-featured-status.php';
