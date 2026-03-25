@@ -52,10 +52,13 @@ add_action('wp_enqueue_scripts', 'sb_enqueue');
 /* ── Strip &#13; carriage returns from XML-imported property descriptions ── */
 add_filter('the_content', function($content) {
     if (is_singular('property')) {
-        $content = str_replace(['&#13;', "\r"], '', $content);
+        // Double CR → paragraph break (runs at priority 1, before wpautop at 10)
+        $content = str_replace(['&amp;#13;&amp;#13;', '&#13;&#13;', "\r\r"], "\n\n", $content);
+        // Single CR → line break
+        $content = str_replace(['&amp;#13;', '&#13;', "\r"], "\n", $content);
     }
     return $content;
-});
+}, 1);
 
 /* ── Property CPT ── */
 function sb_register_property_cpt() {
