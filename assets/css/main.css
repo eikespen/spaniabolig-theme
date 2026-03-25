@@ -1,5 +1,7 @@
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Force-clear any body padding injected by SiteGround optimizer or other plugins */
+html, body { padding: 0 !important; margin: 0; }
 
 :root {
     --navy:      #001d3d;
@@ -380,8 +382,7 @@ input, select, textarea, button { font: inherit; }
     background: var(--navy);
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-/* When WP admin bar is visible it adds margin-top:32px to body —
-   push all sticky elements down to sit flush below it */
+/* WP admin bar: html gets margin-top:32px — sticky elements stick below it */
 .admin-bar .site-header       { top: 32px; }
 .admin-bar .properties-filter { top: 96px; }  /* 64 + 32 */
 .admin-bar .property-sidebar  { top: 120px; } /* 88 + 32 */
@@ -390,6 +391,8 @@ input, select, textarea, button { font: inherit; }
     .admin-bar .site-header       { top: 46px; }
     .admin-bar .properties-filter { top: 110px; }
 }
+/* html.admin-bar adds margin-top to html, not body — ensure body stays flush */
+html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .header-inner {
     max-width: 1280px;
     margin: 0 auto;
