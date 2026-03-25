@@ -3063,35 +3063,36 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 
     /* ── Top-level links ── */
     .site-nav.nav-open .nav-list > li > a {
-        padding: 13px 24px;
-        font-size: 15px;
+        padding: 14px 24px;
+        font-size: 16px;
         font-weight: 600;
         border-radius: 0;
-        color: rgba(255,255,255,.9) !important;
+        color: #fff !important;
         background: transparent !important;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid rgba(255,255,255,.07);
+        text-align: left;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+        letter-spacing: -.01em;
     }
-    .site-nav.nav-open .nav-list > li > a:hover,
     .site-nav.nav-open .nav-list > li > a:active {
         background: rgba(255,255,255,.07) !important;
+    }
+    /* Keep open-state row same colour — no highlight box */
+    .site-nav.nav-open .has-dropdown.is-open > a {
+        background: transparent !important;
         color: #fff !important;
     }
 
-    /* ── Chevron on dropdown trigger ── */
-    .site-nav.nav-open .has-dropdown > a::after {
-        content: '›';
-        font-size: 20px;
-        line-height: 1;
-        color: rgba(255,255,255,.4);
-        transform: rotate(90deg);
-        display: inline-block;
+    /* ── Rotate the existing SVG chevron in the Properties link ── */
+    .site-nav.nav-open .has-dropdown > a svg {
         transition: transform .2s;
+        opacity: .5;
     }
-    .site-nav.nav-open .has-dropdown.is-open > a::after {
-        transform: rotate(270deg);
+    .site-nav.nav-open .has-dropdown.is-open > a svg {
+        transform: rotate(180deg);
+        opacity: .9;
     }
 
     /* ── Sub-menu: hidden by default, shown when .is-open ── */
@@ -3110,33 +3111,36 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
         display: block;
     }
 
-    /* ── Sub-menu items: plain compact text rows, no icons/descriptions ── */
+    /* ── Sub-menu items: plain compact text rows, left-aligned ── */
     .site-nav.nav-open .has-dropdown .dropdown li a,
     .site-nav.nav-open .has-dropdown .dropdown li a.dropdown-item {
-        display: block !important;
-        padding: 11px 24px 11px 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 12px 24px 12px 32px !important;
         font-size: 14px !important;
         font-weight: 500 !important;
-        color: rgba(255,255,255,.7) !important;
+        color: rgba(255,255,255,.65) !important;
         background: transparent !important;
         border-radius: 0 !important;
-        border-bottom: 1px solid rgba(255,255,255,.05);
+        border-bottom: 1px solid rgba(255,255,255,.05) !important;
+        text-align: left !important;
         gap: 0 !important;
     }
-    .site-nav.nav-open .has-dropdown .dropdown li:last-child a { border-bottom: none; }
-    .site-nav.nav-open .has-dropdown .dropdown li a:hover,
+    .site-nav.nav-open .has-dropdown .dropdown li:last-child a {
+        border-bottom: none !important;
+    }
     .site-nav.nav-open .has-dropdown .dropdown li a:active {
         background: rgba(255,255,255,.07) !important;
         color: #fff !important;
     }
 
-    /* Hide the icon box and description text inside dropdown items on mobile */
+    /* Hide icon box and description — show only the title text */
     .site-nav.nav-open .dropdown-icon { display: none !important; }
     .site-nav.nav-open .dropdown-text span { display: none !important; }
     .site-nav.nav-open .dropdown-text strong {
         font-size: 14px !important;
         font-weight: 500 !important;
-        color: rgba(255,255,255,.75) !important;
+        color: rgba(255,255,255,.65) !important;
     }
 }
 
