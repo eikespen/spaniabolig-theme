@@ -12,15 +12,29 @@
         <div class="pf-bar">
             <div class="pf-search">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <input type="text" id="pf-keyword" placeholder="<?php esc_attr_e('Search properties…', 'spaniabolig'); ?>">
+                <input type="text" id="pf-keyword" placeholder="<?php esc_attr_e('Search properties…', 'spaniabolig'); ?>" value="<?php echo esc_attr($active_keyword); ?>">
             </div>
 
+            <?php
+            $active_type     = isset($_GET['property_type']) ? sanitize_text_field($_GET['property_type']) : '';
+            $active_location = isset($_GET['location'])      ? sanitize_text_field($_GET['location'])      : '';
+            $active_beds     = isset($_GET['bedrooms'])       ? sanitize_text_field($_GET['bedrooms'])      : '';
+            $active_min      = isset($_GET['min_price'])      ? intval($_GET['min_price'])                  : 0;
+            $active_max      = isset($_GET['max_price'])      ? intval($_GET['max_price'])                  : 0;
+            $active_status   = isset($_GET['status'])         ? sanitize_text_field($_GET['status'])        : '';
+            $active_keyword  = isset($_GET['keyword'])        ? sanitize_text_field($_GET['keyword'])       : '';
+            // Map price range to select value
+            $active_price = '';
+            if ($active_min || $active_max) {
+                $active_price = $active_min . '-' . ($active_max ?: '');
+            }
+            ?>
             <select id="pf-type" class="pf-select">
                 <option value=""><?php esc_html_e('All types', 'spaniabolig'); ?></option>
                 <?php
                 $types = get_terms(['taxonomy' => 'property_type', 'hide_empty' => false]);
                 if (!is_wp_error($types)) foreach ($types as $t) :
-                    echo '<option value="' . esc_attr($t->slug) . '">' . esc_html($t->name) . '</option>';
+                    echo '<option value="' . esc_attr($t->slug) . '"' . selected($active_type, $t->slug, false) . '>' . esc_html($t->name) . '</option>';
                 endforeach;
                 ?>
             </select>
@@ -35,31 +49,31 @@
                      ORDER BY meta_value ASC"
                 );
                 foreach ($cities as $city) :
-                    echo '<option value="' . esc_attr($city) . '">' . esc_html($city) . '</option>';
+                    echo '<option value="' . esc_attr($city) . '"' . selected($active_location, $city, false) . '>' . esc_html($city) . '</option>';
                 endforeach;
                 ?>
             </select>
 
             <select id="pf-price" class="pf-select">
                 <option value=""><?php esc_html_e('Any price', 'spaniabolig'); ?></option>
-                <option value="0-150000"><?php esc_html_e('Under €150,000', 'spaniabolig'); ?></option>
-                <option value="150000-300000"><?php esc_html_e('€150k – €300k', 'spaniabolig'); ?></option>
-                <option value="300000-500000"><?php esc_html_e('€300k – €500k', 'spaniabolig'); ?></option>
-                <option value="500000-"><?php esc_html_e('€500,000+', 'spaniabolig'); ?></option>
+                <option value="0-150000"<?php selected($active_price, '0-150000'); ?>><?php esc_html_e('Under €150,000', 'spaniabolig'); ?></option>
+                <option value="150000-300000"<?php selected($active_price, '150000-300000'); ?>><?php esc_html_e('€150k – €300k', 'spaniabolig'); ?></option>
+                <option value="300000-500000"<?php selected($active_price, '300000-500000'); ?>><?php esc_html_e('€300k – €500k', 'spaniabolig'); ?></option>
+                <option value="500000-"<?php selected($active_price, '500000-'); ?>><?php esc_html_e('€500,000+', 'spaniabolig'); ?></option>
             </select>
 
             <select id="pf-beds" class="pf-select">
                 <option value=""><?php esc_html_e('Any beds', 'spaniabolig'); ?></option>
-                <option value="1">1+</option>
-                <option value="2">2+</option>
-                <option value="3">3+</option>
-                <option value="4">4+</option>
+                <option value="1"<?php selected($active_beds, '1'); ?>>1+</option>
+                <option value="2"<?php selected($active_beds, '2'); ?>>2+</option>
+                <option value="3"<?php selected($active_beds, '3'); ?>>3+</option>
+                <option value="4"<?php selected($active_beds, '4'); ?>>4+</option>
             </select>
 
             <select id="pf-status" class="pf-select">
                 <option value=""><?php esc_html_e('Buy or rent', 'spaniabolig'); ?></option>
-                <option value="for-sale"><?php esc_html_e('For sale', 'spaniabolig'); ?></option>
-                <option value="for-rent"><?php esc_html_e('For rent', 'spaniabolig'); ?></option>
+                <option value="for-sale"<?php selected($active_status, 'for-sale'); ?>><?php esc_html_e('For sale', 'spaniabolig'); ?></option>
+                <option value="for-rent"<?php selected($active_status, 'for-rent'); ?>><?php esc_html_e('For rent', 'spaniabolig'); ?></option>
             </select>
 
             <?php $active_build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : ''; ?>

@@ -42,7 +42,7 @@
                             <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
                             <span class="dropdown-text"><strong>Townhouses</strong><span>Community living with exclusive amenities</span></span>
                         </a></li>
-                        <li><a href="<?php echo esc_url(home_url('/properties/?build_type=new')); ?>" class="dropdown-item">
+                        <li><a href="<?php echo esc_url(home_url('/properties/?build_type=new_build')); ?>" class="dropdown-item">
                             <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
                             <span class="dropdown-text"><strong>New builds</strong><span>Brand new properties with modern features</span></span>
                         </a></li>

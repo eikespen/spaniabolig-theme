@@ -25,7 +25,7 @@ function sb_fp($key, $default = '') {
                         <select name="build_type">
                             <option value="">All Properties</option>
                             <option value="resale">Resale</option>
-                            <option value="new">New Build</option>
+                            <option value="new_build">New Build</option>
                         </select>
                     </div>
                     <div class="search-field">
@@ -139,7 +139,7 @@ function sb_fp($key, $default = '') {
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 Urbanizations
             </a>
-            <a href="<?php echo esc_url(home_url('/properties/?build_type=new')); ?>" class="quick-link">
+            <a href="<?php echo esc_url(home_url('/properties/?build_type=new_build')); ?>" class="quick-link">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
                 New build
             </a>
@@ -224,7 +224,7 @@ $nb_any    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'me
     <div class="section-inner">
         <div class="showcase-header">
             <h2>New Build Properties</h2>
-            <a href="<?php echo esc_url(home_url('/properties/?build_type=new')); ?>" class="btn btn-outline-sm">View All New Builds</a>
+            <a href="<?php echo esc_url(home_url('/properties/?build_type=new_build')); ?>" class="btn btn-outline-sm">View All New Builds</a>
         </div>
         <div class="showcase-grid">
             <?php foreach ([

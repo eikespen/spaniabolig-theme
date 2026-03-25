@@ -233,9 +233,10 @@
         });
 
         // If URL params are active on page load, trigger AJAX immediately so
-        // pagination renders correctly (SSR only shows one page of results).
+        // filters from the front-page search form or quick links are applied.
         const _urlP = new URLSearchParams(window.location.search);
-        if (_urlP.has('build_type') || _urlP.has('status') || _urlP.has('location') || _urlP.has('keyword')) {
+        const _filterParams = ['build_type','status','location','keyword','property_type','bedrooms','min_price','max_price'];
+        if (_filterParams.some(p => _urlP.has(p) && _urlP.get(p))) {
             doSearch(1);
         }
     }

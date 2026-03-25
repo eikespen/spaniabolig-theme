@@ -24,6 +24,7 @@
                     <li><a href="<?php echo esc_url(home_url('/how-it-works')); ?>">How it works</a></li>
                     <li><a href="<?php echo esc_url(home_url('/services')); ?>">Services</a></li>
                     <li><a href="<?php echo esc_url(home_url('/properties')); ?>">All properties</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/dictionary')); ?>">Property dictionary</a></li>
                     <li><a href="<?php echo esc_url(home_url('/contact')); ?>">Contact us</a></li>
                 </ul>
             </div>

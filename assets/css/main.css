@@ -2943,3 +2943,314 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     color: var(--navy);
     margin-bottom: 8px;
 }
+
+/* ══════════════════════════════════════════════════════════
+   LEGAL PAGES (Privacy Policy, Terms of Use, Cookie Policy)
+══════════════════════════════════════════════════════════ */
+.legal-page {
+    padding: 64px 0 96px;
+    background: var(--white);
+}
+.legal-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--grey-700);
+}
+.legal-updated {
+    font-size: 13px;
+    color: var(--grey-400);
+    margin-bottom: 40px;
+    font-style: italic;
+}
+.legal-content h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    margin: 44px 0 16px;
+    letter-spacing: -0.02em;
+    padding-top: 4px;
+    border-top: 2px solid var(--grey-100);
+}
+.legal-content h2:first-of-type {
+    border-top: none;
+    margin-top: 0;
+}
+.legal-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin: 28px 0 12px;
+}
+.legal-content p {
+    margin-bottom: 16px;
+}
+.legal-content ul {
+    list-style: disc;
+    padding-left: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.legal-content ul li { line-height: 1.7; }
+.legal-content a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.legal-content a:hover { color: var(--navy); }
+
+/* Cookie table */
+.cookie-table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 28px;
+    border-radius: var(--radius);
+    border: 1px solid var(--grey-200);
+}
+.cookie-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.cookie-table thead th {
+    background: var(--grey-50);
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--grey-500);
+    border-bottom: 1px solid var(--grey-200);
+    white-space: nowrap;
+}
+.cookie-table tbody td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--grey-100);
+    color: var(--grey-700);
+    vertical-align: top;
+}
+.cookie-table tbody tr:last-child td { border-bottom: none; }
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE NAV — open state
+══════════════════════════════════════════════════════════ */
+/* Hamburger bars must be white on navy header */
+.nav-toggle span { background: var(--white) !important; }
+
+@media (max-width: 768px) {
+    .site-nav.nav-open {
+        display: flex !important;
+        position: fixed;
+        top: 76px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--navy);
+        z-index: 99;
+        padding: 20px 16px;
+        flex-direction: column;
+        overflow-y: auto;
+        border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .admin-bar .site-nav.nav-open { top: 108px; }
+    .site-nav.nav-open .nav-list {
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+    }
+    .site-nav.nav-open .nav-list > li > a {
+        padding: 12px 16px;
+        font-size: 16px;
+        border-radius: 10px;
+        color: rgba(255,255,255,.9) !important;
+        background: transparent !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .site-nav.nav-open .nav-list > li > a:hover {
+        background: rgba(255,255,255,.1) !important;
+        color: #fff !important;
+    }
+    /* Sub-dropdown in mobile */
+    .site-nav.nav-open .has-dropdown .dropdown {
+        display: block !important;
+        position: static;
+        background: rgba(255,255,255,.06);
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        padding: 6px 8px;
+        margin: 4px 0 8px 8px;
+    }
+    .site-nav.nav-open .has-dropdown .dropdown li a {
+        color: rgba(255,255,255,.75) !important;
+        font-size: 14px;
+        padding: 8px 12px !important;
+    }
+    .site-nav.nav-open .has-dropdown .dropdown li a:hover {
+        background: rgba(255,255,255,.08) !important;
+        color: #fff !important;
+    }
+    /* Add "View Properties" button at bottom of mobile menu */
+    .site-nav.nav-open::after {
+        content: '';
+        flex: 1;
+        min-height: 20px;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE FIXES
+══════════════════════════════════════════════════════════ */
+
+/* Quick links: 4-col → 3-col at tablet, 3-col at 480px stays same */
+@media (max-width: 768px) {
+    .quick-links-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .quick-link { padding: 20px 10px; font-size: 13px; }
+}
+@media (max-width: 480px) {
+    .quick-links-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .quick-link { padding: 16px 8px; gap: 8px; }
+    .quick-link svg { width: 18px; height: 18px; }
+}
+
+/* Price showcase: 3-col → 1-col stacked on mobile */
+@media (max-width: 768px) {
+    .showcase-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+}
+
+/* Lifestyle grid: 4-col → 2-col at tablet → 1-col at mobile */
+@media (max-width: 1024px) {
+    .lifestyle-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .lifestyle-grid { grid-template-columns: 1fr; }
+}
+
+/* Why buy: 2-col → 1-col on mobile */
+@media (max-width: 768px) {
+    .why-buy-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* Services grid: 3-col → 2-col at 768 → 1-col at 480 */
+@media (max-width: 768px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .services-grid { grid-template-columns: 1fr; }
+}
+
+/* Footer links: wrap to 2×2 grid on smaller screens */
+@media (max-width: 768px) {
+    .footer-links { flex-wrap: wrap; gap: 28px 40px; }
+    .footer-col { min-width: 140px; }
+}
+@media (max-width: 480px) {
+    .footer-inner { padding: 48px 20px 32px; }
+    .footer-links { gap: 24px 32px; }
+    .footer-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        padding: 16px 20px;
+    }
+}
+
+/* About card: reduce padding on mobile */
+@media (max-width: 640px) {
+    .about-card { padding: 28px 24px; }
+    .about-services-list { padding: 0 20px; }
+    .about-contact-card { padding: 28px 20px; }
+    .about-team { padding: 56px 0; }
+}
+
+/* Contact form card: reduce padding on mobile */
+@media (max-width: 640px) {
+    .contact-form-card { padding: 28px 20px; }
+}
+
+/* Services contact section: reduce padding on small screens */
+@media (max-width: 480px) {
+    .svc-contact-section { padding: 56px 16px; }
+}
+
+/* Properties filter bar: stack sensibly on mobile */
+@media (max-width: 768px) {
+    .pf-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .pf-search {
+        grid-column: 1 / -1;
+        min-width: unset;
+    }
+    .pf-clear {
+        grid-column: 1 / -1;
+        justify-content: center;
+    }
+}
+@media (max-width: 480px) {
+    .pf-bar { grid-template-columns: 1fr; }
+    .pf-select, .pf-clear { width: 100%; }
+}
+
+/* Single property layout: stack agent sidebar on mobile */
+@media (max-width: 768px) {
+    .enquiry-form__row { grid-template-columns: 1fr; }
+    .enquiry-agent { flex-direction: column; align-items: flex-start; }
+}
+
+/* Dashboard: stack stats on mobile */
+@media (max-width: 768px) {
+    .dash-stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .dash-header-inner { flex-direction: column; align-items: flex-start; }
+    .dash-body { padding: 16px 16px 48px; }
+    .dash-filters-inner { padding: 0 16px; }
+    .dash-table { font-size: 13px; }
+    /* Hide less important columns on mobile */
+    .dash-cell--date, .dash-table thead th:nth-child(6) { display: none; }
+}
+@media (max-width: 480px) {
+    .dash-stats-inner { grid-template-columns: 1fr 1fr; }
+}
+
+/* Hero subtitle: don't overflow on mobile */
+@media (max-width: 640px) {
+    .hero-subtitle { font-size: 16px; }
+    .page-hero p { font-size: 16px; }
+    .cta-banner h2 { font-size: 1.75rem; }
+    .cta-banner p { font-size: 15px; }
+    .section-inner--narrow { padding: 0 16px; }
+    .section-inner { padding: 0 16px; }
+}
+
+/* Property card meta: prevent overflow on narrow cards */
+@media (max-width: 480px) {
+    .card-meta { flex-wrap: wrap; gap: 8px; }
+    .card-price { font-size: 1.2rem; }
+}
+
+/* Step card: reduce padding on mobile */
+@media (max-width: 640px) {
+    .step-card { padding: 24px 20px; gap: 16px; }
+    .step-icon { width: 44px; height: 44px; flex-shrink: 0; }
+}
+
+/* About team: already handled at 860/640 but add extra small fix */
+@media (max-width: 480px) {
+    .about-team { padding: 48px 0; }
+    .about-team__header { margin-bottom: 36px; }
+    .about-team__header h2 { font-size: 28px; }
+}
+
+/* Legal content: smaller padding on mobile */
+@media (max-width: 640px) {
+    .legal-page { padding: 48px 0 72px; }
+    .legal-content h2 { font-size: 1.2rem; }
+}
+
