@@ -40,16 +40,20 @@ add_action('after_setup_theme', 'sb_setup');
 /* ── Enqueue ── */
 function sb_enqueue() {
     wp_enqueue_style('sb-main', get_template_directory_uri() . '/assets/css/main.css', [], filemtime(get_template_directory() . '/assets/css/main.css'));
-    wp_enqueue_script('sb-main', get_template_directory_uri() . '/assets/js/main.js', [], filemtime(get_template_directory() . '/assets/js/main.js'), true);
+
+    // Leaflet must be registered before sb-main so it can be listed as a dependency
+    $js_deps = [];
+    if (is_singular('property')) {
+        wp_enqueue_style('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4');
+        wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true);
+        $js_deps = ['leaflet'];
+    }
+
+    wp_enqueue_script('sb-main', get_template_directory_uri() . '/assets/js/main.js', $js_deps, filemtime(get_template_directory() . '/assets/js/main.js'), true);
     wp_localize_script('sb-main', 'sbData', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce'   => wp_create_nonce('sb_search'),
     ]);
-    // Leaflet — only on single property pages
-    if (is_singular('property')) {
-        wp_enqueue_style('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4');
-        wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true);
-    }
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
 
