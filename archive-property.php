@@ -2,8 +2,8 @@
 
 <section class="properties-hero">
     <div class="section-inner">
-        <h1><?php esc_html_e('Properties in Ciudad Quesada', 'spaniabolig'); ?></h1>
-        <p><?php esc_html_e('Browse our selection of villas, apartments and townhouses in Ciudad Quesada and the urbanizations of Rojales.', 'spaniabolig'); ?></p>
+        <h1><?php esc_html_e('Properties on Costa Blanca', 'spaniabolig'); ?></h1>
+        <p><?php esc_html_e('Browse our selection of villas, apartments and townhouses on the Costa Blanca.', 'spaniabolig'); ?></p>
     </div>
 </section>
 
