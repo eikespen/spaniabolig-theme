@@ -39,6 +39,29 @@
         L.marker([lat, lng]).addTo(map);
     }
 
+    /* ── Dropdown with hover delay ── */
+    document.querySelectorAll('.has-dropdown').forEach(item => {
+        let timer;
+        const dropdown = item.querySelector('.dropdown');
+        if (!dropdown) return;
+
+        item.addEventListener('mouseenter', () => {
+            clearTimeout(timer);
+            dropdown.style.display = 'block';
+        });
+        item.addEventListener('mouseleave', () => {
+            timer = setTimeout(() => {
+                dropdown.style.display = '';
+            }, 150);
+        });
+        dropdown.addEventListener('mouseenter', () => clearTimeout(timer));
+        dropdown.addEventListener('mouseleave', () => {
+            timer = setTimeout(() => {
+                dropdown.style.display = '';
+            }, 150);
+        });
+    });
+
     /* ── Sticky header shadow ── */
     const header = document.querySelector('.site-header');
     if (header) {
