@@ -105,6 +105,7 @@ function sb_property_meta_box_cb($post) {
         'sb_city'      => ['label' => 'City/Area', 'type' => 'text', 'placeholder' => 'e.g. Ciudad Quesada'],
         'sb_lat'       => ['label' => 'Latitude', 'type' => 'text'],
         'sb_lng'       => ['label' => 'Longitude', 'type' => 'text'],
+        'sb_build_type' => ['label' => 'Build Type', 'type' => 'select', 'options' => ['resale' => 'Resale', 'new_build' => 'New Build']],
         'sb_featured'  => ['label' => 'Featured Property', 'type' => 'checkbox'],
     ];
     echo '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0">';
@@ -136,7 +137,7 @@ function sb_save_property_meta($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    $fields = ['sb_price','sb_bedrooms','sb_bathrooms','sb_size','sb_status','sb_ref','sb_city','sb_lat','sb_lng','sb_featured'];
+    $fields = ['sb_price','sb_bedrooms','sb_bathrooms','sb_size','sb_status','sb_ref','sb_city','sb_lat','sb_lng','sb_build_type','sb_featured'];
     foreach ($fields as $key) {
         if ($key === 'sb_featured') {
             update_post_meta($post_id, $key, isset($_POST[$key]) ? '1' : '0');
@@ -146,6 +147,21 @@ function sb_save_property_meta($post_id) {
     }
 }
 add_action('save_post_property', 'sb_save_property_meta');
+
+/* ── Filter archive by build_type URL param ── */
+function sb_filter_archive_by_build_type($query) {
+    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
+        $build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : '';
+        if ($build_type) {
+            $query->set('meta_query', [[
+                'key'     => 'sb_build_type',
+                'value'   => $build_type,
+                'compare' => '=',
+            ]]);
+        }
+    }
+}
+add_action('pre_get_posts', 'sb_filter_archive_by_build_type');
 
 /* ── AJAX Property Search ── */
 function sb_ajax_search() {
@@ -176,6 +192,9 @@ function sb_ajax_search() {
     }
     if (!empty($_POST['status'])) {
         $args['meta_query'][] = ['key' => 'sb_status', 'value' => sanitize_text_field($_POST['status']), 'compare' => '='];
+    }
+    if (!empty($_POST['build_type'])) {
+        $args['meta_query'][] = ['key' => 'sb_build_type', 'value' => sanitize_key($_POST['build_type']), 'compare' => '='];
     }
     if (!empty($_POST['keyword'])) {
         $args['s'] = sanitize_text_field($_POST['keyword']);

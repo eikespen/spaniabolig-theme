@@ -62,6 +62,13 @@
                 <option value="for-rent"><?php esc_html_e('For rent', 'spaniabolig'); ?></option>
             </select>
 
+            <?php $active_build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : ''; ?>
+            <select id="pf-build-type" class="pf-select">
+                <option value=""><?php esc_html_e('All types', 'spaniabolig'); ?></option>
+                <option value="resale"<?php selected($active_build_type, 'resale'); ?>><?php esc_html_e('Resale', 'spaniabolig'); ?></option>
+                <option value="new_build"<?php selected($active_build_type, 'new_build'); ?>><?php esc_html_e('New Build', 'spaniabolig'); ?></option>
+            </select>
+
             <button class="pf-clear" id="pf-clear">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 <?php esc_html_e('Clear', 'spaniabolig'); ?>

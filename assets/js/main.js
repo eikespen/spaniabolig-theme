@@ -78,8 +78,9 @@
         const locEl    = document.getElementById('pf-location');
         const priceEl  = document.getElementById('pf-price');
         const bedsEl   = document.getElementById('pf-beds');
-        const statusEl = document.getElementById('pf-status');
-        const sortEl   = document.getElementById('pf-sort');
+        const statusEl    = document.getElementById('pf-status');
+        const buildTypeEl = document.getElementById('pf-build-type');
+        const sortEl      = document.getElementById('pf-sort');
         const clearBtn = document.getElementById('pf-clear');
         const countEl  = document.getElementById('pf-count');
         const noRes    = document.getElementById('pf-no-results');
@@ -151,6 +152,7 @@
             fd.append('max_price',     maxPrice);
             fd.append('bedrooms',      bedsEl.value);
             fd.append('status',        statusEl.value);
+            if (buildTypeEl) fd.append('build_type', buildTypeEl.value);
             fd.append('sort',          sortEl.value);
             fd.append('paged',         currentPage);
             fd.append('per_page',      12);
@@ -182,11 +184,12 @@
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => doSearch(1), 400);
         });
-        [typeEl, locEl, priceEl, bedsEl, statusEl, sortEl].forEach(el => {
+        [typeEl, locEl, priceEl, bedsEl, statusEl, buildTypeEl, sortEl].filter(Boolean).forEach(el => {
             el.addEventListener('change', () => doSearch(1));
         });
         clearBtn.addEventListener('click', () => {
             kwEl.value = typeEl.value = locEl.value = priceEl.value = bedsEl.value = statusEl.value = '';
+            if (buildTypeEl) buildTypeEl.value = '';
             sortEl.value = 'date';
             doSearch(1);
         });
