@@ -12,9 +12,16 @@ if (!is_user_logged_in()) {
     wp_redirect(wp_login_url(get_permalink()));
     exit;
 }
-
-get_header();
-?>
+?><!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+<meta charset="<?php bloginfo('charset'); ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Property — <?php bloginfo('name'); ?></title>
+<?php wp_head(); ?>
+</head>
+<body class="ap-standalone">
+<?php
 
 <div class="add-property-page">
 
@@ -418,4 +425,6 @@ get_header();
 
 </div><!-- /.add-property-page -->
 
-<?php get_footer(); ?>
+<?php wp_footer(); ?>
+</body>
+</html>
