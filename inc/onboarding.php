@@ -26,7 +26,7 @@ add_action('user_register', function (int $user_id) {
     $site_url      = home_url('/');
     $admin_url     = admin_url();
     $login_url     = wp_login_url();
-    $dashboard_url = sb_front_url('property-dashboard', '/property-dashboard');
+    $dashboard_url = sb_front_url('dashboard', '/dashboard');
     $add_prop_url  = sb_front_url('add-property', '/add-property');
 
     $subject = "Welcome to {$site_name} — Your quick-start guide";
@@ -168,7 +168,7 @@ add_action('wp_dashboard_setup', function () {
 });
 
 function sb_dashboard_widget_render() {
-    $dashboard_url = sb_front_url('property-dashboard', '/property-dashboard');
+    $dashboard_url = sb_front_url('dashboard', '/dashboard');
     $add_prop_url  = sb_front_url('add-property', '/add-property');
     $admin_url     = admin_url();
     ?>
@@ -253,7 +253,7 @@ add_action('admin_notices', function () {
     if (!$user_id) return;
     if (get_user_meta($user_id, 'sb_welcome_dismissed', true)) return;
 
-    $dashboard_url = sb_front_url('property-dashboard', '/property-dashboard');
+    $dashboard_url = sb_front_url('dashboard', '/dashboard');
     $add_prop_url  = sb_front_url('add-property', '/add-property');
     ?>
     <div class="notice notice-info is-dismissible sb-welcome-notice" style="border-left-color:#001d3d;padding:16px 20px;">

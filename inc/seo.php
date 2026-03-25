@@ -167,7 +167,7 @@ add_action('admin_init', function () {
             "Learn how Spaniabolig uses cookies, what types we set, and how you can manage your cookie preferences.",
             '',
         ],
-        'property-dashboard' => [
+        'dashboard' => [
             "Property Dashboard | {$site_name}",
             "Manage your property listings on Spaniabolig.",
             '',

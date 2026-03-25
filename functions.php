@@ -451,8 +451,8 @@ add_action('admin_init', function() {
     if (!is_admin()) return;
     $page = isset($_GET['page']) ? $_GET['page'] : '';
     if ($page === 'sb-property-dashboard') {
-        $dashboard = get_page_by_path('property-dashboard') ?: get_page_by_path('dashboard');
-        $url = $dashboard ? get_permalink($dashboard->ID) : home_url('/property-dashboard');
+        $dashboard = get_page_by_path('dashboard') ?: get_page_by_path('property-dashboard');
+        $url = $dashboard ? get_permalink($dashboard->ID) : home_url('/dashboard');
         wp_redirect($url);
         exit;
     }
