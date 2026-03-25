@@ -186,17 +186,23 @@ input, select, textarea, button { font: inherit; }
     background: var(--grey-50);
     padding: 80px 0;
 }
-.about-contact-grid {
+.about-contact-card {
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    padding: 40px;
     max-width: 640px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-sm);
 }
-.about-contact-form h2 {
-    font-size: 1.6rem;
+.about-contact-card h2 {
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--grey-900);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     letter-spacing: -0.02em;
 }
-.about-contact-form > .section-inner > div > p {
+.about-contact-card > p {
     font-size: 15px;
     color: var(--grey-500);
     margin-bottom: 28px;
@@ -225,6 +231,34 @@ input, select, textarea, button { font: inherit; }
     margin-bottom: 40px;
     text-align: center;
 }
+/* About services list (stacked, matches reference) */
+.about-services-list {
+    max-width: 740px;
+    margin: 0 auto;
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    padding: 0 40px;
+}
+.about-service-item {
+    padding: 24px 0;
+    border-top: 1px solid var(--grey-100);
+}
+.about-service-item:first-child { border-top: none; }
+.about-service-item h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin-bottom: 8px;
+}
+.about-service-item p {
+    font-size: 14.5px;
+    color: var(--grey-500);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Services grid (used on Services page) */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
