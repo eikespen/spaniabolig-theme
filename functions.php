@@ -49,14 +49,33 @@ function sb_enqueue() {
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
 
-/* ── Fix double-encoded HTML entities from XML import ── */
+/* ── One-time DB migration: fix double-encoded entities in all property content ── */
+add_action('admin_init', function() {
+    if (!isset($_GET['sb_fix_content']) || !current_user_can('manage_options')) return;
+    if (get_option('sb_content_fixed_v2')) { wp_die('Already done.'); }
+    global $wpdb;
+    // Step 1: un-double-encode &amp;ENTITY; → &ENTITY; (handles &amp;nbsp;, &amp;#13;, etc.)
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&amp;#13;', '&#13;') WHERE post_type = 'property'");
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&amp;nbsp;', '&nbsp;') WHERE post_type = 'property'");
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&amp;amp;', '&amp;') WHERE post_type = 'property'");
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&amp;lt;', '&lt;') WHERE post_type = 'property'");
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&amp;gt;', '&gt;') WHERE post_type = 'property'");
+    // Step 2: strip bare &#13; (carriage returns) — replace double with nothing, single with nothing
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&#13;', '') WHERE post_type = 'property'");
+    // Step 3: remove &nbsp; spacer paragraphs
+    $wpdb->query("UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, '&nbsp;', ' ') WHERE post_type = 'property'");
+    // Flush post cache
+    $ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'property'");
+    foreach ($ids as $id) { clean_post_cache($id); }
+    update_option('sb_content_fixed_v2', true);
+    wp_die('Done! All ' . count($ids) . ' property descriptions cleaned.');
+});
+
+/* ── Fallback filter: fix any remaining double-encoded entities on output ── */
 add_filter('the_content', function($content) {
     if (is_singular('property')) {
-        // Un-double-encode any &amp;ENTITY; → &ENTITY; (covers &amp;nbsp;, &amp;#13;, etc.)
         $content = preg_replace('/&amp;((?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);)/', '&$1', $content);
-        // Convert &#13;&#13; (double CR) to paragraph break before wpautop runs
-        $content = str_replace(['&#13;&#13;', "\r\r"], "\n\n", $content);
-        $content = str_replace(['&#13;', "\r"], "\n", $content);
+        $content = str_replace(['&#13;&#13;', '&#13;', "\r"], ['', '', ''], $content);
     }
     return $content;
 }, 1);
