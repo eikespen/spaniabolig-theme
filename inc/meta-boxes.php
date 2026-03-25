@@ -259,6 +259,20 @@ function sb_mb_about($post) {
         sb_grid_end();
     sb_section_end();
 
+    sb_section_start('👥', 'Meet the Team');
+        sb_grid_start();
+            sb_field($post, 'sb_team_heading',  'Section heading', 'text',     'Meet the team');
+            sb_field($post, 'sb_team_subtitle', 'Section subtitle', 'textarea', 'Our dedicated team of property specialists — based in Spain — are here to guide you every step of the way.');
+        sb_grid_end();
+    sb_section_end();
+
+    sb_section_start('✉', 'Contact Form Card');
+        sb_grid_start();
+            sb_field($post, 'sb_contact_card_title', 'Card title', 'text',     'Get in touch with us');
+            sb_field($post, 'sb_contact_card_text',  'Card intro', 'textarea', 'Have questions about properties in Ciudad Quesada? Send us a message and we\'ll get back to you as soon as possible.');
+        sb_grid_end();
+    sb_section_end();
+
     sb_section_start('→', 'CTA');
         sb_grid_start();
             sb_field($post, 'sb_cta_title',    'Title',       'text',     'Ready to find your dream property?');
@@ -373,6 +387,11 @@ function sb_mb_services($post) {
         }
     sb_section_end();
 
+    sb_section_start('👤', 'Contact Card (below services grid)');
+        sb_field($post, 'sb_contact_heading',     'Heading',               'textarea', 'Do you want to order some of our services or have any questions? Let us know.');
+        sb_field($post, 'sb_form_service_label',  'Form dropdown label',   'text',     'What type of services do you need? Click here.');
+    sb_section_end();
+
     sb_section_start('→', 'CTA');
         sb_grid_start();
             sb_field($post, 'sb_cta_title',    'Title',       'text',     'Interested in our property services?');
@@ -469,6 +488,11 @@ add_action('save_post_page', function($post_id) {
         'sb_faq1_question','sb_faq1_answer','sb_faq2_question','sb_faq2_answer',
         'sb_faq3_question','sb_faq3_answer','sb_faq4_question','sb_faq4_answer',
         'sb_faq5_question','sb_faq5_answer','sb_faq6_question','sb_faq6_answer',
+        // Services — contact card
+        'sb_contact_heading','sb_form_service_label',
+        // About — meet the team & contact form card
+        'sb_team_heading','sb_team_subtitle',
+        'sb_contact_card_title','sb_contact_card_text',
     ];
 
     foreach ($all_keys as $key) {

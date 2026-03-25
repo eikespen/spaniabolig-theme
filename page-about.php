@@ -51,8 +51,8 @@ if (!empty($team)) : ?>
 <section class="about-team">
     <div class="section-inner">
         <div class="about-team__header">
-            <h2>Meet the team</h2>
-            <p>Our dedicated team of property specialists — based in Spain — are here to guide you every step of the way.</p>
+            <h2><?php echo esc_html(sb_ab('sb_team_heading', 'Meet the team')); ?></h2>
+            <p><?php echo esc_html(sb_ab('sb_team_subtitle', 'Our dedicated team of property specialists — based in Spain — are here to guide you every step of the way.')); ?></p>
         </div>
         <div class="about-team__grid">
             <?php foreach ($team as $agent) :
@@ -113,8 +113,8 @@ if (!empty($team)) : ?>
 <section class="about-contact-form">
     <div class="section-inner--narrow">
         <div class="about-contact-card">
-            <h2>Get in touch with us</h2>
-            <p>Have questions about properties in Ciudad Quesada? Send us a message and we'll get back to you as soon as possible.</p>
+            <h2><?php echo esc_html(sb_ab('sb_contact_card_title', 'Get in touch with us')); ?></h2>
+            <p><?php echo esc_html(sb_ab('sb_contact_card_text', "Have questions about properties in Ciudad Quesada? Send us a message and we'll get back to you as soon as possible.")); ?></p>
             <form class="contact-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="sb_contact_form">
                 <?php wp_nonce_field('sb_contact', 'sb_contact_nonce'); ?>
