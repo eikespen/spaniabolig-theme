@@ -881,8 +881,47 @@ input, select, textarea, button { font: inherit; }
 .property-map { margin-top: 40px; }
 .property-map h2 { font-size: 1.3rem; font-weight: 700; color: var(--grey-900); margin-bottom: 16px; }
 
-/* Contact Card */
+/* Agent Card (sidebar) */
 .property-sidebar { position: sticky; top: 88px; }
+.agent-card {
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+.agent-card__header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.agent-card__avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    overflow: hidden; flex-shrink: 0;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+}
+.agent-card__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.agent-card__initials { color: var(--white); font-weight: 700; font-size: 1.1rem; }
+.agent-card__name { font-weight: 700; font-size: 15px; color: var(--grey-900); }
+.agent-card__company { font-size: 13px; color: var(--grey-500); margin-top: 2px; }
+.agent-card__contact { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.agent-card__phone {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 15px; font-weight: 600; color: var(--navy);
+    text-decoration: none;
+}
+.agent-card__phone:hover { color: var(--blue); }
+.agent-card__divider { border: none; border-top: 1px solid var(--grey-200); margin: 20px 0; }
+.agent-card__form-title { font-size: 1rem; font-weight: 700; color: var(--grey-900); margin-bottom: 16px; }
+
+/* WhatsApp button */
+.btn-whatsapp {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: #25D366; color: #fff; border: none; border-radius: 10px;
+    padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+    text-decoration: none; transition: background .15s;
+}
+.btn-whatsapp:hover { background: #1ebe5d; color: #fff; }
+.btn-block { width: 100%; }
+
+/* Contact Card (legacy, kept for compat) */
 .contact-card {
     background: var(--white);
     border: 1px solid var(--grey-200);
@@ -892,6 +931,58 @@ input, select, textarea, button { font: inherit; }
 }
 .contact-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--grey-900); margin-bottom: 8px; }
 .contact-card > p { font-size: 14px; color: var(--grey-500); margin-bottom: 20px; }
+
+/* Full-width enquiry section (below map) */
+.property-enquiry {
+    margin-top: 48px;
+    background: var(--grey-50);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.enquiry-agent {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    padding: 24px 28px;
+    background: var(--navy);
+    color: var(--white);
+}
+.enquiry-agent__avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    overflow: hidden; flex-shrink: 0;
+    background: rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(255,255,255,.3);
+}
+.enquiry-agent__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.enquiry-agent__initials { color: var(--white); font-weight: 700; font-size: 1.2rem; }
+.enquiry-agent__details { flex: 1; min-width: 160px; }
+.enquiry-agent__details strong { display: block; font-size: 16px; font-weight: 700; }
+.enquiry-agent__details span { font-size: 13px; opacity: .75; }
+.enquiry-agent__phone {
+    display: flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,.85); text-decoration: none;
+    font-size: 14px; margin-top: 6px;
+}
+.enquiry-agent__phone:hover { color: #fff; }
+.enquiry-agent__cta { display: flex; gap: 10px; flex-wrap: wrap; }
+.enquiry-agent__cta .btn-outline {
+    border-color: rgba(255,255,255,.5); color: #fff; background: transparent;
+}
+.enquiry-agent__cta .btn-outline:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+.enquiry-form-wrap { padding: 28px; }
+.enquiry-form-wrap h3 { font-size: 1.15rem; font-weight: 700; color: var(--grey-900); margin-bottom: 20px; }
+.enquiry-form { display: flex; flex-direction: column; gap: 14px; }
+.enquiry-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.enquiry-form input,
+.enquiry-form textarea {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--grey-200); border-radius: 10px;
+    font-size: 14px; background: var(--white);
+    transition: border-color .15s;
+}
+.enquiry-form input:focus,
+.enquiry-form textarea:focus { outline: none; border-color: var(--navy); }
+.enquiry-form textarea { resize: vertical; }
 .contact-form { display: flex; flex-direction: column; gap: 12px; }
 .contact-form input,
 .contact-form textarea {
