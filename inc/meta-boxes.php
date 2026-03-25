@@ -360,13 +360,14 @@ function sb_mb_services($post) {
         sb_grid_end();
         sb_divider();
         for ($i = 1; $i <= 6; $i += 2) {
+            $j = $i + 1;
             sb_grid_start();
-                sb_field($post, "sb_service{$i}_title",     "Service $i title",     'text',     $svc_defaults[$i]);
-                sb_field($post, "sb_service{$i+1}_title",   "Service " . ($i+1) . " title", 'text', $svc_defaults[$i+1]);
+                sb_field($post, "sb_service{$i}_title", "Service $i title", 'text',     $svc_defaults[$i]);
+                sb_field($post, "sb_service{$j}_title", "Service $j title", 'text',     $svc_defaults[$j]);
             sb_grid_end();
             sb_grid_start();
-                sb_field($post, "sb_service{$i}_desc",      "Service $i desc",      'textarea', '');
-                sb_field($post, "sb_service{$i+1}_desc",    "Service " . ($i+1) . " desc",  'textarea', '');
+                sb_field($post, "sb_service{$i}_desc",  "Service $i desc",  'textarea', '');
+                sb_field($post, "sb_service{$j}_desc",  "Service $j desc",  'textarea', '');
             sb_grid_end();
             if ($i < 5) sb_divider();
         }
