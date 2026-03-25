@@ -49,13 +49,14 @@ function sb_enqueue() {
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
 
-/* ── Strip &#13; carriage returns from XML-imported property descriptions ── */
+/* ── Fix double-encoded HTML entities from XML import ── */
 add_filter('the_content', function($content) {
     if (is_singular('property')) {
-        // Double CR → paragraph break (runs at priority 1, before wpautop at 10)
-        $content = str_replace(['&amp;#13;&amp;#13;', '&#13;&#13;', "\r\r"], "\n\n", $content);
-        // Single CR → line break
-        $content = str_replace(['&amp;#13;', '&#13;', "\r"], "\n", $content);
+        // Un-double-encode any &amp;ENTITY; → &ENTITY; (covers &amp;nbsp;, &amp;#13;, etc.)
+        $content = preg_replace('/&amp;((?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);)/', '&$1', $content);
+        // Convert &#13;&#13; (double CR) to paragraph break before wpautop runs
+        $content = str_replace(['&#13;&#13;', "\r\r"], "\n\n", $content);
+        $content = str_replace(['&#13;', "\r"], "\n", $content);
     }
     return $content;
 }, 1);
