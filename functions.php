@@ -419,6 +419,23 @@ function sb_ajax_dash_search() {
 }
 add_action('wp_ajax_sb_dash_search', 'sb_ajax_dash_search');
 
+/* ── Admin Menu: Property Dashboard shortcut ── */
+add_action('admin_menu', function() {
+    add_menu_page(
+        'Property Dashboard',
+        'Property Dashboard',
+        'edit_posts',
+        'sb-property-dashboard',
+        'sb_admin_dashboard_redirect',
+        'dashicons-admin-home',
+        3
+    );
+});
+function sb_admin_dashboard_redirect() {
+    wp_safe_redirect(home_url('/dashboard'));
+    exit;
+}
+
 /* ── Helper: Format Price ── */
 function sb_format_price($price) {
     if (!$price) return '';
