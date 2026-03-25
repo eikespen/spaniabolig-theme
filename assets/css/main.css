@@ -123,6 +123,35 @@ input, select, textarea, button { font: inherit; }
 .nav-list li a:hover,
 .nav-list li.current-menu-item a { background: rgba(255,255,255,0.1); color: #fff; }
 
+/* ── Dropdown nav ── */
+.has-dropdown { position: relative; }
+.dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    min-width: 180px;
+    padding: 6px;
+    z-index: 200;
+    list-style: none;
+}
+.dropdown li a {
+    display: block;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--grey-700) !important;
+    border-radius: 8px;
+    background: transparent !important;
+    transition: background .15s;
+}
+.dropdown li a:hover { background: var(--grey-50) !important; color: var(--navy) !important; }
+.has-dropdown:hover .dropdown { display: block; }
+
 .header-actions { display: flex; gap: 10px; align-items: center; margin-left: auto; }
 .nav-toggle {
     display: none;
