@@ -28,9 +28,14 @@
             <select id="pf-location" class="pf-select">
                 <option value=""><?php esc_html_e('Any location', 'spaniabolig'); ?></option>
                 <?php
-                $locs = get_terms(['taxonomy' => 'property_location', 'hide_empty' => false]);
-                if (!is_wp_error($locs)) foreach ($locs as $l) :
-                    echo '<option value="' . esc_attr($l->slug) . '">' . esc_html($l->name) . '</option>';
+                global $wpdb;
+                $cities = $wpdb->get_col(
+                    "SELECT DISTINCT meta_value FROM {$wpdb->postmeta}
+                     WHERE meta_key = 'sb_city' AND meta_value != ''
+                     ORDER BY meta_value ASC"
+                );
+                foreach ($cities as $city) :
+                    echo '<option value="' . esc_attr($city) . '">' . esc_html($city) . '</option>';
                 endforeach;
                 ?>
             </select>

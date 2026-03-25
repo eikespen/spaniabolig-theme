@@ -163,7 +163,7 @@ function sb_ajax_search() {
         $args['tax_query'][] = ['taxonomy' => 'property_type', 'field' => 'slug', 'terms' => sanitize_text_field($_POST['property_type'])];
     }
     if (!empty($_POST['location'])) {
-        $args['tax_query'][] = ['taxonomy' => 'property_location', 'field' => 'slug', 'terms' => sanitize_text_field($_POST['location'])];
+        $args['meta_query'][] = ['key' => 'sb_city', 'value' => sanitize_text_field($_POST['location']), 'compare' => '='];
     }
     if (!empty($_POST['min_price'])) {
         $args['meta_query'][] = ['key' => 'sb_price', 'value' => intval($_POST['min_price']), 'compare' => '>=', 'type' => 'NUMERIC'];
