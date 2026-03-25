@@ -7,6 +7,7 @@ require_once get_template_directory() . '/inc/agents.php';
 require_once get_template_directory() . '/inc/import-featured.php';
 require_once get_template_directory() . '/inc/sideload-images.php';
 require_once get_template_directory() . '/inc/sync-featured-status.php';
+require_once get_template_directory() . '/inc/property-submission.php';
 
 /* ── Image helpers (supports external URLs from XML import) ── */
 function sb_get_image_url(int $post_id, string $size = 'large'): string {
@@ -54,6 +55,17 @@ function sb_enqueue() {
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce'   => wp_create_nonce('sb_search'),
     ]);
+
+    // ── Add Property wizard ───────────────────────────────
+    if (is_page_template('page-add-property.php')) {
+        wp_enqueue_style('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4');
+        wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true);
+        wp_enqueue_script('sb-add-property', get_template_directory_uri() . '/assets/js/add-property.js', ['leaflet'], filemtime(get_template_directory() . '/assets/js/add-property.js'), true);
+        wp_localize_script('sb-add-property', 'sbAddProp', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('sb_add_property'),
+        ]);
+    }
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
 
