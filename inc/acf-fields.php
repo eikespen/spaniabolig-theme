@@ -129,7 +129,7 @@ function sb_register_acf_fields() {
             ['key' => 'field_sb_ab_cta_text',     'label' => 'CTA paragraph',   'name' => 'cta_text',     'type' => 'textarea', 'rows' => 2, 'default_value' => 'Start your journey towards owning your ideal home in Ciudad Quesada and the urbanizations of Rojales today.'],
             ['key' => 'field_sb_ab_cta_btn_text', 'label' => 'CTA button text', 'name' => 'cta_btn_text', 'type' => 'text',  'default_value' => 'Browse properties'],
         ],
-        'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'page']]],
+        'location' => [[['param' => 'page_slug', 'operator' => '==', 'value' => 'about']]],
         'position'        => 'normal',
         'label_placement' => 'top',
     ]);
@@ -180,7 +180,7 @@ function sb_register_acf_fields() {
             ['key' => 'field_sb_hiw_cta_btn1_text', 'label' => 'CTA button 1 text','name' => 'cta_btn1_text', 'type' => 'text',  'default_value' => 'Browse properties'],
             ['key' => 'field_sb_hiw_cta_btn2_text', 'label' => 'CTA button 2 text','name' => 'cta_btn2_text', 'type' => 'text',  'default_value' => 'Contact us'],
         ],
-        'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'page']]],
+        'location' => [[['param' => 'page_slug', 'operator' => '==', 'value' => 'how-it-works']]],
         'position'        => 'normal',
         'label_placement' => 'top',
     ]);
@@ -217,7 +217,7 @@ function sb_register_acf_fields() {
             ['key' => 'field_sb_sv_cta_text',     'label' => 'CTA paragraph',   'name' => 'cta_text',     'type' => 'textarea', 'rows' => 2, 'default_value' => 'Get in touch with our team to discuss how we can help look after your Spanish property.'],
             ['key' => 'field_sb_sv_cta_btn_text', 'label' => 'CTA button text', 'name' => 'cta_btn_text', 'type' => 'text',  'default_value' => 'Contact us today'],
         ],
-        'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'page']]],
+        'location' => [[['param' => 'page_slug', 'operator' => '==', 'value' => 'services']]],
         'position'        => 'normal',
         'label_placement' => 'top',
     ]);
@@ -234,7 +234,7 @@ function sb_register_acf_fields() {
             ['key' => 'field_sb_ct_form_title', 'label' => 'Form card title', 'name' => 'form_title', 'type' => 'text',  'default_value' => 'Send us a message'],
             ['key' => 'field_sb_ct_form_intro', 'label' => 'Form card intro', 'name' => 'form_intro', 'type' => 'text',  'default_value' => 'We aim to respond to all inquiries within 24 hours during business days.'],
         ],
-        'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'page']]],
+        'location' => [[['param' => 'page_slug', 'operator' => '==', 'value' => 'contact']]],
         'position'        => 'normal',
         'label_placement' => 'top',
     ]);
