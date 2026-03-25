@@ -5,7 +5,7 @@
  */
 defined('ABSPATH') || exit;
 
-add_action('acf/init', 'sb_register_acf_fields');
+add_action('init', 'sb_register_acf_fields', 20);
 
 function sb_register_acf_fields() {
     if (!function_exists('acf_add_local_field_group')) return;
