@@ -6,6 +6,7 @@ $size      = get_post_meta(get_the_ID(), 'sb_size', true);
 $status    = get_post_meta(get_the_ID(), 'sb_status', true);
 $city      = get_post_meta(get_the_ID(), 'sb_city', true);
 
+$status_key    = str_replace('_', '-', (string) $status);
 $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 'Sold'];
 ?>
 <article class="property-card">
@@ -20,8 +21,8 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
         <?php endif; ?>
 
         <?php if ($status) : ?>
-            <span class="card-badge card-badge--<?php echo esc_attr($status); ?>">
-                <?php echo esc_html($status_labels[$status] ?? ucfirst($status)); ?>
+            <span class="card-badge card-badge--<?php echo esc_attr($status_key); ?>">
+                <?php echo esc_html($status_labels[$status_key] ?? ucwords(str_replace(['-','_'], ' ', $status))); ?>
             </span>
         <?php endif; ?>
     </a>

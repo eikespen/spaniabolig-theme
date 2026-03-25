@@ -94,9 +94,10 @@
         }
 
         function renderCard(p) {
-            const labels = {'for-sale': 'For Sale', 'for-rent': 'For Rent', 'sold': 'Sold'};
-            const price  = p.price ? '\u20ac\u00a0' + parseInt(p.price).toLocaleString('de-DE') : '';
-            const badge  = p.status ? `<span class="card-badge card-badge--${p.status}">${labels[p.status] || p.status}</span>` : '';
+            const labels    = {'for-sale': 'For Sale', 'for-rent': 'For Rent', 'sold': 'Sold'};
+            const statusKey = p.status ? p.status.replace(/_/g, '-') : '';
+            const price     = p.price ? '\u20ac\u00a0' + parseInt(p.price).toLocaleString('de-DE') : '';
+            const badge     = statusKey ? `<span class="card-badge card-badge--${statusKey}">${labels[statusKey] || statusKey}</span>` : '';
             const img    = p.image
                 ? `<img src="${p.image}" alt="${esc(p.title)}" class="card-image" loading="lazy">`
                 : `<div class="card-image card-image--placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5" width="48" height="48"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>`;
