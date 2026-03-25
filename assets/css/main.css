@@ -1365,14 +1365,15 @@ input, select, textarea, button { font: inherit; }
 
 /* ── CTA Banner ── */
 .cta-banner {
-    background: var(--navy);
+    background: var(--grey-50);
+    border-top: 1px solid var(--grey-200);
     padding: 80px 0;
     text-align: center;
 }
 .cta-banner h2 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: var(--white);
+    color: var(--navy);
     letter-spacing: -0.03em;
     margin-bottom: 16px;
     max-width: 700px;
@@ -1381,12 +1382,24 @@ input, select, textarea, button { font: inherit; }
 }
 .cta-banner p {
     font-size: 17px;
-    color: rgba(255,255,255,.7);
+    color: var(--grey-500);
     margin-bottom: 32px;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
 }
+/* btn-white on light CTA background → navy filled */
+.cta-banner .btn-white {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+}
+.cta-banner .btn-white:hover {
+    background: var(--navy-dark);
+    border-color: var(--navy-dark);
+    color: var(--white);
+}
+/* btn-white used on dark backgrounds elsewhere */
 .btn-white {
     background: var(--white);
     color: var(--navy);
