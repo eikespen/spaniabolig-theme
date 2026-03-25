@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <?php wp_head(); ?>
+    <style>.site-header{background:#001d3d!important;border-bottom:1px solid rgba(255,255,255,.1)!important}.nav-list li a{color:rgba(255,255,255,.85)!important}.nav-list li a:hover{background:rgba(255,255,255,.1)!important;color:#fff!important}</style>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
