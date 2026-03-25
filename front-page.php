@@ -1,10 +1,19 @@
-<?php get_header(); ?>
+<?php
+get_header();
+
+$pid = get_the_ID();
+function sb_fp($key, $default = '') {
+    global $pid;
+    $v = get_post_meta($pid, $key, true);
+    return $v !== '' ? $v : $default;
+}
+?>
 
 <!-- ── HERO ── -->
 <section class="hero">
     <div class="hero-inner">
-        <h1 class="hero-heading"><?php echo esc_html(get_field('hero_heading') ?: 'Find your dream property in Ciudad Quesada'); ?></h1>
-        <p class="hero-subtitle"><?php echo esc_html(get_field('hero_subtitle') ?: 'Discover beautiful homes in Ciudad Quesada and the urbanizations of Rojales with properties to suit every lifestyle and budget.'); ?></p>
+        <h1 class="hero-heading"><?php echo esc_html(sb_fp('sb_hero_heading', 'Find your dream property in Ciudad Quesada')); ?></h1>
+        <p class="hero-subtitle"><?php echo esc_html(sb_fp('sb_hero_subtitle', 'Discover beautiful homes in Ciudad Quesada and the urbanizations of Rojales with properties to suit every lifestyle and budget.')); ?></p>
 
         <!-- Search Card -->
         <div class="search-card">
@@ -261,10 +270,10 @@ $nb_any    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'me
 <!-- ── LIFESTYLE ── -->
 <?php
 $lifestyle_defaults = [
-    ['card_title' => 'Prime location',         'card_desc' => 'Ciudad Quesada offers a perfect blend of Spanish charm and modern amenities, just 10 minutes from Mediterranean beaches.'],
-    ['card_title' => 'International community','card_desc' => 'Join a thriving international community with residents from across Europe enjoying a relaxed Mediterranean lifestyle.'],
-    ['card_title' => '320+ days of sunshine',  'card_desc' => 'Enjoy the famous climate of Ciudad Quesada with over 320 days of sunshine per year, perfect for outdoor living and golf.'],
-    ['card_title' => 'Expert local support',   'card_desc' => 'Our team of local property experts provides personalized assistance throughout your entire property buying journey.'],
+    ['Prime location',          'Ciudad Quesada offers a perfect blend of Spanish charm and modern amenities, just 10 minutes from Mediterranean beaches.'],
+    ['International community', 'Join a thriving international community with residents from across Europe enjoying a relaxed Mediterranean lifestyle.'],
+    ['320+ days of sunshine',   'Enjoy the famous climate of Ciudad Quesada with over 320 days of sunshine per year, perfect for outdoor living and golf.'],
+    ['Expert local support',    'Our team of local property experts provides personalized assistance throughout your entire property buying journey.'],
 ];
 $lifestyle_icons = [
     '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
@@ -272,11 +281,18 @@ $lifestyle_icons = [
     '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
     '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
 ];
-$lifestyle_cards = get_field('lifestyle_cards') ?: $lifestyle_defaults;
+$lifestyle_cards = [];
+for ($i = 1; $i <= 4; $i++) {
+    $def = $lifestyle_defaults[$i - 1];
+    $lifestyle_cards[] = [
+        'card_title' => sb_fp("sb_lifestyle_card{$i}_title", $def[0]),
+        'card_desc'  => sb_fp("sb_lifestyle_card{$i}_desc",  $def[1]),
+    ];
+}
 ?>
 <section class="lifestyle">
     <div class="section-inner">
-        <h2><?php echo esc_html(get_field('lifestyle_title') ?: 'The Ciudad Quesada lifestyle'); ?></h2>
+        <h2><?php echo esc_html(sb_fp('sb_lifestyle_title', 'The Ciudad Quesada lifestyle')); ?></h2>
         <div class="lifestyle-grid">
             <?php foreach ($lifestyle_cards as $i => $card) : ?>
             <div class="lifestyle-card">
@@ -293,41 +309,49 @@ $lifestyle_cards = get_field('lifestyle_cards') ?: $lifestyle_defaults;
 
 <!-- ── WHY BUY ── -->
 <?php
-$why_col1_defaults = [
-    ['item' => 'Established residential area with excellent infrastructure'],
-    ['item' => 'Close to beaches, golf courses, and nature reserves'],
-    ['item' => 'International community with shops, restaurants, and services'],
+$why_col1_defs = [
+    'Established residential area with excellent infrastructure',
+    'Close to beaches, golf courses, and nature reserves',
+    'International community with shops, restaurants, and services',
+    '',
 ];
-$why_col2_defaults = [
-    ['item' => 'Competitive property prices with good appreciation potential'],
-    ['item' => 'Strong rental demand throughout the year'],
-    ['item' => 'Lower cost of living compared to Northern European countries'],
+$why_col2_defs = [
+    'Competitive property prices with good appreciation potential',
+    'Strong rental demand throughout the year',
+    'Lower cost of living compared to Northern European countries',
+    '',
 ];
-$why_col1_items = get_field('why_col1_items') ?: $why_col1_defaults;
-$why_col2_items = get_field('why_col2_items') ?: $why_col2_defaults;
+$why_col1_items = [];
+$why_col2_items = [];
+for ($i = 1; $i <= 4; $i++) {
+    $v1 = sb_fp("sb_why_col1_item{$i}", $why_col1_defs[$i - 1]);
+    $v2 = sb_fp("sb_why_col2_item{$i}", $why_col2_defs[$i - 1]);
+    if ($v1) $why_col1_items[] = $v1;
+    if ($v2) $why_col2_items[] = $v2;
+}
 ?>
 <section class="why-buy">
     <div class="section-inner">
-        <h2><?php echo esc_html(get_field('why_title') ?: 'Why buy in Ciudad Quesada'); ?></h2>
+        <h2><?php echo esc_html(sb_fp('sb_why_title', 'Why buy in Ciudad Quesada')); ?></h2>
         <div class="why-buy-grid">
             <div class="why-buy-col">
-                <h3><?php echo esc_html(get_field('why_col1_heading') ?: 'Perfect Mediterranean lifestyle'); ?></h3>
-                <p><?php echo esc_html(get_field('why_col1_text') ?: "Ciudad Quesada is a popular residential area in Costa Blanca, offering a perfect blend of Spanish lifestyle with international amenities. With over 320 days of sunshine per year, it's an ideal location for those seeking a relaxed Mediterranean way of life."); ?></p>
+                <h3><?php echo esc_html(sb_fp('sb_why_col1_heading', 'Perfect Mediterranean lifestyle')); ?></h3>
+                <p><?php echo esc_html(sb_fp('sb_why_col1_text', "Ciudad Quesada is a popular residential area in Costa Blanca, offering a perfect blend of Spanish lifestyle with international amenities. With over 320 days of sunshine per year, it's an ideal location for those seeking a relaxed Mediterranean way of life.")); ?></p>
                 <ul class="check-list">
-                    <?php foreach ($why_col1_items as $row) : ?>
-                    <li><?php echo esc_html($row['item']); ?></li>
+                    <?php foreach ($why_col1_items as $item) : ?>
+                    <li><?php echo esc_html($item); ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
             <div class="why-buy-col">
-                <h3><?php echo esc_html(get_field('why_col2_heading') ?: 'Excellent investment opportunity'); ?></h3>
-                <p><?php echo esc_html(get_field('why_col2_text') ?: 'Ciudad Quesada offers exceptional value for money compared to other Mediterranean destinations, with a stable property market and strong rental potential.'); ?></p>
+                <h3><?php echo esc_html(sb_fp('sb_why_col2_heading', 'Excellent investment opportunity')); ?></h3>
+                <p><?php echo esc_html(sb_fp('sb_why_col2_text', 'Ciudad Quesada offers exceptional value for money compared to other Mediterranean destinations, with a stable property market and strong rental potential.')); ?></p>
                 <ul class="check-list">
-                    <?php foreach ($why_col2_items as $row) : ?>
-                    <li><?php echo esc_html($row['item']); ?></li>
+                    <?php foreach ($why_col2_items as $item) : ?>
+                    <li><?php echo esc_html($item); ?></li>
                     <?php endforeach; ?>
                 </ul>
-                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-primary btn-pill" style="margin-top:24px;"><?php echo esc_html(get_field('why_col2_btn_text') ?: 'Browse Ciudad Quesada properties'); ?></a>
+                <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-primary btn-pill" style="margin-top:24px;"><?php echo esc_html(sb_fp('sb_why_col2_btn_text', 'Browse Ciudad Quesada properties')); ?></a>
             </div>
         </div>
     </div>
@@ -336,17 +360,22 @@ $why_col2_items = get_field('why_col2_items') ?: $why_col2_defaults;
 <!-- ── FAQ ── -->
 <?php
 $faq_defaults = [
-    ['question' => 'Why buy property in Ciudad Quesada?', 'answer' => 'Ciudad Quesada offers the perfect blend of Spanish lifestyle with international amenities. It features year-round sunshine, beautiful beaches just minutes away, championship golf courses, extensive restaurant options, and a thriving international community. Properties here typically offer excellent value compared to other Mediterranean coastal areas.'],
-    ['question' => 'What types of properties are available in Ciudad Quesada?', 'answer' => 'Ciudad Quesada offers a diverse range of properties including modern villas with private pools, contemporary apartments with community facilities, traditional Spanish townhouses, new build developments with the latest features, and investment properties with strong rental potential.'],
-    ['question' => 'What is the buying process for foreigners in Spain?', 'answer' => 'The buying process in Spain typically involves: obtaining an NIE (foreigner identification number), opening a Spanish bank account, making an offer and signing a reservation agreement with a deposit (usually €3,000–€6,000), signing the private purchase contract with a larger deposit (typically 10%), and completing the final purchase at the notary.'],
-    ['question' => 'What additional costs should I budget for when buying property in Spain?', 'answer' => 'When purchasing property in Spain, additional costs typically total 10–13% of the purchase price. These include: transfer tax (10% for resale properties) or VAT (10% for new builds), notary fees (0.5–1%), property registry fees (0.5%), legal fees (1–2%), and potentially mortgage arrangement fees if financing.'],
-    ['question' => 'Can I get financing to buy property in Ciudad Quesada?', 'answer' => 'Yes, foreign buyers can obtain mortgages for properties in Ciudad Quesada. Spanish banks typically offer 60–70% financing for non-residents (up to 80% for residents). Our property team works with mortgage specialists who can secure competitive rates and guide you through the application process.'],
+    ['Why buy property in Ciudad Quesada?', 'Ciudad Quesada offers the perfect blend of Spanish lifestyle with international amenities. It features year-round sunshine, beautiful beaches just minutes away, championship golf courses, extensive restaurant options, and a thriving international community. Properties here typically offer excellent value compared to other Mediterranean coastal areas.'],
+    ['What types of properties are available in Ciudad Quesada?', 'Ciudad Quesada offers a diverse range of properties including modern villas with private pools, contemporary apartments with community facilities, traditional Spanish townhouses, new build developments with the latest features, and investment properties with strong rental potential.'],
+    ['What is the buying process for foreigners in Spain?', 'The buying process in Spain typically involves: obtaining an NIE (foreigner identification number), opening a Spanish bank account, making an offer and signing a reservation agreement with a deposit (usually €3,000–€6,000), signing the private purchase contract with a larger deposit (typically 10%), and completing the final purchase at the notary.'],
+    ['What additional costs should I budget for when buying property in Spain?', 'When purchasing property in Spain, additional costs typically total 10–13% of the purchase price. These include: transfer tax (10% for resale properties) or VAT (10% for new builds), notary fees (0.5–1%), property registry fees (0.5%), legal fees (1–2%), and potentially mortgage arrangement fees if financing.'],
 ];
-$faqs = get_field('faqs') ?: $faq_defaults;
+$faqs = [];
+for ($i = 1; $i <= 4; $i++) {
+    $def = $faq_defaults[$i - 1];
+    $q = sb_fp("sb_faq{$i}_question", $def[0]);
+    $a = sb_fp("sb_faq{$i}_answer",   $def[1]);
+    if ($q && $a) $faqs[] = ['question' => $q, 'answer' => $a];
+}
 ?>
 <section class="faq">
     <div class="section-inner">
-        <h2><?php echo esc_html(get_field('faq_title') ?: 'Frequently asked questions'); ?></h2>
+        <h2><?php echo esc_html(sb_fp('sb_faq_title', 'Frequently asked questions')); ?></h2>
         <div class="faq-list">
             <?php foreach ($faqs as $i => $faq) : ?>
             <details class="faq-item" <?php if ($i === 0) echo 'open'; ?>>
@@ -361,9 +390,9 @@ $faqs = get_field('faqs') ?: $faq_defaults;
 <!-- ── CTA BANNER ── -->
 <section class="cta-banner">
     <div class="section-inner">
-        <h2><?php echo esc_html(get_field('cta_title') ?: 'Ready to find your dream property in Ciudad Quesada?'); ?></h2>
-        <p><?php echo esc_html(get_field('cta_text') ?: 'Our local property experts can help you find the perfect home that matches your requirements and budget in Ciudad Quesada and the urbanizations of Rojales.'); ?></p>
-        <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-white btn-lg"><?php echo esc_html(get_field('cta_btn_text') ?: 'Schedule a property viewing'); ?></a>
+        <h2><?php echo esc_html(sb_fp('sb_cta_title', 'Ready to find your dream property in Ciudad Quesada?')); ?></h2>
+        <p><?php echo esc_html(sb_fp('sb_cta_text', 'Our local property experts can help you find the perfect home that matches your requirements and budget in Ciudad Quesada and the urbanizations of Rojales.')); ?></p>
+        <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-white btn-lg"><?php echo esc_html(sb_fp('sb_cta_btn_text', 'Schedule a property viewing')); ?></a>
     </div>
 </section>
 
