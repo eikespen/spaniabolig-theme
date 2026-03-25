@@ -21,6 +21,18 @@ require_once get_template_directory() . '/inc/property-submission.php';
 require_once get_template_directory() . '/inc/onboarding.php';
 require_once get_template_directory() . '/inc/seo.php';
 
+/* ── Disable Gutenberg block editor for pages ── */
+// All page content is managed via custom meta boxes — the block editor is not needed
+// and just gets in the way. This gives a clean title → meta boxes layout.
+add_filter('use_block_editor_for_post_type', function (bool $use, string $post_type): bool {
+    return $post_type === 'page' ? false : $use;
+}, 10, 2);
+
+// Also remove the unused editor textarea from pages entirely
+add_action('init', function () {
+    remove_post_type_support('page', 'editor');
+});
+
 /* ── Image helpers (supports external URLs from XML import) ── */
 function sb_get_image_url(int $post_id, string $size = 'large'): string {
     if (has_post_thumbnail($post_id)) {
