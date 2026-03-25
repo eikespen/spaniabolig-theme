@@ -2,6 +2,7 @@
 defined('ABSPATH') || exit;
 
 require_once get_template_directory() . '/inc/importer.php';
+require_once get_template_directory() . '/inc/acf-fields.php';
 
 /* ── Image helpers (supports external URLs from XML import) ── */
 function sb_get_image_url(int $post_id, string $size = 'large'): string {

@@ -6,16 +6,16 @@ get_header(); ?>
 
 <section class="page-hero">
     <div class="section-inner">
-        <h1>Contact us</h1>
-        <p>Get in touch with Spaniabolig for any questions about properties in Ciudad Quesada and the urbanizations of Rojales.</p>
+        <h1><?php echo esc_html(get_field('hero_title') ?: 'Contact us'); ?></h1>
+        <p><?php echo esc_html(get_field('hero_subtitle') ?: 'Get in touch with Spaniabolig for any questions about properties in Ciudad Quesada and the urbanizations of Rojales.'); ?></p>
     </div>
 </section>
 
 <section class="contact-page">
     <div class="section-inner">
         <div class="contact-form-card">
-            <h2>Send us a message</h2>
-            <p>We aim to respond to all inquiries within 24 hours during business days.</p>
+            <h2><?php echo esc_html(get_field('form_title') ?: 'Send us a message'); ?></h2>
+            <p><?php echo esc_html(get_field('form_intro') ?: 'We aim to respond to all inquiries within 24 hours during business days.'); ?></p>
             <?php
             $sent = isset($_GET['sent']) && $_GET['sent'] === '1';
             $error = isset($_GET['error']) && $_GET['error'] === '1';

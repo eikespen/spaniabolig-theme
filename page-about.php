@@ -6,8 +6,8 @@ get_header(); ?>
 
 <section class="page-hero">
     <div class="section-inner">
-        <h1>About Spaniabolig</h1>
-        <p>We help foreign buyers find their dream properties exclusively in Ciudad Quesada and the urbanizations of Rojales, with a focus on villas, apartments, and townhouses.</p>
+        <h1><?php echo esc_html(get_field('hero_title') ?: 'About Spaniabolig'); ?></h1>
+        <p><?php echo esc_html(get_field('hero_subtitle') ?: 'We help foreign buyers find their dream properties exclusively in Ciudad Quesada and the urbanizations of Rojales, with a focus on villas, apartments, and townhouses.'); ?></p>
     </div>
 </section>
 
@@ -15,15 +15,27 @@ get_header(); ?>
     <div class="section-inner">
         <div class="about-stack">
             <div class="about-card">
-                <h2>Our mission</h2>
-                <p>At Spaniabolig, we understand that finding the right property in a foreign country can be challenging. Our mission is to simplify this process for international buyers by providing a transparent property listing service that showcases the best properties in Ciudad Quesada and the surrounding urbanizations suited to your specific needs and budget.</p>
-                <p>We believe that everyone deserves clear, unbiased information when making important property investment decisions, especially when buying abroad. That's why we've developed a platform that cuts through the complexity and presents your options in a straightforward, easy-to-understand way.</p>
+                <h2><?php echo esc_html(get_field('mission_card1_title') ?: 'Our mission'); ?></h2>
+                <?php
+                $card1_text = get_field('mission_card1_text');
+                if ($card1_text) {
+                    echo wp_kses_post($card1_text);
+                } else { ?>
+                    <p>At Spaniabolig, we understand that finding the right property in a foreign country can be challenging. Our mission is to simplify this process for international buyers by providing a transparent property listing service that showcases the best properties in Ciudad Quesada and the surrounding urbanizations suited to your specific needs and budget.</p>
+                    <p>We believe that everyone deserves clear, unbiased information when making important property investment decisions, especially when buying abroad. That's why we've developed a platform that cuts through the complexity and presents your options in a straightforward, easy-to-understand way.</p>
+                <?php } ?>
             </div>
             <div class="about-card">
-                <h2>Your trusted partner for Spanish property</h2>
-                <p>Spaniabolig is your professional property partner specializing exclusively in Ciudad Quesada and the surrounding urbanizations of Rojales on the Costa Blanca. We are dedicated to helping international buyers find their perfect Spanish home in this beautiful Mediterranean community.</p>
-                <p>Our deep connection to Ciudad Quesada goes beyond business. Living and working in this vibrant community has allowed us to build strong relationships with local real estate professionals, developers, and property owners. This insider knowledge gives us invaluable insights into the local housing market and upcoming opportunities.</p>
-                <p>We have successfully helped numerous international clients from across Europe find their dream properties in Ciudad Quesada and the surrounding areas.</p>
+                <h2><?php echo esc_html(get_field('mission_card2_title') ?: 'Your trusted partner for Spanish property'); ?></h2>
+                <?php
+                $card2_text = get_field('mission_card2_text');
+                if ($card2_text) {
+                    echo wp_kses_post($card2_text);
+                } else { ?>
+                    <p>Spaniabolig is your professional property partner specializing exclusively in Ciudad Quesada and the surrounding urbanizations of Rojales on the Costa Blanca. We are dedicated to helping international buyers find their perfect Spanish home in this beautiful Mediterranean community.</p>
+                    <p>Our deep connection to Ciudad Quesada goes beyond business. Living and working in this vibrant community has allowed us to build strong relationships with local real estate professionals, developers, and property owners. This insider knowledge gives us invaluable insights into the local housing market and upcoming opportunities.</p>
+                    <p>We have successfully helped numerous international clients from across Europe find their dream properties in Ciudad Quesada and the surrounding areas.</p>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -52,17 +64,19 @@ get_header(); ?>
 
 <section class="about-services">
     <div class="section-inner">
-        <h2>How we help you</h2>
+        <h2><?php echo esc_html(get_field('services_title') ?: 'How we help you'); ?></h2>
+        <?php
+        $services_defaults = [
+            ['title' => 'Expert property service', 'desc' => 'Our team of local property experts has extensive knowledge of Ciudad Quesada and the urbanizations of Rojales. We personally view and evaluate every property we list to ensure it meets our quality standards.'],
+            ['title' => 'Comprehensive property listings', 'desc' => 'We offer an extensive range of properties exclusively in Ciudad Quesada and the urbanizations of Rojales, from villas with pools to apartments and townhouses with great locations.'],
+            ['title' => 'Foreigner-friendly focus', 'desc' => 'We specifically cater to international buyers, providing guidance on the Spanish property purchase process and connecting you with English-speaking legal and financial experts.'],
+            ['title' => 'Transparent information', 'desc' => 'We provide clear details on property features, locations, prices, and local amenities in Ciudad Quesada to help you make informed decisions about your property investment.'],
+            ['title' => 'Personalized property search', 'desc' => 'Our advanced property search tools help you find properties that match your specific requirements, from budget and location to features like swimming pools and proximity to the beach.'],
+        ];
+        $services = get_field('services') ?: $services_defaults;
+        ?>
         <div class="services-grid">
-            <?php
-            $services = [
-                ['title' => 'Expert property service', 'desc' => 'Our team of local property experts has extensive knowledge of Ciudad Quesada and the urbanizations of Rojales. We personally view and evaluate every property we list to ensure it meets our quality standards.'],
-                ['title' => 'Comprehensive property listings', 'desc' => 'We offer an extensive range of properties exclusively in Ciudad Quesada and the urbanizations of Rojales, from villas with pools to apartments and townhouses with great locations.'],
-                ['title' => 'Foreigner-friendly focus', 'desc' => 'We specifically cater to international buyers, providing guidance on the Spanish property purchase process and connecting you with English-speaking legal and financial experts.'],
-                ['title' => 'Transparent information', 'desc' => 'We provide clear details on property features, locations, prices, and local amenities in Ciudad Quesada to help you make informed decisions about your property investment.'],
-                ['title' => 'Personalized property search', 'desc' => 'Our advanced property search tools help you find properties that match your specific requirements, from budget and location to features like swimming pools and proximity to the beach.'],
-            ];
-            foreach ($services as $s) : ?>
+            <?php foreach ($services as $s) : ?>
             <div class="service-card">
                 <h3><?php echo esc_html($s['title']); ?></h3>
                 <p><?php echo esc_html($s['desc']); ?></p>
@@ -74,9 +88,9 @@ get_header(); ?>
 
 <section class="cta-banner">
     <div class="section-inner">
-        <h2>Ready to find your dream property in Ciudad Quesada?</h2>
-        <p>Start your journey towards owning your ideal home in Ciudad Quesada and the urbanizations of Rojales today.</p>
-        <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-white btn-lg">Browse properties</a>
+        <h2><?php echo esc_html(get_field('cta_title') ?: 'Ready to find your dream property in Ciudad Quesada?'); ?></h2>
+        <p><?php echo esc_html(get_field('cta_text') ?: 'Start your journey towards owning your ideal home in Ciudad Quesada and the urbanizations of Rojales today.'); ?></p>
+        <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-white btn-lg"><?php echo esc_html(get_field('cta_btn_text') ?: 'Browse properties'); ?></a>
     </div>
 </section>
 
