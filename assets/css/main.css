@@ -380,6 +380,16 @@ input, select, textarea, button { font: inherit; }
     background: var(--navy);
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+/* When WP admin bar is visible it adds margin-top:32px to body —
+   push all sticky elements down to sit flush below it */
+.admin-bar .site-header       { top: 32px; }
+.admin-bar .properties-filter { top: 96px; }  /* 64 + 32 */
+.admin-bar .property-sidebar  { top: 120px; } /* 88 + 32 */
+.admin-bar .dash-header       { top: 32px; }
+@media screen and (max-width: 782px) {
+    .admin-bar .site-header       { top: 46px; }
+    .admin-bar .properties-filter { top: 110px; }
+}
 .header-inner {
     max-width: 1280px;
     margin: 0 auto;
