@@ -217,11 +217,21 @@ input, select, textarea, button { font: inherit; }
     line-height: 1.5;
     cursor: pointer;
     width: 100%;
-    box-sizing: border-box;
     margin-bottom: 16px;
 }
-.consent-label input { margin-top: 3px; flex-shrink: 0; }
-.consent-label span, .consent-label > *:not(input) { min-width: 0; word-wrap: break-word; }
+.consent-label input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 16px !important;
+    height: 16px;
+    min-width: 16px;
+    padding: 0 !important;
+    margin-top: 2px;
+    border: 1px solid var(--grey-200);
+    border-radius: 4px;
+    background: var(--white);
+    box-sizing: border-box;
+}
+.consent-label span { flex: 1; }
 
 /* ── About services ── */
 .about-services {
