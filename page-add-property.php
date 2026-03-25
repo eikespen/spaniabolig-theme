@@ -12,29 +12,14 @@ if (!is_user_logged_in()) {
     wp_redirect(wp_login_url(get_permalink()));
     exit;
 }
-?><!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-<meta charset="<?php bloginfo('charset'); ?>">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Add Property — <?php bloginfo('name'); ?></title>
-<?php wp_head(); ?>
-</head>
-<body class="ap-standalone">
-<?php
+
+get_header();
+?>
 
 <div class="add-property-page">
 
     <!-- AP Header -->
     <div class="ap-header">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="ap-header__logo" aria-label="Back to site">
-            <?php if (has_custom_logo()): ?>
-                <?php the_custom_logo(); ?>
-            <?php else: ?>
-                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/logo-white.svg'); ?>"
-                     alt="<?php echo esc_attr(get_bloginfo('name')); ?>" width="140" height="38">
-            <?php endif; ?>
-        </a>
         <div class="ap-header__center">
             <span class="ap-header__title">Add New Property</span>
             <span class="ap-header__step-label">Step <span id="ap-current-step-num">1</span> of 4</span>
@@ -425,6 +410,4 @@ if (!is_user_logged_in()) {
 
 </div><!-- /.add-property-page -->
 
-<?php wp_footer(); ?>
-</body>
-</html>
+<?php get_footer(); ?>
