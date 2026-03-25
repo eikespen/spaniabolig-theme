@@ -496,6 +496,363 @@ input, select, textarea, button { font: inherit; }
     color: rgba(255,255,255,.4);
 }
 
+/* ── Section Inner (shared container) ── */
+.section-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ── Search CTA row ── */
+.search-cta-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* ── Quick Links ── */
+.quick-links {
+    background: var(--white);
+    border-bottom: 1px solid var(--grey-200);
+    padding: 0;
+}
+.quick-links-grid {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.quick-links-grid::-webkit-scrollbar { display: none; }
+.quick-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--grey-700);
+    white-space: nowrap;
+    border-right: 1px solid var(--grey-200);
+    transition: background .15s, color .15s;
+    flex-shrink: 0;
+}
+.quick-link svg { color: var(--grey-400); flex-shrink: 0; }
+.quick-link:hover { background: var(--grey-50); color: var(--navy); }
+.quick-link:hover svg { color: var(--navy); }
+.quick-link--all { font-weight: 600; color: var(--navy); }
+
+/* ── Price Showcase (Resale + New Build) ── */
+.price-showcase {
+    padding: 72px 0;
+    background: var(--white);
+}
+.price-showcase--newbuild {
+    background: var(--grey-50);
+}
+.showcase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.showcase-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    letter-spacing: -0.03em;
+}
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.showcase-tier {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.tier-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--grey-500);
+}
+.tier-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    background: rgba(0,29,61,.08);
+    padding: 4px 12px;
+    border-radius: 100px;
+    width: fit-content;
+}
+.price-showcase--newbuild .tier-badge {
+    color: #0057b7;
+    background: rgba(0,87,183,.1);
+}
+.tier-card {
+    display: block;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--grey-200);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow .2s, transform .2s;
+    text-decoration: none;
+}
+.tier-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+.tier-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+}
+.tier-img--placeholder {
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: var(--grey-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tier-info {
+    padding: 16px 20px 20px;
+}
+.tier-info h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--grey-900);
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.tier-city {
+    font-size: 13px;
+    color: var(--grey-500);
+    margin-bottom: 8px;
+}
+.tier-price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+.tier-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--grey-500);
+}
+.btn-block { width: 100%; text-align: center; justify-content: center; }
+
+/* ── Lifestyle ── */
+.lifestyle {
+    padding: 80px 0;
+    background: var(--navy);
+}
+.lifestyle h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+    text-align: center;
+}
+.lifestyle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+.lifestyle-card {
+    background: rgba(255,255,255,.08);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    border: 1px solid rgba(255,255,255,.1);
+}
+.lifestyle-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,.12);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+.lifestyle-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+}
+.lifestyle-card p {
+    font-size: 14px;
+    color: rgba(255,255,255,.65);
+    line-height: 1.65;
+}
+
+/* ── Why Buy ── */
+.why-buy {
+    padding: 80px 0;
+    background: var(--white);
+}
+.why-buy h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+}
+.why-buy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+}
+.why-buy-col h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin-bottom: 14px;
+}
+.why-buy-col p {
+    font-size: 15px;
+    color: var(--grey-500);
+    line-height: 1.75;
+    margin-bottom: 20px;
+}
+.check-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.check-list li {
+    font-size: 14px;
+    color: var(--grey-700);
+    padding-left: 24px;
+    position: relative;
+    line-height: 1.5;
+}
+.check-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    background: var(--navy);
+    border-radius: 50%;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* ── FAQ ── */
+.faq {
+    padding: 80px 0;
+    background: var(--grey-50);
+}
+.faq h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+    text-align: center;
+}
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.faq-item {
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.faq-item summary {
+    padding: 20px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--grey-900);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+    content: '+';
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--grey-400);
+    flex-shrink: 0;
+    transition: transform .2s;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-answer {
+    padding: 0 24px 20px;
+    font-size: 15px;
+    color: var(--grey-500);
+    line-height: 1.75;
+    border-top: 1px solid var(--grey-100);
+    padding-top: 16px;
+}
+
+/* ── CTA Banner ── */
+.cta-banner {
+    background: var(--navy);
+    padding: 80px 0;
+    text-align: center;
+}
+.cta-banner h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.cta-banner p {
+    font-size: 17px;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.btn-white {
+    background: var(--white);
+    color: var(--navy);
+    border-color: var(--white);
+}
+.btn-white:hover {
+    background: var(--grey-100);
+    border-color: var(--grey-100);
+}
+.btn-pill { border-radius: 100px; }
+.btn-outline-dark {
+    background: transparent;
+    color: var(--navy);
+    border: 2px solid var(--grey-200);
+}
+.btn-outline-dark:hover { background: var(--grey-50); border-color: var(--navy); }
+
 /* ── Responsive ── */
 @media (max-width: 1024px) {
     .property-grid { grid-template-columns: repeat(2, 1fr); }

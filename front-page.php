@@ -204,10 +204,10 @@ $resale_high = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, '
 
 <!-- ── NEW BUILD PROPERTIES ── -->
 <?php
-$nb_budget = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new'], ['key' => 'sb_price', 'value' => 300000, 'compare' => '<', 'type' => 'NUMERIC']]]);
-$nb_mid    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new'], ['key' => 'sb_price', 'value' => [300000, 500000], 'compare' => 'BETWEEN', 'type' => 'NUMERIC']]]);
-$nb_high   = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new'], ['key' => 'sb_price', 'value' => 500000, 'compare' => '>', 'type' => 'NUMERIC']]]);
-$nb_any    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new']]]);
+$nb_budget = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new_build'], ['key' => 'sb_price', 'value' => 300000, 'compare' => '<', 'type' => 'NUMERIC']]]);
+$nb_mid    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new_build'], ['key' => 'sb_price', 'value' => [300000, 500000], 'compare' => 'BETWEEN', 'type' => 'NUMERIC']]]);
+$nb_high   = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new_build'], ['key' => 'sb_price', 'value' => 500000, 'compare' => '>', 'type' => 'NUMERIC']]]);
+$nb_any    = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'new_build']]]);
 ?>
 
 <?php if ($nb_any->found_posts > 0) : ?>
