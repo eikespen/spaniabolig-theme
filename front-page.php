@@ -39,12 +39,17 @@ function sb_fp($key, $default = '') {
                         </select>
                     </div>
                     <div class="search-field">
-                        <label>Urbanization</label>
-                        <select name="urbanization">
-                            <option value="">All Urbanizations</option>
+                        <label>Location</label>
+                        <select name="location">
+                            <option value="">All Locations</option>
                             <?php
-                            $urbs = get_terms(['taxonomy' => 'urbanization', 'hide_empty' => false]);
-                            foreach ($urbs as $u) echo '<option value="' . esc_attr($u->slug) . '">' . esc_html($u->name) . '</option>';
+                            global $wpdb;
+                            $cities = $wpdb->get_col(
+                                "SELECT DISTINCT meta_value FROM {$wpdb->postmeta}
+                                 WHERE meta_key = 'sb_city' AND meta_value != ''
+                                 ORDER BY meta_value ASC"
+                            );
+                            foreach ($cities as $city) echo '<option value="' . esc_attr($city) . '">' . esc_html($city) . '</option>';
                             ?>
                         </select>
                     </div>
