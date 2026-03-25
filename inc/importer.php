@@ -172,11 +172,15 @@ function sb_run_import(string $feed_key): array {
         // Size: prefer built, fall back to plot
         $size = (int) ($prop->surface_area->built ?: $prop->surface_area->plot);
 
-        // Title: multilingual title or fallback
+        // Title: multilingual title or clean fallback (no ref number)
         if (!empty($prop->title->en)) {
             $title = trim((string) $prop->title->en);
+        } elseif ($beds && $type_raw && $city) {
+            $title = $beds . '-Bedroom ' . ucfirst(strtolower($type_raw)) . ' in ' . $city;
+        } elseif ($type_raw && $city) {
+            $title = ucfirst(strtolower($type_raw)) . ' in ' . $city;
         } else {
-            $title = $beds . '-bed ' . $type_raw . ' in ' . $city . ' (Ref: ' . $ref . ')';
+            $title = 'Property in ' . ($city ?: 'Spain');
         }
 
         // Description

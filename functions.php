@@ -543,6 +543,37 @@ function sb_ajax_service_inquiry(): void {
 add_action('wp_ajax_sb_service_inquiry',        'sb_ajax_service_inquiry');
 add_action('wp_ajax_nopriv_sb_service_inquiry', 'sb_ajax_service_inquiry');
 
+/* ── Bulk clean property titles — visit /wp-admin/?sb_clean_titles=1 ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_clean_titles']) || !current_user_can('manage_options')) return;
+
+    $properties = get_posts([
+        'post_type'      => 'property',
+        'posts_per_page' => -1,
+        'post_status'    => 'any',
+        'fields'         => 'ids',
+    ]);
+
+    $fixed = 0;
+    foreach ($properties as $id) {
+        $title = get_the_title($id);
+        // Strip "(Ref: XXXXX)" patterns
+        $clean = preg_replace('/\s*\(Ref:\s*[^\)]+\)/i', '', $title);
+        $clean = trim($clean);
+        if ($clean !== $title) {
+            wp_update_post(['ID' => $id, 'post_title' => $clean]);
+            $fixed++;
+        }
+    }
+
+    wp_die(
+        '<h2>Title cleanup done</h2><p>Fixed <strong>' . $fixed . '</strong> of <strong>' . count($properties) . '</strong> properties.</p>' .
+        '<p><a href="' . admin_url('edit.php?post_type=property') . '">View all properties &rarr;</a></p>',
+        'Title Cleanup',
+        ['response' => 200]
+    );
+});
+
 /* ── One-time page seeder — visit /wp-admin/?sb_seed_pages=1 ── */
 add_action('admin_init', function () {
     if (!isset($_GET['sb_seed_pages']) || !current_user_can('manage_options')) return;
