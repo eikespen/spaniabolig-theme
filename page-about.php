@@ -67,7 +67,7 @@ function sb_ab($key, $default = '') {
                 </div>
                 <label class="consent-label">
                     <input type="checkbox" required>
-                    I consent to having this website store my submitted information so I can be contacted in response to my inquiry.
+                    <span>I consent to having this website store my submitted information so I can be contacted in response to my inquiry.</span>
                 </label>
                 <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:8px;">Send Message</button>
             </form>
