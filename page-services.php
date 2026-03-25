@@ -63,12 +63,148 @@ for ($i = 1; $i <= 6; $i++) {
     </div>
 </section>
 
-<section class="cta-banner">
+<section class="svc-contact-section">
     <div class="section-inner--narrow">
-        <h2><?php echo esc_html(sb_sv('sb_cta_title', 'Interested in our property services?')); ?></h2>
-        <p><?php echo esc_html(sb_sv('sb_cta_text', 'Get in touch with our team to discuss how we can help look after your Spanish property.')); ?></p>
-        <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-white btn-lg"><?php echo esc_html(sb_sv('sb_cta_btn_text', 'Contact us today')); ?></a>
+        <div class="svc-contact-card">
+
+            <!-- Left: agent info -->
+            <div class="svc-contact-card__left">
+                <h2 class="svc-contact-card__heading">
+                    <?php echo esc_html(sb_sv('sb_contact_heading', 'Do you want to order some of our services or have any questions? Let us know.')); ?>
+                </h2>
+
+                <?php
+                $photo_url = sb_sv('sb_contact_photo_url', '');
+                if ($photo_url): ?>
+                <img src="<?php echo esc_url($photo_url); ?>"
+                     alt="<?php echo esc_attr(sb_sv('sb_contact_name', 'Christer')); ?>"
+                     class="svc-contact-card__photo">
+                <?php else: ?>
+                <div class="svc-contact-card__photo-placeholder">
+                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="40" cy="32" r="16" fill="#cbd5e1"/>
+                        <path d="M8 72c0-17.673 14.327-32 32-32s32 14.327 32 32" fill="#cbd5e1"/>
+                    </svg>
+                </div>
+                <?php endif; ?>
+
+                <div class="svc-contact-card__info">
+                    <?php $phone = sb_sv('sb_contact_phone', '+47 909 17 648'); if ($phone): ?>
+                    <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone)); ?>" class="svc-contact-card__info-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+                        <?php echo esc_html($phone); ?>
+                    </a>
+                    <?php endif;
+                    $email = sb_sv('sb_contact_email', 'christer@spaniabolig.no'); if ($email): ?>
+                    <a href="mailto:<?php echo esc_attr($email); ?>" class="svc-contact-card__info-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <?php echo esc_html($email); ?>
+                    </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Right: enquiry form -->
+            <div class="svc-contact-card__right">
+                <form class="svc-form" id="svc-inquiry-form" novalidate>
+                    <?php wp_nonce_field('sb_service_inquiry', 'svc_nonce'); ?>
+
+                    <div class="svc-form__field">
+                        <select name="svc_service" class="svc-form__input svc-form__select" required>
+                            <option value="" disabled selected><?php echo esc_html(sb_sv('sb_form_service_label', 'What type of services do you need? Click here.')); ?></option>
+                            <option value="Meet &amp; Greet">Meet &amp; Greet</option>
+                            <option value="Key holding">Key holding</option>
+                            <option value="Pool services">Pool services / Pool boy</option>
+                            <option value="Cleaning services">Cleaning services</option>
+                            <option value="Property photography">Property photography</option>
+                            <option value="Maintenance &amp; repairs">Maintenance &amp; repairs</option>
+                            <option value="Other">Other / General enquiry</option>
+                        </select>
+                    </div>
+
+                    <div class="svc-form__field">
+                        <input type="text" name="svc_name" class="svc-form__input" placeholder="Name" required>
+                    </div>
+
+                    <div class="svc-form__row">
+                        <div class="svc-form__field">
+                            <input type="email" name="svc_email" class="svc-form__input" placeholder="Email" required>
+                        </div>
+                        <div class="svc-form__field">
+                            <input type="tel" name="svc_phone" class="svc-form__input" placeholder="Phone">
+                        </div>
+                    </div>
+
+                    <div class="svc-form__field">
+                        <input type="text" name="svc_city" class="svc-form__input" placeholder="City">
+                    </div>
+
+                    <div class="svc-form__field svc-form__field--checkbox">
+                        <label class="svc-form__checkbox-label">
+                            <input type="checkbox" name="svc_consent" required>
+                            <span>I consent to having this website store my submitted information</span>
+                        </label>
+                    </div>
+
+                    <div class="svc-form__error" id="svc-form-error" style="display:none" role="alert"></div>
+                    <div class="svc-form__success" id="svc-form-success" style="display:none" role="status"></div>
+
+                    <button type="submit" class="svc-form__submit" id="svc-submit-btn">Submit</button>
+                </form>
+            </div>
+
+        </div>
     </div>
 </section>
+
+<script>
+(function () {
+    var form    = document.getElementById('svc-inquiry-form');
+    var errEl   = document.getElementById('svc-form-error');
+    var sucEl   = document.getElementById('svc-form-success');
+    var submitBtn = document.getElementById('svc-submit-btn');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errEl.style.display = 'none';
+        sucEl.style.display = 'none';
+
+        var consent = form.querySelector('[name="svc_consent"]');
+        if (consent && !consent.checked) {
+            errEl.textContent = 'Please give your consent to submit this form.';
+            errEl.style.display = 'block';
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+
+        var fd = new FormData(form);
+        fd.append('action', 'sb_service_inquiry');
+
+        fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (res) {
+                if (res.success) {
+                    form.reset();
+                    sucEl.textContent = res.data.message;
+                    sucEl.style.display = 'block';
+                } else {
+                    errEl.textContent = (res.data && res.data.message) ? res.data.message : 'Something went wrong. Please try again.';
+                    errEl.style.display = 'block';
+                }
+            })
+            .catch(function () {
+                errEl.textContent = 'Network error. Please check your connection and try again.';
+                errEl.style.display = 'block';
+            })
+            .finally(function () {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
+            });
+    });
+})();
+</script>
 
 <?php get_footer(); ?>

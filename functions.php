@@ -474,6 +474,44 @@ function sb_handle_contact_form() {
 add_action('admin_post_sb_contact_form', 'sb_handle_contact_form');
 add_action('admin_post_nopriv_sb_contact_form', 'sb_handle_contact_form');
 
+/* ── Service Inquiry AJAX Handler ── */
+function sb_ajax_service_inquiry(): void {
+    if (!check_ajax_referer('sb_service_inquiry', 'svc_nonce', false)) {
+        wp_send_json_error(['message' => 'Security check failed. Please refresh and try again.'], 403);
+    }
+
+    $service = sanitize_text_field(wp_unslash($_POST['svc_service'] ?? ''));
+    $name    = sanitize_text_field(wp_unslash($_POST['svc_name']    ?? ''));
+    $email   = sanitize_email(wp_unslash($_POST['svc_email']        ?? ''));
+    $phone   = sanitize_text_field(wp_unslash($_POST['svc_phone']   ?? ''));
+    $city    = sanitize_text_field(wp_unslash($_POST['svc_city']    ?? ''));
+    $consent = !empty($_POST['svc_consent']);
+
+    if (!$name || !$email || !$service) {
+        wp_send_json_error(['message' => 'Please fill in all required fields.'], 422);
+    }
+    if (!is_email($email)) {
+        wp_send_json_error(['message' => 'Please enter a valid email address.'], 422);
+    }
+    if (!$consent) {
+        wp_send_json_error(['message' => 'Please give your consent to submit this form.'], 422);
+    }
+
+    $to      = get_option('admin_email');
+    $subject = 'New service enquiry from ' . $name;
+    $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
+    $body    = '<p><strong>Service:</strong> ' . esc_html($service) . '</p>'
+             . '<p><strong>Name:</strong> '    . esc_html($name)    . '</p>'
+             . '<p><strong>Email:</strong> '   . esc_html($email)   . '</p>'
+             . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
+             . '<p><strong>City:</strong> '    . esc_html($city)    . '</p>';
+    wp_mail($to, $subject, $body, $headers);
+
+    wp_send_json_success(['message' => "Thanks, {$name}! We'll be in touch shortly."]);
+}
+add_action('wp_ajax_sb_service_inquiry',        'sb_ajax_service_inquiry');
+add_action('wp_ajax_nopriv_sb_service_inquiry', 'sb_ajax_service_inquiry');
+
 /* ── Rewrite flush on activation ── */
 function sb_flush_rewrite() {
     sb_register_property_cpt();

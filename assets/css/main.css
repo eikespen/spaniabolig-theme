@@ -2623,3 +2623,178 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .dash-page-btn--active { background: var(--navy); color: var(--white); border-color: var(--navy); }
 
 .dash-loading-row td { text-align: center; padding: 40px; color: var(--grey-400); }
+
+/* ══════════════════════════════════════════════════════════
+   SERVICE CONTACT CARD (page-services.php)
+══════════════════════════════════════════════════════════ */
+.svc-contact-section {
+    padding: 80px 24px;
+    background: var(--grey-50);
+}
+
+.svc-contact-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(0,0,0,.08);
+    padding: 56px;
+}
+
+/* Left column */
+.svc-contact-card__heading {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--navy);
+    margin-bottom: 28px;
+}
+
+.svc-contact-card__photo {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    max-height: 420px;
+    display: block;
+    margin-bottom: 24px;
+}
+
+.svc-contact-card__photo-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--grey-100);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+.svc-contact-card__photo-placeholder svg {
+    width: 80px;
+    height: 80px;
+    opacity: .4;
+}
+
+.svc-contact-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.svc-contact-card__info-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    text-decoration: none;
+}
+.svc-contact-card__info-item:hover { text-decoration: underline; }
+.svc-contact-card__info-item svg { flex-shrink: 0; color: var(--grey-400); }
+
+/* Right column — form */
+.svc-form { display: flex; flex-direction: column; gap: 14px; }
+
+.svc-form__field { display: flex; flex-direction: column; }
+
+.svc-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.svc-form__input {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 14px;
+    color: var(--grey-700);
+    background: var(--grey-50);
+    border: 1.5px solid var(--grey-200);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color .15s;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.svc-form__input:focus { border-color: var(--navy); background: var(--white); }
+.svc-form__input::placeholder { color: var(--grey-400); }
+
+.svc-form__select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.svc-form__field--checkbox { margin-top: 4px; }
+.svc-form__checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--grey-500);
+    line-height: 1.5;
+}
+.svc-form__checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: var(--navy);
+    cursor: pointer;
+}
+
+.svc-form__submit {
+    width: 100%;
+    padding: 15px;
+    background: #f5b800;
+    color: #1a1a1a;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+    font-family: inherit;
+    letter-spacing: .01em;
+}
+.svc-form__submit:hover { background: #e0a800; }
+.svc-form__submit:active { transform: scale(.99); }
+.svc-form__submit:disabled { opacity: .6; cursor: not-allowed; }
+
+.svc-form__error {
+    padding: 12px 16px;
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 14px;
+}
+.svc-form__success {
+    padding: 16px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    color: #166534;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+    .svc-contact-card {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 36px 28px;
+    }
+    .svc-contact-card__photo { max-height: 320px; }
+}
+@media (max-width: 480px) {
+    .svc-form__row { grid-template-columns: 1fr; }
+}
