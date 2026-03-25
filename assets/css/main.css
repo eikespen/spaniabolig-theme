@@ -2798,3 +2798,116 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 @media (max-width: 480px) {
     .svc-form__row { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   ABOUT PAGE — MEET THE TEAM
+══════════════════════════════════════════════════════════ */
+.about-team {
+    padding: 80px 24px;
+    background: var(--white);
+}
+.about-team__header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.about-team__header h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 12px;
+}
+.about-team__header p {
+    font-size: 16px;
+    color: var(--grey-500);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+.about-team__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+}
+
+/* Agent card */
+.agent-card {
+    background: var(--white);
+    border: 1px solid var(--grey-100);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,.06);
+    transition: box-shadow .2s, transform .2s;
+}
+.agent-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,.12);
+    transform: translateY(-3px);
+}
+.agent-card__photo-wrap {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--grey-100);
+}
+.agent-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform .4s;
+}
+.agent-card:hover .agent-card__photo { transform: scale(1.03); }
+.agent-card__photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.agent-card__photo-placeholder svg { width: 72px; height: 72px; opacity: .35; }
+.agent-card__body {
+    padding: 20px 20px 24px;
+}
+.agent-card__name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+}
+.agent-card__title {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--grey-400);
+    margin-bottom: 16px;
+}
+.agent-card__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.agent-card__contact {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: var(--grey-600);
+    text-decoration: none;
+    transition: color .15s;
+    line-height: 1.3;
+    word-break: break-all;
+}
+.agent-card__contact:hover { color: var(--navy); }
+.agent-card__contact svg { flex-shrink: 0; color: var(--grey-400); }
+.agent-card__contact--whatsapp:hover { color: #25d366; }
+.agent-card__contact--whatsapp:hover svg { color: #25d366; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .about-team__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+    .about-team__grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+}

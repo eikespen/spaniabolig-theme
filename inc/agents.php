@@ -114,6 +114,93 @@ add_action('save_post_property', function ($post_id) {
     update_post_meta($post_id, 'sb_agent_id', $agent_id);
 });
 
+/* ── 3b. One-time agent seeder ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_seed_agents']) || !current_user_can('manage_options')) return;
+
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+
+    $agents_data = [
+        [
+            'name'      => 'Ole Martin Holthe',
+            'title'     => 'Partner & Chairman',
+            'phone'     => '+47 950 68 097',
+            'whatsapp'  => '4795068097',
+            'email'     => 'ole.martin@spaniabolig.no',
+            'photo_url' => 'https://spaniabolig.no/wp-content/uploads/2024/06/spaniabolig-olemartin-web-768x1024.jpg',
+            'order'     => 1,
+        ],
+        [
+            'name'      => 'Christer K. Flagtvedt',
+            'title'     => 'Advisor',
+            'phone'     => '+47 909 17 648',
+            'whatsapp'  => '4790917648',
+            'email'     => 'christer@spaniabolig.no',
+            'photo_url' => 'https://spaniabolig.no/wp-content/uploads/2024/06/spaniabolig-christer-web-768x1024.jpg',
+            'order'     => 2,
+        ],
+        [
+            'name'      => 'Marianne Holthe',
+            'title'     => 'Advisor',
+            'phone'     => '+47 908 95 480',
+            'whatsapp'  => '4790895480',
+            'email'     => 'marianne@spaniabolig.no',
+            'photo_url' => 'https://spaniabolig.no/wp-content/uploads/2024/06/spaniabolig-marianne-web-768x1024.jpg',
+            'order'     => 3,
+        ],
+        [
+            'name'      => 'May-Lise Gundersen',
+            'title'     => 'Advisor',
+            'phone'     => '+47 472 02 414',
+            'whatsapp'  => '4747202414',
+            'email'     => 'maylise@spaniabolig.no',
+            'photo_url' => 'https://spaniabolig.no/wp-content/uploads/2024/11/may-lise-3-768x1024.jpg',
+            'order'     => 4,
+        ],
+    ];
+
+    $log = [];
+
+    foreach ($agents_data as $a) {
+        // Skip if already exists by name
+        $existing = get_page_by_title($a['name'], OBJECT, 'sb_agent');
+        if ($existing) {
+            $log[] = "Skipped (already exists): {$a['name']}";
+            continue;
+        }
+
+        $post_id = wp_insert_post([
+            'post_title'  => $a['name'],
+            'post_type'   => 'sb_agent',
+            'post_status' => 'publish',
+            'menu_order'  => $a['order'],
+        ]);
+
+        if (is_wp_error($post_id)) {
+            $log[] = "Error creating {$a['name']}: " . $post_id->get_error_message();
+            continue;
+        }
+
+        update_post_meta($post_id, 'sb_agent_title',    $a['title']);
+        update_post_meta($post_id, 'sb_agent_phone',    $a['phone']);
+        update_post_meta($post_id, 'sb_agent_whatsapp', $a['whatsapp']);
+        update_post_meta($post_id, 'sb_agent_email',    $a['email']);
+
+        // Sideload photo as featured image
+        $att_id = media_sideload_image($a['photo_url'], $post_id, $a['name'], 'id');
+        if (!is_wp_error($att_id)) {
+            set_post_thumbnail($post_id, $att_id);
+            $log[] = "Created: {$a['name']} (ID {$post_id}, photo attached)";
+        } else {
+            $log[] = "Created: {$a['name']} (ID {$post_id}, photo failed: " . $att_id->get_error_message() . ')';
+        }
+    }
+
+    wp_die('<h2>Agent Seeder</h2><ul><li>' . implode('</li><li>', array_map('esc_html', $log)) . '</li></ul><p><a href="' . admin_url() . '">Back to dashboard</a></p>');
+});
+
 /* ── 4. Helper: get agent data for a property ── */
 function sb_get_property_agent(int $post_id): array {
     $agent_id = (int) get_post_meta($post_id, 'sb_agent_id', true);
