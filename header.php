@@ -64,10 +64,16 @@
                 <li <?php if (is_page('how-it-works')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/how-it-works')); ?>">How it works</a></li>
                 <li <?php if (is_page('services')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/services')); ?>">Services</a></li>
                 <li <?php if (is_page('contact')) echo 'class="current"'; ?>><a href="<?php echo esc_url(home_url('/contact')); ?>">Contact</a></li>
-                <li><a href="<?php echo esc_url(home_url('/favorites')); ?>" class="nav-favorites">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    Favorites
-                </a></li>
+                <?php
+                $fav_page = get_page_by_path('favorites') ?: get_page_by_path('favourites');
+                $fav_url  = $fav_page ? get_permalink($fav_page->ID) : home_url('/favorites');
+                ?>
+                <li <?php if (is_page(['favorites','favourites'])) echo 'class="current"'; ?>>
+                    <a href="<?php echo esc_url($fav_url); ?>" class="nav-favorites">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        Favorites
+                    </a>
+                </li>
             </ul>
         </nav>
 
