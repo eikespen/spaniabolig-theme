@@ -1,6 +1,8 @@
 <?php
 defined('ABSPATH') || exit;
 
+require_once get_template_directory() . '/inc/importer.php';
+
 /* ── Theme Setup ── */
 function sb_setup() {
     add_theme_support('title-tag');
