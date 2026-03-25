@@ -13,20 +13,6 @@
         });
     }
 
-    /* ── Property gallery lightbox (simple) ── */
-    const mainImg  = document.querySelector('.gallery-main-img');
-    const thumbs   = document.querySelectorAll('.gallery-thumb');
-    if (mainImg && thumbs.length) {
-        thumbs.forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                mainImg.src = thumb.src.replace('-150x150', '');
-                mainImg.srcset = '';
-                thumbs.forEach(t => t.style.opacity = '0.8');
-                thumb.style.opacity = '1';
-            });
-        });
-    }
-
     /* ── Gallery thumbnail click-to-swap ── */
     const mainImg = document.getElementById('gallery-main-img');
     if (mainImg) {
