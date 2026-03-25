@@ -17,13 +17,17 @@ add_action('admin_init', function () {
     $batch_size = 3; // properties per run (keep low to avoid timeout)
     $log        = [];
 
-    /* ── Find properties with remote image URLs that haven't been sideloaded yet ── */
+    /* ── Find only spaniabolig.no featured/exclusive properties not yet sideloaded ── */
     $props = get_posts([
         'post_type'      => 'property',
         'post_status'    => 'publish',
         'posts_per_page' => $batch_size,
         'meta_query'     => [
             'relation' => 'AND',
+            [
+                'key'   => 'sb_featured',
+                'value' => '1',
+            ],
             [
                 'key'     => 'sb_thumb_url',
                 'compare' => 'EXISTS',
@@ -154,6 +158,7 @@ add_action('admin_init', function () {
         'fields'         => 'ids',
         'meta_query'     => [
             'relation' => 'AND',
+            ['key' => 'sb_featured', 'value' => '1'],
             ['key' => 'sb_thumb_url', 'compare' => 'EXISTS'],
             ['key' => 'sb_images_sideloaded', 'compare' => 'NOT EXISTS'],
         ],
