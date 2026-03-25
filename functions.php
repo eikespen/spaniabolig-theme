@@ -2,20 +2,7 @@
 defined('ABSPATH') || exit;
 
 require_once get_template_directory() . '/inc/importer.php';
-require_once get_template_directory() . '/inc/acf-fields.php';
-
-/* ── ACF inline test ── */
-add_action('init', function() {
-    if (!function_exists('acf_add_local_field_group')) return;
-    acf_add_local_field_group([
-        'key'    => 'group_sb_test',
-        'title'  => 'TEST GROUP',
-        'fields' => [
-            ['key' => 'field_sb_test_1', 'label' => 'Test field', 'name' => 'test_field', 'type' => 'text'],
-        ],
-        'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'page']]],
-    ]);
-}, 99);
+require_once get_template_directory() . '/inc/meta-boxes.php';
 
 /* ── Image helpers (supports external URLs from XML import) ── */
 function sb_get_image_url(int $post_id, string $size = 'large'): string {
