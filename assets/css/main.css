@@ -965,10 +965,14 @@ input, select, textarea, button { font: inherit; }
 }
 .enquiry-agent__phone:hover { color: #fff; }
 .enquiry-agent__cta { display: flex; gap: 10px; flex-wrap: wrap; }
-.enquiry-agent__cta .btn-outline {
-    border-color: rgba(255,255,255,.5); color: #fff; background: transparent;
+.btn-white {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: transparent; color: #fff;
+    border: 2px solid rgba(255,255,255,.55); border-radius: 10px;
+    padding: 10px 18px; font-size: 14px; font-weight: 600;
+    cursor: pointer; text-decoration: none; transition: background .15s, border-color .15s;
 }
-.enquiry-agent__cta .btn-outline:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+.btn-white:hover { background: rgba(255,255,255,.12); border-color: #fff; color: #fff; }
 .enquiry-form-wrap { padding: 28px; }
 .enquiry-form-wrap h3 { font-size: 1.15rem; font-weight: 700; color: var(--grey-900); margin-bottom: 20px; }
 .enquiry-form { display: flex; flex-direction: column; gap: 14px; }

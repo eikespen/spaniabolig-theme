@@ -41,14 +41,23 @@
 
     /* ── Leaflet map (if lat/lng set) ── */
     const mapEl = document.getElementById('sb-map');
-    if (mapEl && window.L) {
+    if (mapEl) {
         const lat = parseFloat(mapEl.dataset.lat);
         const lng = parseFloat(mapEl.dataset.lng);
-        const map = L.map('sb-map').setView([lat, lng], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        L.marker([lat, lng]).addTo(map);
+        const mapSection = mapEl.closest('.property-map');
+        if (!window.L || isNaN(lat) || isNaN(lng)) {
+            if (mapSection) mapSection.style.display = 'none';
+        } else {
+            try {
+                const map = L.map('sb-map').setView([lat, lng], 14);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+                L.marker([lat, lng]).addTo(map);
+            } catch (e) {
+                if (mapSection) mapSection.style.display = 'none';
+            }
+        }
     }
 
     /* ── Dropdown with hover delay ── */
