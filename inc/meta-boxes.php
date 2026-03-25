@@ -401,6 +401,30 @@ function sb_mb_contact($post) {
             sb_field($post, 'sb_form_intro', 'Form intro', 'text', 'We aim to respond to all inquiries within 24 hours during business days.');
         sb_grid_end();
     sb_section_end();
+
+    sb_section_start('◎', 'Contact Info Cards');
+        sb_grid_start(3);
+            sb_field($post, 'sb_info_email_label',    'Email label',    'text', 'Email us');
+            sb_field($post, 'sb_info_phone_label',    'Phone label',    'text', 'Call us');
+            sb_field($post, 'sb_info_location_label', 'Location label', 'text', 'Find us');
+        sb_grid_end();
+        sb_grid_start(3);
+            sb_field($post, 'sb_info_email',    'Email address', 'text', 'post@spaniabolig.no');
+            sb_field($post, 'sb_info_phone',    'Phone number',  'text', '+34 696 039 621');
+            sb_field($post, 'sb_info_location', 'Location text', 'text', 'Ciudad Quesada, Rojales, Alicante, Spain');
+        sb_grid_end();
+    sb_section_end();
+
+    sb_section_start('?', 'FAQs');
+        sb_field($post, 'sb_faq_title', 'Section title', 'text', 'Frequently asked questions');
+        sb_divider();
+        for ($i = 1; $i <= 6; $i++) {
+            sb_grid_start();
+                sb_field($post, "sb_faq{$i}_question", "FAQ $i — Question", 'text',     '');
+                sb_field($post, "sb_faq{$i}_answer",   "FAQ $i — Answer",   'textarea', '');
+            sb_grid_end();
+        }
+    sb_section_end();
 }
 
 /* ── Save all page meta ── */
@@ -438,6 +462,13 @@ add_action('save_post_page', function($post_id) {
         'sb_included1_title','sb_included1_desc','sb_included2_title','sb_included2_desc',
         'sb_included3_title','sb_included3_desc','sb_included4_title','sb_included4_desc',
         'sb_form_title','sb_form_intro',
+        'sb_info_email_label','sb_info_email',
+        'sb_info_phone_label','sb_info_phone',
+        'sb_info_location_label','sb_info_location',
+        'sb_faq_title',
+        'sb_faq1_question','sb_faq1_answer','sb_faq2_question','sb_faq2_answer',
+        'sb_faq3_question','sb_faq3_answer','sb_faq4_question','sb_faq4_answer',
+        'sb_faq5_question','sb_faq5_answer','sb_faq6_question','sb_faq6_answer',
     ];
 
     foreach ($all_keys as $key) {

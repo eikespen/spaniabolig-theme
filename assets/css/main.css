@@ -1243,6 +1243,85 @@ input, select, textarea, button { font: inherit; }
     color: var(--grey-400);
     margin-top: 12px;
 }
+
+/* Contact info cards */
+.contact-info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 740px;
+    margin: 24px auto 0;
+}
+.contact-info-card {
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+.contact-info-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--grey-50);
+    border: 1px solid var(--grey-200);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--navy);
+}
+.contact-info-card strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin-bottom: 2px;
+}
+.contact-info-card span {
+    font-size: 13.5px;
+    color: var(--grey-500);
+}
+
+/* Contact FAQ */
+.contact-faq {
+    max-width: 740px;
+    margin: 40px auto 0;
+    background: var(--white);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+}
+.contact-faq h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    margin-bottom: 28px;
+    letter-spacing: -0.02em;
+}
+.contact-faq-item {
+    padding: 20px 0;
+    border-top: 1px solid var(--grey-100);
+}
+.contact-faq-item:first-child { border-top: none; padding-top: 0; }
+.contact-faq-item h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--grey-900);
+    margin-bottom: 8px;
+}
+.contact-faq-item p {
+    font-size: 14.5px;
+    color: var(--grey-600);
+    line-height: 1.65;
+    margin: 0;
+}
+@media (max-width: 640px) {
+    .contact-info-cards { grid-template-columns: 1fr; }
+    .contact-faq { padding: 24px 20px; }
+}
 .contact-page-grid { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
 .contact-form-wrap h2, .contact-info h2 { font-size: 1.5rem; margin-bottom: 24px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
