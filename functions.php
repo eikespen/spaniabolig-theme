@@ -8,6 +8,7 @@ require_once get_template_directory() . '/inc/import-featured.php';
 require_once get_template_directory() . '/inc/sideload-images.php';
 require_once get_template_directory() . '/inc/sync-featured-status.php';
 require_once get_template_directory() . '/inc/property-submission.php';
+require_once get_template_directory() . '/inc/onboarding.php';
 
 /* ── Image helpers (supports external URLs from XML import) ── */
 function sb_get_image_url(int $post_id, string $size = 'large'): string {
