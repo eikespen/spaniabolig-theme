@@ -96,16 +96,16 @@ input, select, textarea, button { font: inherit; }
     text-align: center;
 }
 .page-hero h1 {
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-size: clamp(2.5rem, 5vw, 3.25rem);
     font-weight: 800;
     color: var(--grey-900);
     letter-spacing: -0.03em;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 .page-hero p {
-    font-size: 17px;
+    font-size: 19px;
     color: var(--grey-500);
-    max-width: 620px;
+    max-width: 720px;
     margin: 0 auto;
     line-height: 1.65;
 }
@@ -148,29 +148,27 @@ input, select, textarea, button { font: inherit; }
 .about-stack {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    max-width: 740px;
-    margin: 0 auto;
+    gap: 28px;
 }
 .about-card {
     background: var(--white);
     border-radius: var(--radius);
-    padding: 36px 40px;
+    padding: 44px 48px;
     border: 1px solid var(--grey-200);
     box-shadow: var(--shadow-sm);
 }
 .about-card h2 {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     font-weight: 800;
     color: var(--grey-900);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     letter-spacing: -0.02em;
 }
 .about-card p {
-    font-size: 15px;
+    font-size: 18px;
     color: var(--grey-500);
     line-height: 1.75;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 .about-card p:last-child { margin-bottom: 0; }
 .about-contact-form {
@@ -239,28 +237,26 @@ input, select, textarea, button { font: inherit; }
 }
 /* About services list (stacked, matches reference) */
 .about-services-list {
-    max-width: 740px;
-    margin: 0 auto;
     background: var(--white);
     border: 1px solid var(--grey-200);
     border-radius: var(--radius);
-    padding: 0 40px;
+    padding: 0 48px;
 }
 .about-service-item {
-    padding: 24px 0;
+    padding: 28px 0;
     border-top: 1px solid var(--grey-100);
 }
 .about-service-item:first-child { border-top: none; }
 .about-service-item h3 {
-    font-size: 15px;
+    font-size: 19px;
     font-weight: 700;
     color: var(--grey-900);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 .about-service-item p {
-    font-size: 14.5px;
+    font-size: 17px;
     color: var(--grey-500);
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0;
 }
 
@@ -277,13 +273,13 @@ input, select, textarea, button { font: inherit; }
     border: 1px solid var(--grey-200);
 }
 .service-card h3 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--grey-900);
     margin-bottom: 12px;
 }
 .service-card p {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--grey-500);
     line-height: 1.7;
 }
@@ -296,19 +292,17 @@ input, select, textarea, button { font: inherit; }
 .steps-stack {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-width: 740px;
-    margin: 0 auto;
+    gap: 24px;
 }
 .step-card {
     background: var(--white);
     border-radius: var(--radius);
     border: 1px solid var(--grey-200);
     box-shadow: var(--shadow-sm);
-    padding: 28px 32px;
+    padding: 36px 40px;
     display: flex;
     align-items: flex-start;
-    gap: 24px;
+    gap: 28px;
 }
 .step-icon {
     width: 52px;
@@ -322,23 +316,23 @@ input, select, textarea, button { font: inherit; }
     flex-shrink: 0;
 }
 .step-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--grey-400);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .step-card h3 {
-    font-size: 17px;
+    font-size: 21px;
     font-weight: 700;
     color: var(--grey-900);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 .step-card p {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--grey-500);
-    line-height: 1.65;
+    line-height: 1.7;
 }
 
 /* ── Contact page ── */
@@ -353,23 +347,23 @@ input, select, textarea, button { font: inherit; }
     align-items: start;
 }
 .contact-info h2 {
-    font-size: 1.6rem;
+    font-size: 1.875rem;
     font-weight: 800;
     color: var(--grey-900);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 .contact-info p {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--grey-500);
     line-height: 1.75;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 .contact-details { display: flex; flex-direction: column; gap: 14px; }
 .contact-detail {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 15px;
+    font-size: 17px;
     color: var(--grey-700);
 }
 .contact-detail svg { color: var(--navy); flex-shrink: 0; }
