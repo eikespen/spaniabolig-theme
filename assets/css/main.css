@@ -405,8 +405,9 @@ input, select, textarea, button { font: inherit; }
 .dropdown {
     display: none;
     position: absolute;
-    top: calc(100% + 8px);
+    top: 100%;
     left: 0;
+    padding-top: 8px;
     background: var(--white);
     border: 1px solid var(--grey-200);
     border-radius: var(--radius);
@@ -415,6 +416,7 @@ input, select, textarea, button { font: inherit; }
     padding: 6px;
     z-index: 200;
     list-style: none;
+    background-clip: padding-box;
 }
 .dropdown li a {
     display: block;
