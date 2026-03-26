@@ -233,29 +233,38 @@ function sb_filter_property_archive($query) {
     if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
         $query->set('posts_per_page', 12);
 
-        // Always show featured properties first
-        $meta_query = [
-            'relation'        => 'AND',
-            'featured_clause' => [
-                'key'     => 'sb_featured',
-                'compare' => 'EXISTS',
-            ],
-        ];
-
         $build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : '';
         if ($build_type) {
-            $meta_query[] = [
+            $query->set('meta_query', [[
                 'key'     => 'sb_build_type',
                 'value'   => $build_type,
                 'compare' => '=',
-            ];
+            ]]);
         }
-
-        $query->set('meta_query', $meta_query);
-        $query->set('orderby', ['featured_clause' => 'DESC', 'date' => 'DESC']);
     }
 }
 add_action('pre_get_posts', 'sb_filter_property_archive');
+
+// LEFT JOIN so ALL properties appear; featured ones (sb_featured=1) float to top
+function sb_featured_join($join, $query) {
+    global $wpdb;
+    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
+        $join .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON (
+            {$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured'
+        )";
+    }
+    return $join;
+}
+add_filter('posts_join', 'sb_featured_join', 10, 2);
+
+function sb_featured_orderby($orderby, $query) {
+    global $wpdb;
+    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
+        $orderby = "CAST(COALESCE(sb_feat.meta_value,'0') AS UNSIGNED) DESC, {$wpdb->posts}.post_date DESC";
+    }
+    return $orderby;
+}
+add_filter('posts_orderby', 'sb_featured_orderby', 10, 2);
 
 /* ── AJAX Property Search ── */
 function sb_ajax_search() {
@@ -293,25 +302,38 @@ function sb_ajax_search() {
     if (!empty($_POST['keyword'])) {
         $args['s'] = sanitize_text_field($_POST['keyword']);
     }
-    // Always pin featured properties to the top
-    $args['meta_query']['featured_clause'] = [
-        'key'     => 'sb_featured',
-        'compare' => 'EXISTS',
-    ];
-
     if (!empty($_POST['sort'])) {
         if ($_POST['sort'] === 'price-asc') {
             $args['meta_key'] = 'sb_price';
-            $args['orderby']  = ['featured_clause' => 'DESC', 'meta_value_num' => 'ASC'];
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'ASC';
         } elseif ($_POST['sort'] === 'price-desc') {
             $args['meta_key'] = 'sb_price';
-            $args['orderby']  = ['featured_clause' => 'DESC', 'meta_value_num' => 'DESC'];
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'DESC';
         }
-    } else {
-        $args['orderby'] = ['featured_clause' => 'DESC', 'date' => 'DESC'];
     }
 
+    // LEFT JOIN so featured properties always appear first without excluding any results
+    $sb_feat_join = function($join) {
+        global $wpdb;
+        $join .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON (
+            {$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured'
+        )";
+        return $join;
+    };
+    $sb_feat_orderby = function($orderby) use ($args) {
+        global $wpdb;
+        $prefix = "CAST(COALESCE(sb_feat.meta_value,'0') AS UNSIGNED) DESC";
+        return $orderby ? "{$prefix}, {$orderby}" : $prefix;
+    };
+    add_filter('posts_join', $sb_feat_join);
+    add_filter('posts_orderby', $sb_feat_orderby);
+
     $query = new WP_Query($args);
+
+    remove_filter('posts_join', $sb_feat_join);
+    remove_filter('posts_orderby', $sb_feat_orderby);
     $results = [];
 
     if ($query->have_posts()) {
