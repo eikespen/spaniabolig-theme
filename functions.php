@@ -233,14 +233,26 @@ function sb_filter_property_archive($query) {
     if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
         $query->set('posts_per_page', 12);
 
+        // Always show featured properties first
+        $meta_query = [
+            'relation'        => 'AND',
+            'featured_clause' => [
+                'key'     => 'sb_featured',
+                'compare' => 'EXISTS',
+            ],
+        ];
+
         $build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : '';
         if ($build_type) {
-            $query->set('meta_query', [[
+            $meta_query[] = [
                 'key'     => 'sb_build_type',
                 'value'   => $build_type,
                 'compare' => '=',
-            ]]);
+            ];
         }
+
+        $query->set('meta_query', $meta_query);
+        $query->set('orderby', ['featured_clause' => 'DESC', 'date' => 'DESC']);
     }
 }
 add_action('pre_get_posts', 'sb_filter_property_archive');
@@ -281,16 +293,22 @@ function sb_ajax_search() {
     if (!empty($_POST['keyword'])) {
         $args['s'] = sanitize_text_field($_POST['keyword']);
     }
+    // Always pin featured properties to the top
+    $args['meta_query']['featured_clause'] = [
+        'key'     => 'sb_featured',
+        'compare' => 'EXISTS',
+    ];
+
     if (!empty($_POST['sort'])) {
         if ($_POST['sort'] === 'price-asc') {
             $args['meta_key'] = 'sb_price';
-            $args['orderby']  = 'meta_value_num';
-            $args['order']    = 'ASC';
+            $args['orderby']  = ['featured_clause' => 'DESC', 'meta_value_num' => 'ASC'];
         } elseif ($_POST['sort'] === 'price-desc') {
             $args['meta_key'] = 'sb_price';
-            $args['orderby']  = 'meta_value_num';
-            $args['order']    = 'DESC';
+            $args['orderby']  = ['featured_clause' => 'DESC', 'meta_value_num' => 'DESC'];
         }
+    } else {
+        $args['orderby'] = ['featured_clause' => 'DESC', 'date' => 'DESC'];
     }
 
     $query = new WP_Query($args);
