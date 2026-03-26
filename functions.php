@@ -543,6 +543,26 @@ function sb_ajax_service_inquiry(): void {
 add_action('wp_ajax_sb_service_inquiry',        'sb_ajax_service_inquiry');
 add_action('wp_ajax_nopriv_sb_service_inquiry', 'sb_ajax_service_inquiry');
 
+/* ── Fix property status underscores → hyphens — visit /wp-admin/?sb_fix_status=1 ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_fix_status']) || !current_user_can('manage_options')) return;
+
+    global $wpdb;
+    $fixed = $wpdb->query(
+        "UPDATE {$wpdb->postmeta} SET meta_value = 'for-sale' WHERE meta_key = 'sb_status' AND meta_value = 'for_sale'"
+    );
+    $fixed += $wpdb->query(
+        "UPDATE {$wpdb->postmeta} SET meta_value = 'for-rent' WHERE meta_key = 'sb_status' AND meta_value = 'for_rent'"
+    );
+
+    wp_die(
+        '<h2>Status fix done</h2><p>Fixed <strong>' . $fixed . '</strong> property status values (underscore → hyphen).</p>' .
+        '<p><a href="' . admin_url('edit.php?post_type=property') . '">View all properties &rarr;</a></p>',
+        'Status Fix',
+        ['response' => 200]
+    );
+});
+
 /* ── Bulk clean property titles — visit /wp-admin/?sb_clean_titles=1 ── */
 add_action('admin_init', function () {
     if (!isset($_GET['sb_clean_titles']) || !current_user_can('manage_options')) return;
