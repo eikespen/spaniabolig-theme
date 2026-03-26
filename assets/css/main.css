@@ -1,4 +1,4 @@
-/* ── Reset & Base ── */
+/* ── Reset & Base ── v2 */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 /* Force-clear any body padding injected by SiteGround optimizer or other plugins */
 html, body { padding: 0 !important; margin: 0; }
