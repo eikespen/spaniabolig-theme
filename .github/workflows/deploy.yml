@@ -20,6 +20,7 @@ jobs:
           port: 21
           local-dir: ./
           server-dir: ${{ secrets.FTP_THEME_PATH }}
+          dangerous-clean-slate: true
           exclude: |
             **/.git*
             **/.git*/**
