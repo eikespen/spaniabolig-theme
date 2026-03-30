@@ -234,6 +234,10 @@ function sb_save_property_meta($post_id) {
             // Set featured_date when first featured, or when re-featured
             if ($is_featured === '1' && ($was_featured !== '1' || !empty($_POST['sb_refeature']))) {
                 update_post_meta($post_id, 'sb_featured_date', time());
+                // Bump post date so it sorts first in date-based queries
+                remove_action('save_post_property', 'sb_save_property_meta');
+                wp_update_post(['ID' => $post_id, 'post_date' => current_time('mysql'), 'post_date_gmt' => current_time('mysql', true)]);
+                add_action('save_post_property', 'sb_save_property_meta');
             }
             if ($is_featured === '0') {
                 delete_post_meta($post_id, 'sb_featured_date');
@@ -261,12 +265,6 @@ function sb_filter_property_archive($query) {
 
         if (!empty($_GET['featured'])) {
             $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
-            $meta_query['featured_date_clause'] = [
-                'relation' => 'OR',
-                ['key' => 'sb_featured_date', 'compare' => 'EXISTS'],
-                ['key' => 'sb_featured_date', 'compare' => 'NOT EXISTS'],
-            ];
-            $query->set('orderby', ['featured_date_clause' => 'DESC', 'date' => 'DESC']);
         }
 
         if ($meta_query) {
