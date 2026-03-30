@@ -703,6 +703,16 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .card-badge--for-sale { background: var(--navy); color: var(--white); }
 .card-badge--for-rent { background: #0057b7; color: var(--white); }
 .card-badge--sold     { background: var(--grey-500); color: var(--white); }
+.card-badge--exclusive {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    background: linear-gradient(135deg, #d4a017, #f0c040);
+    color: #1a1a1a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
 
 /* On the single property page the badge sits in text flow, not over an image */
 .property-header .card-badge {

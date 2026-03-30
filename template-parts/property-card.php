@@ -5,6 +5,7 @@ $bathrooms = get_post_meta(get_the_ID(), 'sb_bathrooms', true);
 $size      = get_post_meta(get_the_ID(), 'sb_size', true);
 $status    = get_post_meta(get_the_ID(), 'sb_status', true);
 $city      = get_post_meta(get_the_ID(), 'sb_city', true);
+$featured  = get_post_meta(get_the_ID(), 'sb_featured', true);
 
 $status_key    = str_replace('_', '-', (string) $status);
 $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 'Sold'];
@@ -23,6 +24,13 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
         <?php if ($status) : ?>
             <span class="card-badge card-badge--<?php echo esc_attr($status_key); ?>">
                 <?php echo esc_html($status_labels[$status_key] ?? ucwords(str_replace(['-','_'], ' ', $status))); ?>
+            </span>
+        <?php endif; ?>
+
+        <?php if ($featured === '1') : ?>
+            <span class="card-badge card-badge--exclusive">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Exclusive
             </span>
         <?php endif; ?>
 
