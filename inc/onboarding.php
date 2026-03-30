@@ -152,10 +152,29 @@ add_action('user_register', function (int $user_id) {
     sb_send_welcome_email($user_id);
 });
 
-/* Resend welcome email: /wp-admin/?sb_resend_welcome=email@example.com */
+/* Resend welcome email:
+   Single user:  /wp-admin/?sb_resend_welcome=email@example.com
+   All users:    /wp-admin/?sb_resend_welcome=all
+*/
 add_action('admin_init', function () {
     if (!isset($_GET['sb_resend_welcome']) || !current_user_can('manage_options')) return;
-    $email = sanitize_email($_GET['sb_resend_welcome']);
+    $target = sanitize_text_field($_GET['sb_resend_welcome']);
+
+    if ($target === 'all') {
+        $users = get_users(['fields' => ['ID', 'user_email', 'display_name']]);
+        $log   = [];
+        foreach ($users as $u) {
+            $sent  = sb_send_welcome_email($u->ID);
+            $log[] = ($sent ? '✅' : '❌') . ' ' . $u->user_email;
+        }
+        wp_die(
+            '<h2 style="font-size:18px">Welcome email sent to all users</h2>' .
+            '<pre style="font-size:14px;line-height:2">' . implode("\n", $log) . '</pre>',
+            'Resend Welcome Emails'
+        );
+    }
+
+    $email = sanitize_email($target);
     $user  = get_user_by('email', $email);
     if (!$user) {
         wp_die('User not found: ' . esc_html($email));
