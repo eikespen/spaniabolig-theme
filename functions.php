@@ -261,6 +261,12 @@ function sb_filter_property_archive($query) {
 
         if (!empty($_GET['featured'])) {
             $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
+            $meta_query['featured_date_clause'] = [
+                'relation' => 'OR',
+                ['key' => 'sb_featured_date', 'compare' => 'EXISTS'],
+                ['key' => 'sb_featured_date', 'compare' => 'NOT EXISTS'],
+            ];
+            $query->set('orderby', ['featured_date_clause' => 'DESC', 'date' => 'DESC']);
         }
 
         if ($meta_query) {

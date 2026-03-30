@@ -165,14 +165,18 @@ function sb_fp($key, $default = '') {
 $featured_q = new WP_Query([
     'post_type'      => 'property',
     'posts_per_page' => 6,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
+    'orderby'        => ['featured_date_clause' => 'DESC', 'date' => 'DESC'],
     'meta_query'     => [
         ['key' => 'sb_featured', 'value' => '1'],
         [
             'relation' => 'OR',
             ['key' => 'sb_status', 'value' => 'sold', 'compare' => '!='],
             ['key' => 'sb_status', 'compare' => 'NOT EXISTS'],
+        ],
+        'featured_date_clause' => [
+            'relation' => 'OR',
+            ['key' => 'sb_featured_date', 'compare' => 'EXISTS'],
+            ['key' => 'sb_featured_date', 'compare' => 'NOT EXISTS'],
         ],
     ],
 ]);
