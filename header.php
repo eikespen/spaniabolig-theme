@@ -54,6 +54,10 @@
                             <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
                             <span class="dropdown-text"><strong>Properties with pool</strong><span>Find your perfect home with a swimming pool</span></span>
                         </a></li>
+                        <li><a href="<?php echo esc_url(home_url('/properties/?featured=1')); ?>" class="dropdown-item">
+                            <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+                            <span class="dropdown-text"><strong>Featured properties</strong><span>Our exclusive hand-picked selection</span></span>
+                        </a></li>
                         <li><a href="<?php echo esc_url(home_url('/properties')); ?>" class="dropdown-item">
                             <span class="dropdown-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
                             <span class="dropdown-text"><strong>Investment properties</strong><span>High-yield rental investment opportunities</span></span>
