@@ -203,6 +203,14 @@ function sb_property_meta_box_cb($post) {
         } elseif ($field['type'] === 'checkbox') {
             echo '<input type="checkbox" name="' . esc_attr($key) . '" value="1"' . checked($val, '1', false) . '>';
             echo ' <span>Yes</span>';
+            if ($key === 'sb_featured' && $val === '1') {
+                $featured_date = get_post_meta($post->ID, 'sb_featured_date', true);
+                $date_label = $featured_date ? date('M j, Y H:i', $featured_date) : 'Not set';
+                echo '<div style="margin-top:8px">';
+                echo '<label><input type="checkbox" name="sb_refeature" value="1"> <strong>Re-feature</strong> <span style="color:#646970;font-size:12px">(bump to top of featured list)</span></label>';
+                echo '<div style="color:#646970;font-size:12px;margin-top:4px">Featured since: ' . esc_html($date_label) . '</div>';
+                echo '</div>';
+            }
         } else {
             $placeholder = isset($field['placeholder']) ? ' placeholder="' . esc_attr($field['placeholder']) . '"' : '';
             echo '<input type="' . esc_attr($field['type']) . '" name="' . esc_attr($key) . '" value="' . esc_attr($val) . '"' . $placeholder . ' style="width:100%;padding:6px">';
@@ -220,7 +228,16 @@ function sb_save_property_meta($post_id) {
     $fields = ['sb_price','sb_bedrooms','sb_bathrooms','sb_size','sb_status','sb_ref','sb_city','sb_lat','sb_lng','sb_build_type','sb_featured'];
     foreach ($fields as $key) {
         if ($key === 'sb_featured') {
-            update_post_meta($post_id, $key, isset($_POST[$key]) ? '1' : '0');
+            $was_featured = get_post_meta($post_id, 'sb_featured', true);
+            $is_featured = isset($_POST[$key]) ? '1' : '0';
+            update_post_meta($post_id, $key, $is_featured);
+            // Set featured_date when first featured, or when re-featured
+            if ($is_featured === '1' && ($was_featured !== '1' || !empty($_POST['sb_refeature']))) {
+                update_post_meta($post_id, 'sb_featured_date', time());
+            }
+            if ($is_featured === '0') {
+                delete_post_meta($post_id, 'sb_featured_date');
+            }
         } elseif (isset($_POST[$key])) {
             update_post_meta($post_id, $key, sanitize_text_field($_POST[$key]));
         }
@@ -244,6 +261,9 @@ function sb_filter_property_archive($query) {
 
         if (!empty($_GET['featured'])) {
             $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
+            $query->set('meta_key', 'sb_featured_date');
+            $query->set('orderby', 'meta_value_num');
+            $query->set('order', 'DESC');
         }
 
         if ($meta_query) {
