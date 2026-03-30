@@ -233,13 +233,19 @@ function sb_filter_property_archive($query) {
     if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
         $query->set('posts_per_page', 12);
 
+        $meta_query = [];
+
         $build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : '';
         if ($build_type) {
-            $query->set('meta_query', [[
-                'key'     => 'sb_build_type',
-                'value'   => $build_type,
-                'compare' => '=',
-            ]]);
+            $meta_query[] = ['key' => 'sb_build_type', 'value' => $build_type, 'compare' => '='];
+        }
+
+        if (!empty($_GET['featured'])) {
+            $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
+        }
+
+        if ($meta_query) {
+            $query->set('meta_query', $meta_query);
         }
     }
 }
