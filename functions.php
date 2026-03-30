@@ -261,9 +261,6 @@ function sb_filter_property_archive($query) {
 
         if (!empty($_GET['featured'])) {
             $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
-            $query->set('meta_key', 'sb_featured_date');
-            $query->set('orderby', 'meta_value_num');
-            $query->set('order', 'DESC');
         }
 
         if ($meta_query) {

@@ -165,8 +165,7 @@ function sb_fp($key, $default = '') {
 $featured_q = new WP_Query([
     'post_type'      => 'property',
     'posts_per_page' => 6,
-    'meta_key'       => 'sb_featured_date',
-    'orderby'        => 'meta_value_num',
+    'orderby'        => 'date',
     'order'          => 'DESC',
     'meta_query'     => [
         ['key' => 'sb_featured', 'value' => '1'],
