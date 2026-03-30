@@ -20,8 +20,9 @@ function sb_front_url(string $slug, string $fallback_path): string {
 /* ════════════════════════════════════════════
    1. WELCOME EMAIL — fires when a user is created
 ════════════════════════════════════════════ */
-add_action('user_register', function (int $user_id) {
+function sb_send_welcome_email(int $user_id) {
     $user          = get_userdata($user_id);
+    if (!$user) return false;
     $site_name     = get_bloginfo('name');
     $site_url      = home_url('/');
     $admin_url     = admin_url();
@@ -136,7 +137,7 @@ add_action('user_register', function (int $user_id) {
 </html>
 ";
 
-    wp_mail(
+    return wp_mail(
         $user->user_email,
         $subject,
         $body,
@@ -144,6 +145,25 @@ add_action('user_register', function (int $user_id) {
             'Content-Type: text/html; charset=UTF-8',
             'From: ' . $site_name . ' <' . get_option('admin_email') . '>',
         ]
+    );
+}
+
+add_action('user_register', function (int $user_id) {
+    sb_send_welcome_email($user_id);
+});
+
+/* Resend welcome email: /wp-admin/?sb_resend_welcome=email@example.com */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_resend_welcome']) || !current_user_can('manage_options')) return;
+    $email = sanitize_email($_GET['sb_resend_welcome']);
+    $user  = get_user_by('email', $email);
+    if (!$user) {
+        wp_die('User not found: ' . esc_html($email));
+    }
+    $sent = sb_send_welcome_email($user->ID);
+    wp_die($sent
+        ? '<p style="font-size:16px">✅ Welcome email sent to <strong>' . esc_html($email) . '</strong></p>'
+        : '<p style="font-size:16px">❌ Failed to send email to ' . esc_html($email) . '</p>'
     );
 });
 
