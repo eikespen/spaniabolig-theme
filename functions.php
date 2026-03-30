@@ -232,6 +232,8 @@ add_action('save_post_property', 'sb_save_property_meta');
 function sb_filter_property_archive($query) {
     if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
         $query->set('posts_per_page', 12);
+        $query->set('orderby', 'date');
+        $query->set('order', 'DESC');
 
         $meta_query = [];
 
