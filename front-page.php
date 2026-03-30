@@ -160,6 +160,36 @@ function sb_fp($key, $default = '') {
     </div>
 </section>
 
+<!-- ── EXCLUSIVE / FEATURED PROPERTIES ── -->
+<?php
+$featured_q = new WP_Query([
+    'post_type'      => 'property',
+    'posts_per_page' => 6,
+    'meta_query'     => [
+        ['key' => 'sb_featured', 'value' => '1'],
+        ['key' => 'sb_status', 'value' => 'sold', 'compare' => '!='],
+    ],
+]);
+?>
+<?php if ($featured_q->have_posts()) : ?>
+<section class="featured-properties">
+    <div class="section-inner">
+        <div class="section-header">
+            <h2>Exclusive Properties</h2>
+            <a href="<?php echo esc_url(home_url('/properties/?featured=1')); ?>" class="view-all">
+                View all
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+        </div>
+        <div class="property-grid">
+            <?php while ($featured_q->have_posts()) : $featured_q->the_post(); ?>
+                <?php get_template_part('template-parts/property-card'); ?>
+            <?php endwhile; wp_reset_postdata(); ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- ── RESALE PROPERTIES ── -->
 <?php
 $resale_all = new WP_Query(['post_type' => 'property', 'posts_per_page' => 1, 'meta_query' => [['key' => 'sb_build_type', 'value' => 'resale']]]);
