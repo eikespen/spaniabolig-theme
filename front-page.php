@@ -167,7 +167,11 @@ $featured_q = new WP_Query([
     'posts_per_page' => 6,
     'meta_query'     => [
         ['key' => 'sb_featured', 'value' => '1'],
-        ['key' => 'sb_status', 'value' => 'sold', 'compare' => '!='],
+        [
+            'relation' => 'OR',
+            ['key' => 'sb_status', 'value' => 'sold', 'compare' => '!='],
+            ['key' => 'sb_status', 'compare' => 'NOT EXISTS'],
+        ],
     ],
 ]);
 ?>
