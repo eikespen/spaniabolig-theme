@@ -167,6 +167,17 @@ add_action('admin_init', function () {
 add_action('admin_init', function () {
     if (!isset($_GET['sb_fix_images']) || !current_user_can('manage_options')) return;
 
+    // Reset all: /wp-admin/?sb_fix_images=reset
+    if ($_GET['sb_fix_images'] === 'reset') {
+        $deleted = 0;
+        $props = get_posts(['post_type' => 'property', 'posts_per_page' => -1, 'meta_key' => 'sb_images_fixed', 'fields' => 'ids']);
+        foreach ($props as $pid) {
+            delete_post_meta($pid, 'sb_images_fixed');
+            $deleted++;
+        }
+        wp_die("<pre style='font-family:monospace;padding:20px;background:#fff3cd'>Reset {$deleted} properties. Now visit <a href='?sb_fix_images=1'>?sb_fix_images=1</a> to re-run.</pre>");
+    }
+
     $source     = 'https://spaniabolig-old.holthe.com/wp-json/wp/v2';
     $batch_size = 2;
     $log        = [];
