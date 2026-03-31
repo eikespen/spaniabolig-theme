@@ -270,30 +270,21 @@ function sb_filter_property_archive($query) {
         if ($meta_query) {
             $query->set('meta_query', $meta_query);
         }
+
+        // Sort featured properties first
+        $query->set('sb_featured_first', true);
     }
 }
+/* Sort featured properties to the top of archive listings */
+add_filter('posts_clauses', function($clauses, $query) {
+    if ($query->get('sb_featured_first')) {
+        global $wpdb;
+        $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON ({$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured')";
+        $clauses['orderby']  = "COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
+    }
+    return $clauses;
+}, 10, 2);
 add_action('pre_get_posts', 'sb_filter_property_archive');
-
-// LEFT JOIN so ALL properties appear; featured ones (sb_featured=1) float to top
-function sb_featured_join($join, $query) {
-    global $wpdb;
-    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
-        $join .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON (
-            {$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured'
-        )";
-    }
-    return $join;
-}
-add_filter('posts_join', 'sb_featured_join', 10, 2);
-
-function sb_featured_orderby($orderby, $query) {
-    global $wpdb;
-    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
-        $orderby = "CAST(COALESCE(sb_feat.meta_value,'0') AS UNSIGNED) DESC, {$wpdb->posts}.post_date DESC";
-    }
-    return $orderby;
-}
-add_filter('posts_orderby', 'sb_featured_orderby', 10, 2);
 
 /* ── AJAX Property Search ── */
 function sb_ajax_search() {
@@ -343,26 +334,12 @@ function sb_ajax_search() {
         }
     }
 
-    // LEFT JOIN so featured properties always appear first without excluding any results
-    $sb_feat_join = function($join) {
-        global $wpdb;
-        $join .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON (
-            {$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured'
-        )";
-        return $join;
-    };
-    $sb_feat_orderby = function($orderby) use ($args) {
-        global $wpdb;
-        $prefix = "CAST(COALESCE(sb_feat.meta_value,'0') AS UNSIGNED) DESC";
-        return $orderby ? "{$prefix}, {$orderby}" : $prefix;
-    };
-    add_filter('posts_join', $sb_feat_join);
-    add_filter('posts_orderby', $sb_feat_orderby);
+    // Sort featured properties first (unless sorting by price)
+    if (empty($_POST['sort']) || $_POST['sort'] === 'date') {
+        $args['sb_featured_first'] = true;
+    }
 
     $query = new WP_Query($args);
-
-    remove_filter('posts_join', $sb_feat_join);
-    remove_filter('posts_orderby', $sb_feat_orderby);
     $results = [];
 
     if ($query->have_posts()) {
