@@ -113,7 +113,7 @@ add_action('admin_init', function () {
         // Resolve featured media first for thumb
         $thumb_media_id = $prop['featured_media'] ?? 0;
         if ($thumb_media_id) {
-            $tm = wp_remote_get("{$source}/media/{$thumb_media_id}?_fields=source_url", ['timeout' => 10]);
+            $tm = wp_remote_get("{$source}/media/{$thumb_media_id}?_fields=source_url", ['timeout' => 10, 'sslverify' => false]);
             if (!is_wp_error($tm)) {
                 $td = json_decode(wp_remote_retrieve_body($tm), true);
                 $thumb_url = $td['source_url'] ?? '';
@@ -122,7 +122,7 @@ add_action('admin_init', function () {
 
         // Sideload up to 8 gallery images
         foreach (array_slice($image_ids, 0, 8) as $img_id) {
-            $mr = wp_remote_get("{$source}/media/{$img_id}?_fields=source_url", ['timeout' => 10]);
+            $mr = wp_remote_get("{$source}/media/{$img_id}?_fields=source_url", ['timeout' => 10, 'sslverify' => false]);
             if (!is_wp_error($mr)) {
                 $md = json_decode(wp_remote_retrieve_body($mr), true);
                 if (!empty($md['source_url'])) {
@@ -192,10 +192,9 @@ add_action('admin_init', function () {
         $slug = $prop->post_name;
 
         // Try to find the property on the old site by slug
-        $resp = wp_remote_get("{$source}/properties?slug={$slug}&_fields=id,featured_media,property_meta", ['timeout' => 30]);
+        $resp = wp_remote_get("{$source}/properties?slug={$slug}&_fields=id,featured_media,property_meta", ['timeout' => 30, 'sslverify' => false]);
         if (is_wp_error($resp)) {
             $log[] = "ERROR fetching {$slug}: " . $resp->get_error_message();
-            update_post_meta($prop->ID, 'sb_images_fixed', '1');
             continue;
         }
 
@@ -214,7 +213,7 @@ add_action('admin_init', function () {
         // Resolve ALL image URLs (no limit)
         $image_urls = [];
         foreach ($img_ids as $img_id) {
-            $mr = wp_remote_get("{$source}/media/{$img_id}?_fields=source_url", ['timeout' => 10]);
+            $mr = wp_remote_get("{$source}/media/{$img_id}?_fields=source_url", ['timeout' => 10, 'sslverify' => false]);
             if (!is_wp_error($mr)) {
                 $md = json_decode(wp_remote_retrieve_body($mr), true);
                 if (!empty($md['source_url'])) {
@@ -227,7 +226,7 @@ add_action('admin_init', function () {
         $thumb_url = '';
         $thumb_id  = $old['featured_media'] ?? 0;
         if ($thumb_id) {
-            $tm = wp_remote_get("{$source}/media/{$thumb_id}?_fields=source_url", ['timeout' => 10]);
+            $tm = wp_remote_get("{$source}/media/{$thumb_id}?_fields=source_url", ['timeout' => 10, 'sslverify' => false]);
             if (!is_wp_error($tm)) {
                 $td = json_decode(wp_remote_retrieve_body($tm), true);
                 $thumb_url = $td['source_url'] ?? '';
