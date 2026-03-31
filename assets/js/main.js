@@ -74,6 +74,67 @@
         });
     }
 
+    /* ── Lightbox ── */
+    const lightbox = document.getElementById('propertyLightbox');
+    if (lightbox) {
+        const lbImg     = lightbox.querySelector('.lightbox-img');
+        const lbCounter = lightbox.querySelector('.lightbox-counter');
+        const thumbs    = [...document.querySelectorAll('[data-lightbox]')];
+        const urls      = [...document.querySelectorAll('.gallery-thumb')].map(t => t.dataset.full || t.src);
+        let current     = 0;
+
+        function showSlide(i) {
+            current = (i + urls.length) % urls.length;
+            lbImg.src = urls[current];
+            lbCounter.textContent = (current + 1) + ' / ' + urls.length;
+        }
+
+        function openLightbox(index) {
+            showSlide(index || 0);
+            lightbox.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.hidden = true;
+            document.body.style.overflow = '';
+        }
+
+        // Open from "View all photos" button
+        document.querySelectorAll('[data-lightbox-open]').forEach(btn => {
+            btn.addEventListener('click', () => openLightbox(0));
+        });
+
+        // Open from clicking main image
+        if (mainImg) {
+            mainImg.addEventListener('click', () => {
+                const idx = parseInt(mainImg.dataset.lightbox) || 0;
+                openLightbox(idx);
+            });
+        }
+
+        // Open from clicking a thumbnail
+        document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+            thumb.addEventListener('dblclick', () => {
+                openLightbox(parseInt(thumb.dataset.lightbox) || 0);
+            });
+        });
+
+        // Controls
+        lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        lightbox.querySelector('.lightbox-overlay').addEventListener('click', closeLightbox);
+        lightbox.querySelector('.lightbox-prev').addEventListener('click', () => showSlide(current - 1));
+        lightbox.querySelector('.lightbox-next').addEventListener('click', () => showSlide(current + 1));
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.hidden) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') showSlide(current - 1);
+            if (e.key === 'ArrowRight') showSlide(current + 1);
+        });
+    }
+
     /* ── Leaflet map (if lat/lng set) ── */
     const mapEl = document.getElementById('sb-map');
     if (mapEl) {
