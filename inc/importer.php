@@ -166,7 +166,7 @@ function sb_run_import(string $feed_key): array {
         $city     = trim((string) ($prop->town ?: $prop->location_detail));
         $lat      = (float) $prop->location->latitude;
         $lng      = (float) $prop->location->longitude;
-        $status   = ((string) $prop->price_freq === 'rent') ? 'for_rent' : 'for_sale';
+        $status   = ((string) $prop->price_freq === 'rent') ? 'for-rent' : 'for-sale';
         $type_raw = trim((string) $prop->type);
 
         // Size: prefer built, fall back to plot
@@ -269,15 +269,10 @@ function sb_run_import(string $feed_key): array {
             }
         }
 
-        // Urbanization taxonomy from location_detail
+        // Location detail stored as meta (urbanization/area detail)
         $location_detail = trim((string) $prop->location_detail);
         if ($location_detail) {
-            $term = get_term_by('name', $location_detail, 'urbanization');
-            if (!$term) $term = wp_insert_term($location_detail, 'urbanization');
-            if (!is_wp_error($term)) {
-                $term_id = is_array($term) ? $term['term_id'] : $term->term_id;
-                wp_set_post_terms($post_id, [$term_id], 'urbanization');
-            }
+            update_post_meta($post_id, 'sb_urbanization', $location_detail);
         }
     }
 

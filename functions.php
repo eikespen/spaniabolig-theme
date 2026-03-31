@@ -274,6 +274,27 @@ function sb_filter_property_archive($query) {
 }
 add_action('pre_get_posts', 'sb_filter_property_archive');
 
+// LEFT JOIN so ALL properties appear; featured ones (sb_featured=1) float to top
+function sb_featured_join($join, $query) {
+    global $wpdb;
+    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
+        $join .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON (
+            {$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured'
+        )";
+    }
+    return $join;
+}
+add_filter('posts_join', 'sb_featured_join', 10, 2);
+
+function sb_featured_orderby($orderby, $query) {
+    global $wpdb;
+    if (!is_admin() && $query->is_main_query() && is_post_type_archive('property')) {
+        $orderby = "CAST(COALESCE(sb_feat.meta_value,'0') AS UNSIGNED) DESC, {$wpdb->posts}.post_date DESC";
+    }
+    return $orderby;
+}
+add_filter('posts_orderby', 'sb_featured_orderby', 10, 2);
+
 /* ── AJAX Property Search ── */
 function sb_ajax_search() {
     check_ajax_referer('sb_search', 'nonce');
@@ -322,7 +343,26 @@ function sb_ajax_search() {
         }
     }
 
+    // LEFT JOIN so featured properties always appear first without excluding any results
+    $sb_feat_join = function($join) {
+        global $wpdb;
+        $join .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON (
+            {$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured'
+        )";
+        return $join;
+    };
+    $sb_feat_orderby = function($orderby) use ($args) {
+        global $wpdb;
+        $prefix = "CAST(COALESCE(sb_feat.meta_value,'0') AS UNSIGNED) DESC";
+        return $orderby ? "{$prefix}, {$orderby}" : $prefix;
+    };
+    add_filter('posts_join', $sb_feat_join);
+    add_filter('posts_orderby', $sb_feat_orderby);
+
     $query = new WP_Query($args);
+
+    remove_filter('posts_join', $sb_feat_join);
+    remove_filter('posts_orderby', $sb_feat_orderby);
     $results = [];
 
     if ($query->have_posts()) {
@@ -571,6 +611,26 @@ function sb_ajax_service_inquiry(): void {
 }
 add_action('wp_ajax_sb_service_inquiry',        'sb_ajax_service_inquiry');
 add_action('wp_ajax_nopriv_sb_service_inquiry', 'sb_ajax_service_inquiry');
+
+/* ── Fix property status underscores → hyphens — visit /wp-admin/?sb_fix_status=1 ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_fix_status']) || !current_user_can('manage_options')) return;
+
+    global $wpdb;
+    $fixed = $wpdb->query(
+        "UPDATE {$wpdb->postmeta} SET meta_value = 'for-sale' WHERE meta_key = 'sb_status' AND meta_value = 'for_sale'"
+    );
+    $fixed += $wpdb->query(
+        "UPDATE {$wpdb->postmeta} SET meta_value = 'for-rent' WHERE meta_key = 'sb_status' AND meta_value = 'for_rent'"
+    );
+
+    wp_die(
+        '<h2>Status fix done</h2><p>Fixed <strong>' . $fixed . '</strong> property status values (underscore → hyphen).</p>' .
+        '<p><a href="' . admin_url('edit.php?post_type=property') . '">View all properties &rarr;</a></p>',
+        'Status Fix',
+        ['response' => 200]
+    );
+});
 
 /* ── Bulk clean property titles — visit /wp-admin/?sb_clean_titles=1 ── */
 add_action('admin_init', function () {
