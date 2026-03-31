@@ -885,6 +885,21 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .gallery-thumb { width: 100px; height: 72px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: 0.8; transition: opacity .15s; flex-shrink: 0; }
 .gallery-thumb:hover { opacity: 1; }
 .gallery-thumb.active { opacity: 1; outline: 3px solid var(--primary); outline-offset: 2px; }
+.gallery-thumb--hidden { display: none; }
+.gallery-thumb-more {
+    flex-shrink: 0;
+    width: 100px;
+    height: 72px;
+    border-radius: 8px;
+    border: 1px solid var(--grey-200);
+    background: var(--grey-100);
+    color: var(--grey-700);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+}
+.gallery-thumb-more:hover { background: var(--grey-200); }
 
 /* Lightbox */
 .lightbox {

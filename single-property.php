@@ -34,11 +34,17 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
                         </button>
                     <?php endif; ?>
                 </div>
-                <?php if (count($image_urls) > 1) : ?>
+                <?php if (count($image_urls) > 1) :
+                    $visible_count = 6;
+                    $remaining     = count($image_urls) - $visible_count;
+                ?>
                 <div class="gallery-thumbs">
                     <?php foreach ($image_urls as $i => $thumb_url) : ?>
-                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb<?php echo $i === 0 ? ' active' : ''; ?>" loading="lazy" data-full="<?php echo esc_url($thumb_url); ?>" data-lightbox="<?php echo $i; ?>">
+                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb<?php echo $i === 0 ? ' active' : ''; ?><?php echo $i >= $visible_count ? ' gallery-thumb--hidden' : ''; ?>" loading="lazy" data-full="<?php echo esc_url($thumb_url); ?>" data-lightbox="<?php echo $i; ?>">
                     <?php endforeach; ?>
+                    <?php if ($remaining > 0) : ?>
+                        <button class="gallery-thumb-more" data-lightbox-open>+<?php echo $remaining; ?> more</button>
+                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
 
