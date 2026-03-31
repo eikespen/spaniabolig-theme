@@ -335,11 +335,22 @@ function sb_ajax_search() {
     }
 
     // Sort featured properties first (unless sorting by price)
-    if (empty($_POST['sort']) || $_POST['sort'] === 'date') {
-        $args['sb_featured_first'] = true;
+    $feat_first = empty($_POST['sort']) || $_POST['sort'] === 'date';
+    if ($feat_first) {
+        $sb_feat_clauses = function($clauses) {
+            global $wpdb;
+            $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON ({$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured')";
+            $clauses['orderby']  = "COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
+            return $clauses;
+        };
+        add_filter('posts_clauses', $sb_feat_clauses);
     }
 
     $query = new WP_Query($args);
+
+    if ($feat_first) {
+        remove_filter('posts_clauses', $sb_feat_clauses);
+    }
     $results = [];
 
     if ($query->have_posts()) {
@@ -356,6 +367,7 @@ function sb_ajax_search() {
                 'size'      => get_post_meta(get_the_ID(), 'sb_size', true),
                 'status'    => get_post_meta(get_the_ID(), 'sb_status', true),
                 'city'      => get_post_meta(get_the_ID(), 'sb_city', true),
+                'featured'  => get_post_meta(get_the_ID(), 'sb_featured', true),
             ];
         }
         wp_reset_postdata();
