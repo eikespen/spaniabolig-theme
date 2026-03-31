@@ -270,8 +270,20 @@ function sb_filter_property_archive($query) {
         if ($meta_query) {
             $query->set('meta_query', $meta_query);
         }
+
+        // Sort featured properties first
+        $query->set('sb_featured_first', true);
     }
 }
+/* Sort featured properties to the top of archive listings */
+add_filter('posts_clauses', function($clauses, $query) {
+    if ($query->get('sb_featured_first')) {
+        global $wpdb;
+        $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON ({$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured')";
+        $clauses['orderby']  = "COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
+    }
+    return $clauses;
+}, 10, 2);
 add_action('pre_get_posts', 'sb_filter_property_archive');
 
 /* ── AJAX Property Search ── */
@@ -320,6 +332,11 @@ function sb_ajax_search() {
             $args['orderby']  = 'meta_value_num';
             $args['order']    = 'DESC';
         }
+    }
+
+    // Sort featured properties first (unless sorting by price)
+    if (empty($_POST['sort']) || $_POST['sort'] === 'date') {
+        $args['sb_featured_first'] = true;
     }
 
     $query = new WP_Query($args);
