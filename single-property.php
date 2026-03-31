@@ -26,13 +26,33 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
             if ($main_img) :
             ?>
                 <div class="gallery-main">
-                    <img id="gallery-main-img" src="<?php echo esc_url($main_img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="gallery-main-img">
+                    <img id="gallery-main-img" src="<?php echo esc_url($main_img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="gallery-main-img" data-lightbox="0">
+                    <?php if (count($image_urls) > 1) : ?>
+                        <button class="gallery-view-all" data-lightbox-open>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            View all <?php echo count($image_urls); ?> photos
+                        </button>
+                    <?php endif; ?>
                 </div>
                 <?php if (count($image_urls) > 1) : ?>
                 <div class="gallery-thumbs">
                     <?php foreach ($image_urls as $i => $thumb_url) : ?>
-                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb<?php echo $i === 0 ? ' active' : ''; ?>" loading="lazy" data-full="<?php echo esc_url($thumb_url); ?>">
+                        <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb<?php echo $i === 0 ? ' active' : ''; ?>" loading="lazy" data-full="<?php echo esc_url($thumb_url); ?>" data-lightbox="<?php echo $i; ?>">
                     <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+
+                <!-- Lightbox -->
+                <?php if (count($image_urls) > 1) : ?>
+                <div class="lightbox" id="propertyLightbox" hidden>
+                    <div class="lightbox-overlay"></div>
+                    <button class="lightbox-close" aria-label="Close">&times;</button>
+                    <button class="lightbox-prev" aria-label="Previous">&#8249;</button>
+                    <button class="lightbox-next" aria-label="Next">&#8250;</button>
+                    <div class="lightbox-content">
+                        <img class="lightbox-img" src="" alt="">
+                    </div>
+                    <div class="lightbox-counter"></div>
                 </div>
                 <?php endif; ?>
             <?php endif; ?>
