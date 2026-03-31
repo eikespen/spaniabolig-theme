@@ -156,3 +156,103 @@ add_action('admin_init', function () {
     echo '</pre>';
     exit;
 });
+
+/**
+ * Fix missing images: re-fetch ALL gallery image URLs from old site for featured properties.
+ * Trigger: /wp-admin/?sb_fix_images=1  (admin only, processes 2 properties per run)
+ *
+ * The original import was limited to 8 images per property. This fetches all of them.
+ * Re-run until you see "All done!" to process all properties.
+ */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_fix_images']) || !current_user_can('manage_options')) return;
+
+    $source     = 'https://spaniabolig-old.holthe.com/wp-json/wp/v2';
+    $batch_size = 2;
+    $log        = [];
+
+    // Find featured properties that haven't been fixed yet
+    $props = get_posts([
+        'post_type'      => 'property',
+        'post_status'    => 'publish',
+        'posts_per_page' => $batch_size,
+        'meta_query'     => [
+            ['key' => 'sb_featured', 'value' => '1'],
+            ['key' => 'sb_ref', 'compare' => 'EXISTS'],
+            ['key' => 'sb_images_fixed', 'compare' => 'NOT EXISTS'],
+        ],
+    ]);
+
+    if (empty($props)) {
+        wp_die('<pre style="font-family:monospace;padding:20px;background:#d4edda">All done! All featured properties have full image sets.</pre>');
+    }
+
+    foreach ($props as $prop) {
+        $ref  = get_post_meta($prop->ID, 'sb_ref', true);
+        $slug = $prop->post_name;
+
+        // Try to find the property on the old site by slug
+        $resp = wp_remote_get("{$source}/properties?slug={$slug}&_fields=id,featured_media,property_meta", ['timeout' => 30]);
+        if (is_wp_error($resp)) {
+            $log[] = "ERROR fetching {$slug}: " . $resp->get_error_message();
+            update_post_meta($prop->ID, 'sb_images_fixed', '1');
+            continue;
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($resp), true);
+        if (empty($data[0])) {
+            $log[] = "SKIP (not found on old site): {$slug}";
+            update_post_meta($prop->ID, 'sb_images_fixed', '1');
+            continue;
+        }
+
+        $old      = $data[0];
+        $meta     = $old['property_meta'] ?? [];
+        $img_ids  = array_filter((array) ($meta['fave_property_images'] ?? []));
+        $old_count = count($img_ids);
+
+        // Resolve ALL image URLs (no limit)
+        $image_urls = [];
+        foreach ($img_ids as $img_id) {
+            $mr = wp_remote_get("{$source}/media/{$img_id}?_fields=source_url", ['timeout' => 10]);
+            if (!is_wp_error($mr)) {
+                $md = json_decode(wp_remote_retrieve_body($mr), true);
+                if (!empty($md['source_url'])) {
+                    $image_urls[] = $md['source_url'];
+                }
+            }
+        }
+
+        // Resolve featured media for thumb
+        $thumb_url = '';
+        $thumb_id  = $old['featured_media'] ?? 0;
+        if ($thumb_id) {
+            $tm = wp_remote_get("{$source}/media/{$thumb_id}?_fields=source_url", ['timeout' => 10]);
+            if (!is_wp_error($tm)) {
+                $td = json_decode(wp_remote_retrieve_body($tm), true);
+                $thumb_url = $td['source_url'] ?? '';
+            }
+        }
+        if (!$thumb_url && !empty($image_urls)) {
+            $thumb_url = $image_urls[0];
+        }
+
+        // Update meta
+        if ($thumb_url) {
+            update_post_meta($prop->ID, 'sb_thumb_url', $thumb_url);
+        }
+        if (!empty($image_urls)) {
+            update_post_meta($prop->ID, 'sb_image_urls', $image_urls);
+        }
+
+        update_post_meta($prop->ID, 'sb_images_fixed', '1');
+        $log[] = "FIXED [{$prop->ID}]: {$slug} | {$old_count} images found, " . count($image_urls) . " URLs saved";
+    }
+
+    echo '<pre style="font-family:monospace;padding:20px;background:#f0f0f0;white-space:pre-wrap">';
+    echo "<strong>Batch complete!</strong> Processed " . count($props) . " properties.\n";
+    echo "Reload this page to process the next batch.\n\n";
+    echo implode("\n", $log);
+    echo '</pre>';
+    exit;
+});
