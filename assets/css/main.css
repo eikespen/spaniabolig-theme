@@ -981,6 +981,7 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 }
 
 .property-layout { display: grid; grid-template-columns: 1fr 360px; gap: 48px; align-items: start; }
+.property-content { min-width: 0; overflow: hidden; }
 
 .property-header { margin-bottom: 28px; }
 .property-title { font-size: 2rem; font-weight: 800; color: var(--grey-900); letter-spacing: -0.03em; margin: 10px 0 12px; }
@@ -1014,7 +1015,7 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .stat label { font-size: 11px; color: var(--grey-500); text-transform: uppercase; letter-spacing: .06em; }
 
 /* ── Property tabs ── */
-.prop-tabs { margin-bottom: 40px; }
+.prop-tabs { margin-bottom: 40px; overflow: visible; }
 .prop-tabs__nav {
     display: flex;
     border-bottom: 2px solid var(--grey-200);
@@ -1041,10 +1042,15 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 .prop-tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
 
 .prop-tab-panel { display: none; }
-.prop-tab-panel.active { display: block; }
+.prop-tab-panel.active { display: block; min-height: 280px; }
 
 /* Description */
+.property-description { overflow: visible; }
 .property-description p { margin-bottom: 16px; color: var(--grey-700); line-height: 1.8; font-size: 15px; }
+.property-description img { max-width: 100%; height: auto; }
+.property-description iframe { max-width: 100%; }
+.property-description table { max-width: 100%; overflow-x: auto; display: block; }
+.property-description * { max-width: 100%; box-sizing: border-box; }
 
 /* Details table */
 .prop-details-table { width: 100%; border-collapse: collapse; }
