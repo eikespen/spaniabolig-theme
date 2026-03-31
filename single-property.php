@@ -30,7 +30,7 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
                 </div>
                 <?php if (count($image_urls) > 1) : ?>
                 <div class="gallery-thumbs">
-                    <?php foreach (array_slice($image_urls, 0, 9) as $i => $thumb_url) : ?>
+                    <?php foreach ($image_urls as $i => $thumb_url) : ?>
                         <img src="<?php echo esc_url($thumb_url); ?>" alt="" class="gallery-thumb<?php echo $i === 0 ? ' active' : ''; ?>" loading="lazy" data-full="<?php echo esc_url($thumb_url); ?>">
                     <?php endforeach; ?>
                 </div>
