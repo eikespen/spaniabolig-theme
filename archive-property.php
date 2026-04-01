@@ -30,7 +30,6 @@ if ($active_min || $active_max) {
                 <input type="text" id="pf-keyword" placeholder="<?php esc_attr_e('Search properties…', 'spaniabolig'); ?>" value="<?php echo esc_attr($active_keyword); ?>">
             </div>
 
-            <?php
             <select id="pf-type" class="pf-select">
                 <option value=""><?php esc_html_e('All types', 'spaniabolig'); ?></option>
                 <?php
