@@ -14,29 +14,50 @@ add_action('admin_init', function () {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';
 
-    $batch_size = 3; // properties per run (keep low to avoid timeout)
     $log        = [];
 
-    /* ── Find properties with remote image URLs not yet sideloaded ── */
     /* Use ?sb_sideload_images=all to process ALL properties (not just featured) */
     $all_mode = ($_GET['sb_sideload_images'] === 'all');
 
     $meta_query = [
         'relation' => 'AND',
-        [
-            'key'     => 'sb_image_urls',
-            'compare' => 'EXISTS',
-        ],
-        [
-            'key'     => 'sb_images_sideloaded',
-            'compare' => 'NOT EXISTS',
-        ],
+        ['key' => 'sb_image_urls', 'compare' => 'EXISTS'],
+        ['key' => 'sb_images_sideloaded', 'compare' => 'NOT EXISTS'],
     ];
 
     if (!$all_mode) {
         $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
     }
 
+    /* ── First: bulk-skip all properties whose images are NOT from the old site ── */
+    $skip_candidates = get_posts([
+        'post_type'      => 'property',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'meta_query'     => $meta_query,
+    ]);
+
+    $skipped = 0;
+    foreach ($skip_candidates as $skip_id) {
+        $urls = get_post_meta($skip_id, 'sb_image_urls', true);
+        if (!is_array($urls)) $urls = [];
+        $from_old = false;
+        foreach ($urls as $u) {
+            if (strpos($u, 'spaniabolig-old.holthe.com') !== false) { $from_old = true; break; }
+        }
+        if (!$from_old) {
+            update_post_meta($skip_id, 'sb_images_sideloaded', '1');
+            $skipped++;
+        }
+    }
+    if ($skipped > 0) {
+        $log[] = "Bulk-skipped {$skipped} properties (images not from old site)";
+        $log[] = str_repeat('─', 60);
+    }
+
+    /* ── Now find properties that actually need sideloading (old site images) ── */
+    $batch_size = 2; // keep low — these actually download images
     $props = get_posts([
         'post_type'      => 'property',
         'post_status'    => 'publish',
@@ -46,11 +67,13 @@ add_action('admin_init', function () {
 
     if (empty($props)) {
         $scope = $all_mode ? 'All properties' : 'All featured properties';
-        echo '<pre style="font-family:monospace;padding:20px;background:#d4edda">All done! ' . $scope . ' have local images.</pre>';
+        $log[] = '';
+        $log[] = 'All done! ' . $scope . ' have local images.';
+        echo '<pre style="font-family:monospace;padding:20px;background:#d4edda;white-space:pre-wrap">' . implode("\n", $log) . '</pre>';
         exit;
     }
 
-    $log[] = 'Processing ' . count($props) . ' properties this batch...';
+    $log[] = 'Sideloading ' . count($props) . ' properties with old site images...';
     $log[] = str_repeat('─', 60);
 
     foreach ($props as $post) {
@@ -60,19 +83,7 @@ add_action('admin_init', function () {
         $image_urls = get_post_meta($post_id, 'sb_image_urls', true);
         if (!is_array($image_urls)) $image_urls = [];
 
-        // Only sideload images from the old Houzez site — skip XML feed images
-        $has_old_site_images = false;
-        foreach ($image_urls as $url) {
-            if (strpos($url, 'spaniabolig-old.holthe.com') !== false) {
-                $has_old_site_images = true;
-                break;
-            }
-        }
-        if (!$has_old_site_images) {
-            update_post_meta($post_id, 'sb_images_sideloaded', '1');
-            $log[] = "SKIP [{$post_id}] {$title} — images not from old site";
-            continue;
-        }
+        // At this point, only properties with old site images remain
 
         $local_ids   = [];
         $local_urls  = [];
