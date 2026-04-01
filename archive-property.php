@@ -1,4 +1,19 @@
-<?php get_header(); ?>
+<?php
+get_header();
+
+// Parse all filter values upfront (before any template output uses them)
+$active_type     = isset($_GET['property_type']) ? sanitize_text_field($_GET['property_type']) : '';
+$active_location = isset($_GET['location'])      ? sanitize_text_field($_GET['location'])      : '';
+$active_beds     = isset($_GET['bedrooms'])       ? sanitize_text_field($_GET['bedrooms'])      : '';
+$active_min      = isset($_GET['min_price'])      ? intval($_GET['min_price'])                  : 0;
+$active_max      = isset($_GET['max_price'])      ? intval($_GET['max_price'])                  : 0;
+$active_status   = isset($_GET['status'])         ? sanitize_text_field($_GET['status'])        : '';
+$active_keyword  = isset($_GET['keyword'])        ? sanitize_text_field($_GET['keyword'])       : '';
+$active_price    = '';
+if ($active_min || $active_max) {
+    $active_price = $active_min . '-' . ($active_max ?: '');
+}
+?>
 
 <section class="properties-hero">
     <div class="section-inner">
@@ -16,19 +31,6 @@
             </div>
 
             <?php
-            $active_type     = isset($_GET['property_type']) ? sanitize_text_field($_GET['property_type']) : '';
-            $active_location = isset($_GET['location'])      ? sanitize_text_field($_GET['location'])      : '';
-            $active_beds     = isset($_GET['bedrooms'])       ? sanitize_text_field($_GET['bedrooms'])      : '';
-            $active_min      = isset($_GET['min_price'])      ? intval($_GET['min_price'])                  : 0;
-            $active_max      = isset($_GET['max_price'])      ? intval($_GET['max_price'])                  : 0;
-            $active_status   = isset($_GET['status'])         ? sanitize_text_field($_GET['status'])        : '';
-            $active_keyword  = isset($_GET['keyword'])        ? sanitize_text_field($_GET['keyword'])       : '';
-            // Map price range to select value
-            $active_price = '';
-            if ($active_min || $active_max) {
-                $active_price = $active_min . '-' . ($active_max ?: '');
-            }
-            ?>
             <select id="pf-type" class="pf-select">
                 <option value=""><?php esc_html_e('All types', 'spaniabolig'); ?></option>
                 <?php
