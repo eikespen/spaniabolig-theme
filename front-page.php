@@ -17,6 +17,11 @@ function sb_fp($key, $default = '') {
 
         <!-- Search Card -->
         <div class="search-card">
+            <button class="search-card-toggle" type="button" aria-expanded="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                Search Properties
+                <svg class="search-card-toggle__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
             <h2 class="search-card-title">Find Properties</h2>
             <form class="search-form" method="get" action="<?php echo esc_url(home_url('/properties')); ?>">
                 <div class="search-grid">
@@ -116,6 +121,42 @@ function sb_fp($key, $default = '') {
     </div>
 </section>
 
+<!-- ── EXCLUSIVE / FEATURED PROPERTIES ── -->
+<?php
+$featured_q = new WP_Query([
+    'post_type'      => 'property',
+    'posts_per_page' => 6,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+    'meta_query'     => [
+        ['key' => 'sb_featured', 'value' => '1'],
+        [
+            'relation' => 'OR',
+            ['key' => 'sb_status', 'value' => 'sold', 'compare' => '!='],
+            ['key' => 'sb_status', 'compare' => 'NOT EXISTS'],
+        ],
+    ],
+]);
+?>
+<?php if ($featured_q->have_posts()) : ?>
+<section class="featured-properties">
+    <div class="section-inner">
+        <div class="section-header">
+            <h2>Exclusive Properties</h2>
+            <a href="<?php echo esc_url(home_url('/properties/?featured=1')); ?>" class="view-all">
+                View all
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+        </div>
+        <div class="property-grid">
+            <?php while ($featured_q->have_posts()) : $featured_q->the_post(); ?>
+                <?php get_template_part('template-parts/property-card'); ?>
+            <?php endwhile; wp_reset_postdata(); ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- ── PROPERTY TYPE QUICK LINKS ── -->
 <section class="quick-links">
     <div class="section-inner">
@@ -159,42 +200,6 @@ function sb_fp($key, $default = '') {
         </div>
     </div>
 </section>
-
-<!-- ── EXCLUSIVE / FEATURED PROPERTIES ── -->
-<?php
-$featured_q = new WP_Query([
-    'post_type'      => 'property',
-    'posts_per_page' => 6,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-    'meta_query'     => [
-        ['key' => 'sb_featured', 'value' => '1'],
-        [
-            'relation' => 'OR',
-            ['key' => 'sb_status', 'value' => 'sold', 'compare' => '!='],
-            ['key' => 'sb_status', 'compare' => 'NOT EXISTS'],
-        ],
-    ],
-]);
-?>
-<?php if ($featured_q->have_posts()) : ?>
-<section class="featured-properties">
-    <div class="section-inner">
-        <div class="section-header">
-            <h2>Exclusive Properties</h2>
-            <a href="<?php echo esc_url(home_url('/properties/?featured=1')); ?>" class="view-all">
-                View all
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
-            </a>
-        </div>
-        <div class="property-grid">
-            <?php while ($featured_q->have_posts()) : $featured_q->the_post(); ?>
-                <?php get_template_part('template-parts/property-card'); ?>
-            <?php endwhile; wp_reset_postdata(); ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
 
 <!-- ── RESALE PROPERTIES ── -->
 <?php

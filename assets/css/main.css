@@ -574,6 +574,10 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     text-align: left;
 }
 
+.search-card-toggle {
+    display: none;
+}
+
 .search-card-title {
     font-size: 18px;
     font-weight: 700;
@@ -1779,7 +1783,28 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 @media (max-width: 768px) {
     .hero { padding: 60px 0 72px; }
     .hero-heading { font-size: 2.2rem; }
-    .search-card { padding: 20px; }
+    .search-card { padding: 0; box-shadow: none; border: none; background: transparent; }
+    .search-card-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px 20px;
+        background: var(--white);
+        border: 1px solid var(--grey-200);
+        border-radius: var(--radius);
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--navy);
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+    }
+    .search-card-toggle__chevron { transition: transform .2s; }
+    .search-card-toggle[aria-expanded="true"] .search-card-toggle__chevron { transform: rotate(180deg); }
+    .search-card-title { display: none; }
+    .search-card .search-form { display: none; background: var(--white); padding: 20px; border-radius: var(--radius); border: 1px solid var(--grey-200); margin-top: 10px; box-shadow: var(--shadow-sm); }
+    .search-card.search-card--open .search-form { display: block; }
     .search-grid { grid-template-columns: 1fr 1fr; }
     .property-grid { grid-template-columns: 1fr; }
     .why-grid { grid-template-columns: 1fr 1fr; }
