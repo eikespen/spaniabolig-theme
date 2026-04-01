@@ -93,6 +93,47 @@ function sb_enqueue() {
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
 
+/* ── Fix missing meta on featured properties ── */
+/* Visit: /wp-admin/?sb_fix_meta=1  — sets sb_build_type and sb_status on properties missing them */
+add_action('admin_init', function() {
+    if (!isset($_GET['sb_fix_meta']) || !current_user_can('manage_options')) return;
+
+    $props = get_posts([
+        'post_type'      => 'property',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    ]);
+
+    $fixed = 0;
+    $log   = [];
+    foreach ($props as $pid) {
+        $changed = false;
+        $build = get_post_meta($pid, 'sb_build_type', true);
+        $status = get_post_meta($pid, 'sb_status', true);
+
+        if (empty($build)) {
+            update_post_meta($pid, 'sb_build_type', 'resale');
+            $changed = true;
+        }
+        if (empty($status)) {
+            update_post_meta($pid, 'sb_status', 'for-sale');
+            $changed = true;
+        }
+        if ($changed) {
+            $fixed++;
+            $log[] = "[{$pid}] " . get_the_title($pid) . " — set build_type={$build} → resale, status={$status} → for-sale";
+        }
+    }
+
+    echo '<pre style="font-family:monospace;padding:20px;background:#d4edda;white-space:pre-wrap">';
+    echo "<strong>Meta Fix Complete</strong>\n\n";
+    echo "Fixed {$fixed} properties with missing meta.\n\n";
+    echo implode("\n", $log);
+    echo '</pre>';
+    exit;
+});
+
 /* ── One-time DB migration: fix double-encoded entities in all property content ── */
 add_action('admin_init', function() {
     if (!isset($_GET['sb_fix_content']) || !current_user_can('manage_options')) return;
