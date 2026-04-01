@@ -93,10 +93,37 @@ function sb_enqueue() {
 }
 add_action('wp_enqueue_scripts', 'sb_enqueue');
 
-/* ── Fix missing meta on featured properties ── */
-/* Visit: /wp-admin/?sb_fix_meta=1  — sets sb_build_type and sb_status on properties missing them */
+/* ── Debug / fix property meta ── */
+/* Visit: /wp-admin/?sb_debug_prop=ID  — shows all sb_ meta for a property */
+/* Visit: /wp-admin/?sb_fix_meta=1     — sets missing sb_build_type/sb_status */
 add_action('admin_init', function() {
-    if (!isset($_GET['sb_fix_meta']) || !current_user_can('manage_options')) return;
+    if (!current_user_can('manage_options')) return;
+
+    // Debug: show all meta for a specific property
+    if (isset($_GET['sb_debug_prop'])) {
+        $pid = intval($_GET['sb_debug_prop']);
+        $meta = get_post_meta($pid);
+        $sb_meta = [];
+        foreach ($meta as $k => $v) {
+            if (strpos($k, 'sb_') === 0 || strpos($k, '_sb_') === 0) {
+                $sb_meta[$k] = $v[0] ?? $v;
+            }
+        }
+        echo '<pre style="font-family:monospace;padding:20px;background:#f0f9ff;white-space:pre-wrap">';
+        echo '<strong>Property #' . $pid . ': ' . get_the_title($pid) . "</strong>\n\n";
+        foreach ($sb_meta as $k => $v) {
+            if (is_array($v) || (is_string($v) && strpos($v, 'a:') === 0)) {
+                $unserialized = maybe_unserialize($v);
+                echo esc_html($k) . ' = ' . esc_html(print_r($unserialized, true)) . "\n";
+            } else {
+                echo esc_html($k) . ' = ' . esc_html($v) . "\n";
+            }
+        }
+        echo '</pre>';
+        exit;
+    }
+
+    if (!isset($_GET['sb_fix_meta'])) return;
 
     $props = get_posts([
         'post_type'      => 'property',
@@ -122,7 +149,7 @@ add_action('admin_init', function() {
         }
         if ($changed) {
             $fixed++;
-            $log[] = "[{$pid}] " . get_the_title($pid) . " — set build_type={$build} → resale, status={$status} → for-sale";
+            $log[] = "[{$pid}] " . get_the_title($pid) . " — build_type was '{$build}', status was '{$status}'";
         }
     }
 
