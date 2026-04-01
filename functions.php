@@ -275,12 +275,13 @@ function sb_filter_property_archive($query) {
         $query->set('sb_featured_first', true);
     }
 }
-/* Sort featured properties to the top of archive listings */
+/* Sort: featured first, sold last, then by date */
 add_filter('posts_clauses', function($clauses, $query) {
     if ($query->get('sb_featured_first')) {
         global $wpdb;
         $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON ({$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured')";
-        $clauses['orderby']  = "COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
+        $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_stat ON ({$wpdb->posts}.ID = sb_stat.post_id AND sb_stat.meta_key = 'sb_status')";
+        $clauses['orderby']  = "CASE WHEN sb_stat.meta_value = 'sold' THEN 1 ELSE 0 END ASC, COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
     }
     return $clauses;
 }, 10, 2);
@@ -334,13 +335,14 @@ function sb_ajax_search() {
         }
     }
 
-    // Sort featured properties first (unless sorting by price)
+    // Sort: featured first, sold last (unless sorting by price)
     $feat_first = empty($_POST['sort']) || $_POST['sort'] === 'date';
     if ($feat_first) {
         $sb_feat_clauses = function($clauses) {
             global $wpdb;
             $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_feat ON ({$wpdb->posts}.ID = sb_feat.post_id AND sb_feat.meta_key = 'sb_featured')";
-            $clauses['orderby']  = "COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
+            $clauses['join']    .= " LEFT JOIN {$wpdb->postmeta} AS sb_stat ON ({$wpdb->posts}.ID = sb_stat.post_id AND sb_stat.meta_key = 'sb_status')";
+            $clauses['orderby']  = "CASE WHEN sb_stat.meta_value = 'sold' THEN 1 ELSE 0 END ASC, COALESCE(sb_feat.meta_value, '0') DESC, {$wpdb->posts}.post_date DESC";
             return $clauses;
         };
         add_filter('posts_clauses', $sb_feat_clauses);

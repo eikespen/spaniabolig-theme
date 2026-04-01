@@ -31,17 +31,6 @@
         });
     });
 
-    /* ── Mobile search card toggle ── */
-    const searchToggle = document.querySelector('.search-card-toggle');
-    if (searchToggle) {
-        searchToggle.addEventListener('click', () => {
-            const card = searchToggle.closest('.search-card');
-            const open = searchToggle.getAttribute('aria-expanded') === 'true';
-            searchToggle.setAttribute('aria-expanded', !open);
-            card.classList.toggle('search-card--open', !open);
-        });
-    }
-
     /* ── Favourite heart buttons ── */
     function getFavs() {
         try { return JSON.parse(localStorage.getItem('sb_favorites') || '[]'); } catch(e) { return []; }

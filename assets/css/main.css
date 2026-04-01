@@ -562,6 +562,81 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     line-height: 1.7;
 }
 
+/* ── Hero Choice Cards ── */
+.hero-choices {
+    display: flex;
+    gap: 16px;
+    max-width: 680px;
+    margin: 0 auto 28px;
+    justify-content: center;
+}
+.hero-choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 28px 32px;
+    background: var(--white);
+    border: 2px solid var(--grey-200);
+    border-radius: 16px;
+    text-decoration: none;
+    flex: 1;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+    box-shadow: var(--shadow-sm);
+}
+.hero-choice:hover {
+    border-color: var(--navy);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+.hero-choice__icon {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--grey-50);
+    border-radius: 14px;
+    color: var(--navy);
+}
+.hero-choice:hover .hero-choice__icon {
+    background: var(--navy);
+    color: var(--white);
+}
+.hero-choice__label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--grey-900);
+}
+.hero-choice__desc {
+    font-size: 13px;
+    color: var(--grey-500);
+}
+.hero-choice--featured {
+    border-color: #d4a017;
+    background: linear-gradient(135deg, #fffdf5, #fff8e1);
+}
+.hero-choice--featured .hero-choice__icon {
+    background: linear-gradient(135deg, #d4a017, #b8860b);
+    color: var(--white);
+}
+.hero-choice--featured:hover {
+    border-color: #b8860b;
+}
+.hero-choice--featured:hover .hero-choice__icon {
+    background: linear-gradient(135deg, #b8860b, #8b6914);
+}
+
+.hero-cta-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ── Property Search Section ── */
+.property-search-section {
+    padding: 64px 0;
+    background: var(--grey-50);
+}
+
 /* ── Search Card ── */
 .search-card {
     background: var(--white);
@@ -572,10 +647,6 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     max-width: 900px;
     margin: 0 auto;
     text-align: left;
-}
-
-.search-card-toggle {
-    display: none;
 }
 
 .search-card-title {
@@ -1783,29 +1854,14 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 @media (max-width: 768px) {
     .hero { padding: 60px 0 72px; }
     .hero-heading { font-size: 2.2rem; }
-    .search-card { padding: 0; box-shadow: none; border: none; background: transparent; }
-    .search-card-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-        padding: 14px 20px;
-        background: var(--white);
-        border: 1px solid var(--grey-200);
-        border-radius: var(--radius);
-        font-size: 15px;
-        font-weight: 600;
-        color: var(--navy);
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-    }
-    .search-card-toggle__chevron { transition: transform .2s; }
-    .search-card-toggle[aria-expanded="true"] .search-card-toggle__chevron { transform: rotate(180deg); }
-    .search-card-title { display: none; }
-    .search-card .search-form { display: none; background: var(--white); padding: 20px; border-radius: var(--radius); border: 1px solid var(--grey-200); margin-top: 10px; box-shadow: var(--shadow-sm); }
-    .search-card.search-card--open .search-form { display: block; }
+    .hero-choices { flex-direction: column; gap: 12px; max-width: 400px; }
+    .hero-choice { flex-direction: row; padding: 18px 20px; gap: 14px; text-align: left; }
+    .hero-choice__icon { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; }
+    .hero-choice__icon svg { width: 22px; height: 22px; }
+    .hero-choice__desc { display: none; }
+    .search-card { padding: 20px; }
     .search-grid { grid-template-columns: 1fr 1fr; }
+    .property-search-section { padding: 48px 0; }
     .property-grid { grid-template-columns: 1fr; }
     .why-grid { grid-template-columns: 1fr 1fr; }
     .pf-bar { gap: 8px; }
