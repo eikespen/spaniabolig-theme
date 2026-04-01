@@ -172,8 +172,8 @@ add_action('admin_init', function () {
                     if (!is_wp_error($thumb_att)) {
                         update_post_meta($thumb_att, '_sb_source_url', $thumb_url);
                     } else {
-                        $thumb_att = null;
                         $errors[] = 'THUMB ERROR: ' . $thumb_att->get_error_message();
+                        $thumb_att = null;
                     }
                 }
             }
