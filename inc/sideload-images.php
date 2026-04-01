@@ -14,6 +14,15 @@ add_action('admin_init', function () {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';
 
+    /* Bypass SSL verification for the old site (self-signed cert) */
+    $sb_ssl_bypass = function ($args, $url) {
+        if (strpos($url, 'spaniabolig-old.holthe.com') !== false) {
+            $args['sslverify'] = false;
+        }
+        return $args;
+    };
+    add_filter('http_request_args', $sb_ssl_bypass, 10, 2);
+
     $log        = [];
 
     /* Use ?sb_sideload_images=all to process ALL properties (not just featured) */
@@ -237,5 +246,6 @@ add_action('admin_init', function () {
     echo '<strong>Image Sideload — Batch Complete</strong>' . "\n\n";
     echo implode("\n", $log);
     echo '</pre>';
+    remove_filter('http_request_args', $sb_ssl_bypass);
     exit;
 });
