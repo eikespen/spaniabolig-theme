@@ -60,6 +60,20 @@ add_action('admin_init', function () {
         $image_urls = get_post_meta($post_id, 'sb_image_urls', true);
         if (!is_array($image_urls)) $image_urls = [];
 
+        // Only sideload images from the old Houzez site — skip XML feed images
+        $has_old_site_images = false;
+        foreach ($image_urls as $url) {
+            if (strpos($url, 'spaniabolig-old.holthe.com') !== false) {
+                $has_old_site_images = true;
+                break;
+            }
+        }
+        if (!$has_old_site_images) {
+            update_post_meta($post_id, 'sb_images_sideloaded', '1');
+            $log[] = "SKIP [{$post_id}] {$title} — images not from old site";
+            continue;
+        }
+
         $local_ids   = [];
         $local_urls  = [];
         $errors      = [];
