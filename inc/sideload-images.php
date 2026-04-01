@@ -17,7 +17,33 @@ add_action('admin_init', function () {
     $log        = [];
 
     /* Use ?sb_sideload_images=all to process ALL properties (not just featured) */
-    $all_mode = ($_GET['sb_sideload_images'] === 'all');
+    /* Use ?sb_sideload_images=reset_old to re-process properties still pointing to old site */
+    $all_mode = ($_GET['sb_sideload_images'] === 'all' || $_GET['sb_sideload_images'] === 'reset_old');
+
+    // Reset: find properties marked as sideloaded but still have old-site URLs
+    if ($_GET['sb_sideload_images'] === 'reset_old') {
+        $all_props = get_posts([
+            'post_type'      => 'property',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_key'       => 'sb_images_sideloaded',
+        ]);
+        $reset_count = 0;
+        foreach ($all_props as $pid) {
+            $urls = get_post_meta($pid, 'sb_image_urls', true);
+            if (!is_array($urls)) continue;
+            foreach ($urls as $u) {
+                if (strpos($u, 'spaniabolig-old.holthe.com') !== false) {
+                    delete_post_meta($pid, 'sb_images_sideloaded');
+                    $reset_count++;
+                    break;
+                }
+            }
+        }
+        $log[] = "Reset {$reset_count} properties that still have old-site URLs";
+        $log[] = str_repeat('─', 60);
+    }
 
     $meta_query = [
         'relation' => 'AND',
