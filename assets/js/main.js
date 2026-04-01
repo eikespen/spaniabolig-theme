@@ -31,6 +31,17 @@
         });
     });
 
+    /* ── Mobile search card toggle ── */
+    const searchToggle = document.querySelector('.search-card-toggle');
+    if (searchToggle) {
+        searchToggle.addEventListener('click', () => {
+            const card = searchToggle.closest('.search-card');
+            const open = searchToggle.getAttribute('aria-expanded') === 'true';
+            searchToggle.setAttribute('aria-expanded', !open);
+            card.classList.toggle('search-card--open', !open);
+        });
+    }
+
     /* ── Favourite heart buttons ── */
     function getFavs() {
         try { return JSON.parse(localStorage.getItem('sb_favorites') || '[]'); } catch(e) { return []; }
@@ -236,7 +247,9 @@
             const labels    = {'for-sale': 'For Sale', 'for-rent': 'For Rent', 'sold': 'Sold'};
             const statusKey = p.status ? p.status.replace(/_/g, '-') : '';
             const price     = p.price ? '\u20ac\u00a0' + parseInt(p.price).toLocaleString('de-DE') : '';
-            const badge     = statusKey ? `<span class="card-badge card-badge--${statusKey}">${labels[statusKey] || statusKey}</span>` : '';
+            const statusBadge = statusKey ? `<span class="card-badge card-badge--${statusKey}">${labels[statusKey] || statusKey}</span>` : '';
+            const exclusiveBadge = p.featured === '1' ? `<span class="card-badge card-badge--exclusive"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg> Exclusive</span>` : '';
+            const badge = statusBadge + exclusiveBadge;
             const img    = p.image
                 ? `<img src="${p.image}" alt="${esc(p.title)}" class="card-image" loading="lazy">`
                 : `<div class="card-image card-image--placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5" width="48" height="48"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>`;
