@@ -17,30 +17,36 @@ add_action('admin_init', function () {
     $batch_size = 3; // properties per run (keep low to avoid timeout)
     $log        = [];
 
-    /* ── Find only spaniabolig.no featured/exclusive properties not yet sideloaded ── */
+    /* ── Find properties with remote image URLs not yet sideloaded ── */
+    /* Use ?sb_sideload_images=all to process ALL properties (not just featured) */
+    $all_mode = ($_GET['sb_sideload_images'] === 'all');
+
+    $meta_query = [
+        'relation' => 'AND',
+        [
+            'key'     => 'sb_image_urls',
+            'compare' => 'EXISTS',
+        ],
+        [
+            'key'     => 'sb_images_sideloaded',
+            'compare' => 'NOT EXISTS',
+        ],
+    ];
+
+    if (!$all_mode) {
+        $meta_query[] = ['key' => 'sb_featured', 'value' => '1'];
+    }
+
     $props = get_posts([
         'post_type'      => 'property',
         'post_status'    => 'publish',
         'posts_per_page' => $batch_size,
-        'meta_query'     => [
-            'relation' => 'AND',
-            [
-                'key'   => 'sb_featured',
-                'value' => '1',
-            ],
-            [
-                'key'     => 'sb_thumb_url',
-                'compare' => 'EXISTS',
-            ],
-            [
-                'key'     => 'sb_images_sideloaded',
-                'compare' => 'NOT EXISTS',
-            ],
-        ],
+        'meta_query'     => $meta_query,
     ]);
 
     if (empty($props)) {
-        echo '<pre style="font-family:monospace;padding:20px;background:#d4edda">All done! All featured properties have local images.</pre>';
+        $scope = $all_mode ? 'All properties' : 'All featured properties';
+        echo '<pre style="font-family:monospace;padding:20px;background:#d4edda">All done! ' . $scope . ' have local images.</pre>';
         exit;
     }
 
@@ -151,22 +157,26 @@ add_action('admin_init', function () {
     }
 
     /* Count remaining */
+    $rem_query = [
+        'relation' => 'AND',
+        ['key' => 'sb_image_urls', 'compare' => 'EXISTS'],
+        ['key' => 'sb_images_sideloaded', 'compare' => 'NOT EXISTS'],
+    ];
+    if (!$all_mode) {
+        $rem_query[] = ['key' => 'sb_featured', 'value' => '1'];
+    }
     $remaining = get_posts([
         'post_type'      => 'property',
         'post_status'    => 'publish',
         'posts_per_page' => -1,
         'fields'         => 'ids',
-        'meta_query'     => [
-            'relation' => 'AND',
-            ['key' => 'sb_featured', 'value' => '1'],
-            ['key' => 'sb_thumb_url', 'compare' => 'EXISTS'],
-            ['key' => 'sb_images_sideloaded', 'compare' => 'NOT EXISTS'],
-        ],
+        'meta_query'     => $rem_query,
     ]);
 
+    $rerun_url = $all_mode ? '?sb_sideload_images=all' : '?sb_sideload_images=1';
     $log[] = str_repeat('─', 60);
     if (count($remaining) > 0) {
-        $log[] = count($remaining) . ' properties still need processing — <a href="?sb_sideload_images=1">run again</a>';
+        $log[] = count($remaining) . ' properties still need processing — <a href="' . $rerun_url . '">run again</a>';
     } else {
         $log[] = '🎉 All properties processed!';
     }
