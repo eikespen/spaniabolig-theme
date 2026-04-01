@@ -40,8 +40,8 @@ function sb_fp($key, $default = '') {
             </a>
         </div>
         <div class="hero-cta-row">
-            <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-outline btn-lg btn-pill">View all properties</a>
-            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-lg btn-pill">Contact an agent</a>
+            <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-primary btn-lg btn-pill">View all properties</a>
+            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-gold btn-lg btn-pill">Contact an agent</a>
         </div>
     </div>
 </section>
