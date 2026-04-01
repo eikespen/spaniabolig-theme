@@ -70,11 +70,7 @@
                 <option value="4"<?php selected($active_beds, '4'); ?>>4+</option>
             </select>
 
-            <select id="pf-status" class="pf-select">
-                <option value=""><?php esc_html_e('Buy or rent', 'spaniabolig'); ?></option>
-                <option value="for-sale"<?php selected($active_status, 'for-sale'); ?>><?php esc_html_e('For sale', 'spaniabolig'); ?></option>
-                <option value="for-rent"<?php selected($active_status, 'for-rent'); ?>><?php esc_html_e('For rent', 'spaniabolig'); ?></option>
-            </select>
+            <input type="hidden" id="pf-status" value="">
 
             <?php $active_build_type = isset($_GET['build_type']) ? sanitize_key($_GET['build_type']) : ''; ?>
             <select id="pf-build-type" class="pf-select">
