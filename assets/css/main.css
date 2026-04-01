@@ -76,8 +76,8 @@ input, select, textarea, button { font: inherit; }
 .btn-outline              { background: transparent; color: var(--navy); border-color: var(--navy); }
 .btn-outline:hover        { background: var(--navy); color: var(--white); }
 
-.btn-gold                 { background: #d4a017; color: var(--white); border-color: #d4a017; }
-.btn-gold:hover           { background: #b8860b; border-color: #b8860b; }
+.btn-gold                 { background: #FFC300; color: #001D3D; border-color: #FFC300; font-weight: 700; }
+.btn-gold:hover           { background: #e6b000; border-color: #e6b000; }
 
 .btn-outline-sm           { background: transparent; color: var(--navy); border: 2px solid var(--navy);
                             padding: 7px 16px; font-size: 13px; font-weight: 600; border-radius: 8px;
@@ -588,20 +588,20 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     box-shadow: var(--shadow-sm);
 }
 .hero-choice:hover {
-    border-color: var(--navy);
+    border-color: #FFC300;
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
 }
 .hero-choice__icon {
     width: 52px; height: 52px;
     display: flex; align-items: center; justify-content: center;
-    background: var(--grey-50);
+    background: #001D3D;
     border-radius: 14px;
-    color: var(--navy);
+    color: var(--white);
 }
 .hero-choice:hover .hero-choice__icon {
-    background: var(--navy);
-    color: var(--white);
+    background: #FFC300;
+    color: #001D3D;
 }
 .hero-choice__label {
     font-size: 16px;
@@ -613,18 +613,19 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     color: var(--grey-500);
 }
 .hero-choice--featured {
-    border-color: #d4a017;
-    background: linear-gradient(135deg, #fffdf5, #fff8e1);
+    border-color: #FFC300;
+    background: linear-gradient(135deg, #fffef6, #fff8de);
 }
 .hero-choice--featured .hero-choice__icon {
-    background: linear-gradient(135deg, #d4a017, #b8860b);
-    color: var(--white);
+    background: #FFC300;
+    color: #001D3D;
 }
 .hero-choice--featured:hover {
-    border-color: #b8860b;
+    border-color: #e6b000;
 }
 .hero-choice--featured:hover .hero-choice__icon {
-    background: linear-gradient(135deg, #b8860b, #8b6914);
+    background: #001D3D;
+    color: #FFC300;
 }
 
 .hero-cta-row {
