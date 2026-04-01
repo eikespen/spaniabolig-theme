@@ -15,108 +15,33 @@ function sb_fp($key, $default = '') {
         <h1 class="hero-heading"><?php echo esc_html(sb_fp('sb_hero_heading', 'Find your dream property in Ciudad Quesada')); ?></h1>
         <p class="hero-subtitle"><?php echo esc_html(sb_fp('sb_hero_subtitle', 'Discover beautiful homes in Ciudad Quesada and the urbanizations of Rojales with properties to suit every lifestyle and budget.')); ?></p>
 
-        <!-- Search Card -->
-        <div class="search-card">
-            <button class="search-card-toggle" type="button" aria-expanded="false">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                Search Properties
-                <svg class="search-card-toggle__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <h2 class="search-card-title">Find Properties</h2>
-            <form class="search-form" method="get" action="<?php echo esc_url(home_url('/properties')); ?>">
-                <div class="search-grid">
-                    <div class="search-field">
-                        <label>Build Type</label>
-                        <select name="build_type">
-                            <option value="">All Properties</option>
-                            <option value="resale">Resale</option>
-                            <option value="new_build">New Build</option>
-                        </select>
-                    </div>
-                    <div class="search-field">
-                        <label>Property Type</label>
-                        <select name="property_type">
-                            <option value="">All Types</option>
-                            <?php
-                            $types = get_terms(['taxonomy' => 'property_type', 'hide_empty' => false]);
-                            foreach ($types as $t) echo '<option value="' . esc_attr($t->slug) . '">' . esc_html($t->name) . '</option>';
-                            ?>
-                        </select>
-                    </div>
-                    <div class="search-field">
-                        <label>Location</label>
-                        <select name="location">
-                            <option value="">All Locations</option>
-                            <?php
-                            global $wpdb;
-                            $cities = $wpdb->get_col(
-                                "SELECT DISTINCT meta_value FROM {$wpdb->postmeta}
-                                 WHERE meta_key = 'sb_city' AND meta_value != ''
-                                 ORDER BY meta_value ASC"
-                            );
-                            foreach ($cities as $city) echo '<option value="' . esc_attr($city) . '">' . esc_html($city) . '</option>';
-                            ?>
-                        </select>
-                    </div>
-                    <div class="search-field">
-                        <label>Min Price</label>
-                        <select name="min_price">
-                            <option value="">No Min</option>
-                            <option value="50000">€50,000</option>
-                            <option value="100000">€100,000</option>
-                            <option value="150000">€150,000</option>
-                            <option value="200000">€200,000</option>
-                            <option value="300000">€300,000</option>
-                            <option value="400000">€400,000</option>
-                            <option value="500000">€500,000</option>
-                        </select>
-                    </div>
-                    <div class="search-field">
-                        <label>Max Price</label>
-                        <select name="max_price">
-                            <option value="">No Max</option>
-                            <option value="100000">€100,000</option>
-                            <option value="150000">€150,000</option>
-                            <option value="200000">€200,000</option>
-                            <option value="300000">€300,000</option>
-                            <option value="400000">€400,000</option>
-                            <option value="500000">€500,000</option>
-                            <option value="750000">€750,000</option>
-                        </select>
-                    </div>
-                    <div class="search-field">
-                        <label>Bedrooms</label>
-                        <select name="bedrooms">
-                            <option value="">Any</option>
-                            <option value="1">1+</option>
-                            <option value="2">2+</option>
-                            <option value="3">3+</option>
-                            <option value="4">4+</option>
-                            <option value="5">5+</option>
-                        </select>
-                    </div>
-                    <div class="search-field">
-                        <label>Bathrooms</label>
-                        <select name="bathrooms">
-                            <option value="">Any</option>
-                            <option value="1">1+</option>
-                            <option value="2">2+</option>
-                            <option value="3">3+</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="search-actions">
-                    <button type="reset" class="btn btn-ghost btn-search-reset">Reset Filters</button>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                        Search Properties
-                    </button>
-                </div>
-            </form>
+        <!-- Build Type Choice -->
+        <div class="hero-choices">
+            <a href="<?php echo esc_url(home_url('/properties/?build_type=resale')); ?>" class="hero-choice">
+                <span class="hero-choice__icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
+                <span class="hero-choice__label">Resale</span>
+                <span class="hero-choice__desc">Ready to move in</span>
+            </a>
+            <a href="<?php echo esc_url(home_url('/properties/?build_type=new_build')); ?>" class="hero-choice">
+                <span class="hero-choice__icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                </span>
+                <span class="hero-choice__label">New Build</span>
+                <span class="hero-choice__desc">Modern new projects</span>
+            </a>
+            <a href="<?php echo esc_url(home_url('/properties/?featured=1')); ?>" class="hero-choice hero-choice--featured">
+                <span class="hero-choice__icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </span>
+                <span class="hero-choice__label">Exclusive</span>
+                <span class="hero-choice__desc">Hand-picked selection</span>
+            </a>
         </div>
-        <div class="search-cta-row">
-            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-lg btn-pill">Contact an agent</a>
+        <div class="hero-cta-row">
             <a href="<?php echo esc_url(home_url('/properties')); ?>" class="btn btn-outline btn-lg btn-pill">View all properties</a>
+            <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn btn-primary btn-lg btn-pill">Contact an agent</a>
         </div>
     </div>
 </section>
@@ -197,6 +122,97 @@ $featured_q = new WP_Query([
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 All properties
             </a>
+        </div>
+    </div>
+</section>
+
+<!-- ── PROPERTY SEARCH ── -->
+<section class="property-search-section">
+    <div class="section-inner">
+        <div class="section-header">
+            <h2>Search Properties</h2>
+        </div>
+        <div class="search-card">
+            <form class="search-form" method="get" action="<?php echo esc_url(home_url('/properties')); ?>">
+                <div class="search-grid">
+                    <div class="search-field">
+                        <label>Build Type</label>
+                        <select name="build_type">
+                            <option value="">All Properties</option>
+                            <option value="resale">Resale</option>
+                            <option value="new_build">New Build</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Property Type</label>
+                        <select name="property_type">
+                            <option value="">All Types</option>
+                            <?php
+                            $types = get_terms(['taxonomy' => 'property_type', 'hide_empty' => false]);
+                            foreach ($types as $t) echo '<option value="' . esc_attr($t->slug) . '">' . esc_html($t->name) . '</option>';
+                            ?>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Location</label>
+                        <select name="location">
+                            <option value="">All Locations</option>
+                            <?php
+                            global $wpdb;
+                            $cities = $wpdb->get_col(
+                                "SELECT DISTINCT meta_value FROM {$wpdb->postmeta}
+                                 WHERE meta_key = 'sb_city' AND meta_value != ''
+                                 ORDER BY meta_value ASC"
+                            );
+                            foreach ($cities as $city) echo '<option value="' . esc_attr($city) . '">' . esc_html($city) . '</option>';
+                            ?>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Min Price</label>
+                        <select name="min_price">
+                            <option value="">No Min</option>
+                            <option value="50000">&euro;50,000</option>
+                            <option value="100000">&euro;100,000</option>
+                            <option value="150000">&euro;150,000</option>
+                            <option value="200000">&euro;200,000</option>
+                            <option value="300000">&euro;300,000</option>
+                            <option value="400000">&euro;400,000</option>
+                            <option value="500000">&euro;500,000</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Max Price</label>
+                        <select name="max_price">
+                            <option value="">No Max</option>
+                            <option value="100000">&euro;100,000</option>
+                            <option value="150000">&euro;150,000</option>
+                            <option value="200000">&euro;200,000</option>
+                            <option value="300000">&euro;300,000</option>
+                            <option value="400000">&euro;400,000</option>
+                            <option value="500000">&euro;500,000</option>
+                            <option value="750000">&euro;750,000</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Bedrooms</label>
+                        <select name="bedrooms">
+                            <option value="">Any</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                            <option value="5">5+</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                        Search Properties
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </section>
