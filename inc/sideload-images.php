@@ -29,26 +29,19 @@ add_action('admin_init', function () {
     /* Use ?sb_sideload_images=reset_old to re-process properties still pointing to old site */
     $all_mode = ($_GET['sb_sideload_images'] === 'all' || $_GET['sb_sideload_images'] === 'reset_old');
 
-    // Reset: find properties marked as sideloaded but still have old-site URLs
+    // Reset: find ALL properties (sideloaded or not) that still point to old-site URLs
     if ($_GET['sb_sideload_images'] === 'reset_old') {
-        $all_props = get_posts([
-            'post_type'      => 'property',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-            'fields'         => 'ids',
-            'meta_key'       => 'sb_images_sideloaded',
-        ]);
+        global $wpdb;
+        // Find properties whose sb_image_urls or sb_thumb_url meta contains the old domain
+        $pids_with_old = $wpdb->get_col(
+            "SELECT DISTINCT post_id FROM {$wpdb->postmeta}
+             WHERE (meta_key = 'sb_image_urls' OR meta_key = 'sb_thumb_url')
+               AND meta_value LIKE '%spaniabolig-old.holthe.com%'"
+        );
         $reset_count = 0;
-        foreach ($all_props as $pid) {
-            $urls = get_post_meta($pid, 'sb_image_urls', true);
-            if (!is_array($urls)) continue;
-            foreach ($urls as $u) {
-                if (strpos($u, 'spaniabolig-old.holthe.com') !== false) {
-                    delete_post_meta($pid, 'sb_images_sideloaded');
-                    $reset_count++;
-                    break;
-                }
-            }
+        foreach ($pids_with_old as $pid) {
+            delete_post_meta($pid, 'sb_images_sideloaded');
+            $reset_count++;
         }
         $log[] = "Reset {$reset_count} properties that still have old-site URLs";
         $log[] = str_repeat('─', 60);
@@ -206,8 +199,10 @@ add_action('admin_init', function () {
             update_post_meta($post_id, 'sb_thumb_url', wp_get_attachment_url($local_ids[0]));
         }
 
-        /* Mark as done so it's skipped next run */
-        update_post_meta($post_id, 'sb_images_sideloaded', '1');
+        /* Only mark as done if we actually got local URLs (avoid false-positive marker) */
+        if (!empty($local_urls)) {
+            update_post_meta($post_id, 'sb_images_sideloaded', '1');
+        }
 
         $log[] = "✓ [{$post_id}] {$title}";
         $log[] = "  → " . count($local_ids) . " images sideloaded, thumbnail set: " . ($thumb_set ? 'yes' : 'used first gallery img');
