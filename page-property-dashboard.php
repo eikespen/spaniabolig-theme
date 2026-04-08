@@ -23,6 +23,27 @@ $total_props = wp_count_posts('property')->publish;
 $count_sale  = sb_dash_count('sb_status', 'for-sale');
 $count_sold  = sb_dash_count('sb_status', 'sold');
 $count_rent  = sb_dash_count('sb_status', 'for-rent');
+
+// Inquiry counts
+$count_inq_new = (new WP_Query([
+    'post_type'      => 'sb_inquiry',
+    'post_status'    => 'publish',
+    'meta_key'       => '_sb_inq_status',
+    'meta_value'     => 'new',
+    'posts_per_page' => -1,
+    'fields'         => 'ids',
+    'no_found_rows'  => false,
+]))->found_posts;
+$count_inq_total = wp_count_posts('sb_inquiry')->publish ?? 0;
+
+// Recent inquiries (latest 10)
+$recent_inquiries = get_posts([
+    'post_type'      => 'sb_inquiry',
+    'post_status'    => 'publish',
+    'posts_per_page' => 10,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+]);
 ?>
 
 <!-- Dashboard Header -->
@@ -55,6 +76,15 @@ $count_rent  = sb_dash_count('sb_status', 'for-rent');
             <div class="dash-stat-num"><?php echo esc_html($count_rent); ?></div>
             <div class="dash-stat-label">For Rent</div>
         </div>
+        <a href="<?php echo esc_url(admin_url('edit.php?post_type=sb_inquiry')); ?>" class="dash-stat-card" style="text-decoration:none;color:inherit;position:relative;">
+            <div class="dash-stat-num">
+                <?php echo esc_html($count_inq_total); ?>
+                <?php if ($count_inq_new > 0) : ?>
+                    <span style="background:#d63638;color:#fff;font-size:11px;padding:3px 8px;border-radius:10px;vertical-align:middle;margin-left:6px;font-weight:600;"><?php echo esc_html($count_inq_new); ?> new</span>
+                <?php endif; ?>
+            </div>
+            <div class="dash-stat-label">Inquiries</div>
+        </a>
     </div>
 </div>
 
@@ -108,6 +138,62 @@ $count_rent  = sb_dash_count('sb_status', 'for-rent');
         </table>
     </div>
     <div id="dash-pagination" class="dash-pagination"></div>
+
+    <!-- Recent Inquiries -->
+    <div class="dash-inquiries">
+        <div class="dash-inquiries-header">
+            <h2>Recent Inquiries</h2>
+            <a href="<?php echo esc_url(admin_url('edit.php?post_type=sb_inquiry')); ?>" class="dash-inquiries-link">View all →</a>
+        </div>
+        <?php if (empty($recent_inquiries)) : ?>
+            <p class="dash-empty">No inquiries yet.</p>
+        <?php else : ?>
+            <div class="dash-table-wrap">
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Property / Service</th>
+                            <th>Status</th>
+                            <th>Received</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($recent_inquiries as $inq) :
+                            $type    = get_post_meta($inq->ID, '_sb_inq_type', true);
+                            $name    = get_post_meta($inq->ID, '_sb_inq_name', true);
+                            $email   = get_post_meta($inq->ID, '_sb_inq_email', true);
+                            $phone   = get_post_meta($inq->ID, '_sb_inq_phone', true);
+                            $status  = get_post_meta($inq->ID, '_sb_inq_status', true) ?: 'new';
+                            $prop_id = (int) get_post_meta($inq->ID, '_sb_inq_property_id', true);
+                            $service = get_post_meta($inq->ID, '_sb_inq_service', true);
+                            $subject = get_post_meta($inq->ID, '_sb_inq_subject', true);
+                            $type_colors   = ['property' => '#2271b1', 'service' => '#00a32a', 'contact' => '#8c8f94'];
+                            $status_colors = ['new' => '#d63638', 'read' => '#dba617', 'replied' => '#00a32a', 'archived' => '#8c8f94'];
+                            $tbg = $type_colors[$type] ?? '#8c8f94';
+                            $sbg = $status_colors[$status] ?? '#8c8f94';
+                            $context = $prop_id ? get_the_title($prop_id) : ($service ?: $subject ?: '—');
+                        ?>
+                        <tr>
+                            <td><span class="dash-badge" style="background:<?php echo esc_attr($tbg); ?>"><?php echo esc_html(ucfirst($type ?: '—')); ?></span></td>
+                            <td><strong><?php echo esc_html($name ?: '—'); ?></strong></td>
+                            <td><?php echo $email ? '<a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a>' : '—'; ?></td>
+                            <td><?php echo $phone ? '<a href="tel:' . esc_attr($phone) . '">' . esc_html($phone) . '</a>' : '—'; ?></td>
+                            <td><?php echo esc_html($context); ?></td>
+                            <td><span class="dash-badge" style="background:<?php echo esc_attr($sbg); ?>"><?php echo esc_html(ucfirst($status)); ?></span></td>
+                            <td><?php echo esc_html(get_the_date('M j, Y g:i a', $inq)); ?></td>
+                            <td><a class="dash-action-btn dash-action-btn--edit" href="<?php echo esc_url(get_edit_post_link($inq->ID)); ?>">View</a></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
 <script>

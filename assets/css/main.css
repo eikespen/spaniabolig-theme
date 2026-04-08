@@ -2715,8 +2715,13 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     margin: 0 auto;
     padding: 0 32px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 16px;
+}
+.dash-stat-card[href]:hover {
+    border-color: var(--navy);
+    transform: translateY(-1px);
+    transition: all .15s ease;
 }
 .dash-stat-card {
     background: var(--white);
@@ -2799,6 +2804,28 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
     margin: 0 auto;
     padding: 24px 32px 64px;
 }
+.dash-inquiries {
+    margin-top: 48px;
+}
+.dash-inquiries-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.dash-inquiries-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+}
+.dash-inquiries-link {
+    font-size: 14px;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 600;
+}
+.dash-inquiries-link:hover { text-decoration: underline; }
 .dash-table-wrap {
     background: var(--white);
     border: 1px solid var(--grey-200);
@@ -3569,6 +3596,7 @@ html.admin-bar body { margin-top: 0 !important; padding-top: 0 !important; }
 /* Dashboard: stack stats on mobile */
 @media (max-width: 768px) {
     .dash-stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .dash-inquiries-header { flex-direction: column; align-items: flex-start; gap: 8px; }
     .dash-header-inner { flex-direction: column; align-items: flex-start; }
     .dash-body { padding: 16px 16px 48px; }
     .dash-filters-inner { padding: 0 16px; }
