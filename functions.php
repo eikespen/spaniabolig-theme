@@ -762,6 +762,157 @@ add_filter('pre_option_admin_email', function () {
     return 'post@spaniabolig.no';
 });
 
+/* ── One-shot import: Stunning Villa with Sea Views in Quesada — visit /wp-admin/?sb_import_villa_quesada=1 ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_import_villa_quesada']) || !current_user_can('manage_options')) return;
+
+    $slug  = 'stunning-villa-with-sea-views-in-quesada';
+    $title = 'Stunning Villa with Sea Views in Quesada';
+
+    // Avoid duplicate
+    $existing = get_page_by_path($slug, OBJECT, 'property');
+
+    $description = "<p>Welcome to what might just be Ciudad Quesada's most breathtaking view. This elegant and spacious south-east-facing villa offers panoramic vistas stretching from the glittering Mediterranean Sea to the famous Pink Salt Lakes and the lush greenery of La Mata Lagoon. Set on a generous 925 square meter plot, this beautifully designed home combines comfort and space — with multiple terraces, a private guest apartment, and a large swimming pool to truly enjoy the outdoor lifestyle Spain is known for.</p>"
+        . "<p>You enter the property directly from street level and into a large private garage with enough room to comfortably park two vehicles. From here, a stairway leads up to the pool area, where the separate guest apartment is located. The apartment is fully self-contained and features an open-plan kitchen and living area, a private bathroom with a shower, and several large glass doors that open up to the terrace and pool area. This space is perfect for visiting guests or as a rental opportunity. Just next to the apartment, there is also a practical storage room ideal for keeping cushions, outdoor furniture, or pool accessories neatly tucked away.</p>"
+        . "<p>The outdoor area on this level is nothing short of spectacular. A beautiful ten by five meter swimming pool is surrounded by a spacious open terrace, ideal for sunbathing or entertaining. There is a cozy, shaded dining area draped with colorful bougainvillea, creating a peaceful and private corner for alfresco meals while enjoying uninterrupted views toward the sea. From this terrace, you can continue up to the main house, which opens onto yet another generous terrace offering even more panoramic views — this time over the Pink Salt Lakes, the nearby towns of Guardamar del Segura and Rojales, and the distant blue waters of the Mediterranean.</p>"
+        . "<p>The main part of the house is entered through a fully glazed terrace lounge. This sunroom is the perfect place to enjoy your morning coffee while taking in the view at sunrise. With awnings installed for extra shade during the warmer months, this space can be enjoyed comfortably all year round. From the sunroom, you can either step into the hallway, where a guest toilet is located, or go directly into the heart of the home — the bright and open dining area. Just ahead is a private office, which could easily be converted into a fourth bedroom should you wish.</p>"
+        . "<p>To the left of the dining room is a modern, well-equipped kitchen with a sleek white finish and a large side-by-side refrigerator. Connected to the kitchen is a spacious laundry room, which also leads to an additional storage space located just down a few steps. Next to the laundry there is an office room which is the 4th bedroom. On the other side of the dining room is a large living area, complete with a cozy fireplace, perfect for cooler evenings. Here, you will find ample space for relaxing with family or friends, including room for a large sofa and entertainment setup.</p>"
+        . "<p>Beyond the living room is the bedroom wing. There are three generous bedrooms in total, each with built-in wardrobes and natural light. The master bedroom benefits from its own en-suite bathroom, while the remaining two bedrooms share a stylish and functional second bathroom. Every detail of this home has been carefully maintained and tastefully decorated. The property is sold fully furnished, meaning you can move in immediately and start enjoying life under the Spanish sun without having to lift a finger.</p>"
+        . "<p>Outdoors, the plot is cleverly designed across multiple levels to maximize both sun and shade throughout the day. Whether you're lounging by the pool, reading on the upper terrace, or enjoying a quiet dinner under the stars, you'll always find the perfect spot. The garden is beautifully tiled and thoughtfully planted, with low-maintenance landscaping that adds charm and color year-round.</p>"
+        . "<p>Located in a peaceful and established area, the villa is just a short walk from shops, bars, and restaurants, with the center of Ciudad Quesada less than fifteen minutes away on foot. The award-winning beaches of Guardamar del Segura and La Mata are just a short drive away, and several charming local towns such as Benijofar, Benimar, and Rojales are within easy reach.</p>"
+        . "<p>This is truly one of the finest view properties in Ciudad Quesada, combining elegance, functionality, and some of the best scenery the Costa Blanca has to offer. Whether you're looking for a permanent residence, a holiday escape, or an investment with excellent rental potential, this property delivers it all.</p>"
+        . "<p>To fully appreciate everything this home has to offer, a viewing is highly recommended.</p>"
+        . "<p><strong>Property highlights:</strong> Villa · 304 m² built · 925 m² plot · 4 bedrooms · 3 bathrooms · Private pool · Guest apartment · Garage for 2 cars · Sea, salt-lake and lagoon views · Sold fully furnished.</p>";
+
+    $post_data = [
+        'post_type'    => 'property',
+        'post_status'  => 'publish',
+        'post_title'   => $title,
+        'post_name'    => $slug,
+        'post_content' => $description,
+    ];
+
+    if ($existing) {
+        $post_data['ID'] = $existing->ID;
+        $post_id = wp_update_post($post_data, true);
+    } else {
+        $post_id = wp_insert_post($post_data, true);
+    }
+
+    if (is_wp_error($post_id) || !$post_id) {
+        wp_die('Failed to create property: ' . (is_wp_error($post_id) ? $post_id->get_error_message() : 'unknown'));
+    }
+
+    // Meta
+    $meta = [
+        'sb_price'      => '629000',
+        'sb_bedrooms'   => '4',
+        'sb_bathrooms'  => '3',
+        'sb_size'       => '304',
+        'sb_ref'        => '93772',
+        'sb_city'       => 'Ciudad Quesada',
+        'sb_address'    => 'Avenida de La Costa Azul, 69, Quesada, Spain',
+        'sb_lat'        => '38.0699331',
+        'sb_lng'        => '-0.7191206',
+        'sb_status'     => 'for-sale',
+        'sb_build_type' => 'resale',
+        'sb_featured'   => '1', // exclusive → featured
+    ];
+    foreach ($meta as $k => $v) update_post_meta($post_id, $k, $v);
+
+    // Image URLs (queue for the existing sideloader)
+    $image_urls = [
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-2-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-3-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-4-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-5-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-6-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-7-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-8-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-9-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-10-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-11-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-12-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-13-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-14-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-15-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-16-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-17-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-18-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-19-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-20-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-21-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-22-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-23-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-24-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-25-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-26-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-27-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-28-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-29-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-30-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-31-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-32-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-33-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-34-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-35-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-36-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-37-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-38-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-39-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-40-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-41-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-42-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-43-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-44-1.jpg',
+        'https://spaniabolig-old.holthe.com/wp-content/uploads/2024/12/WEBSITE-45-1.jpg',
+    ];
+    update_post_meta($post_id, 'sb_image_urls', $image_urls);
+    update_post_meta($post_id, 'sb_thumb_url',  $image_urls[0]);
+    delete_post_meta($post_id, 'sb_images_sideloaded'); // force re-sideload
+
+    // Assign May-Lise as agent
+    $agent_query = get_posts([
+        'post_type'      => 'sb_agent',
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+        's'              => 'May-Lise',
+        'fields'         => 'ids',
+    ]);
+    if (!$agent_query) {
+        $agent_query = get_posts([
+            'post_type'      => 'sb_agent',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            's'              => 'Gundersen',
+            'fields'         => 'ids',
+        ]);
+    }
+    $agent_id = $agent_query[0] ?? 0;
+    if ($agent_id) {
+        update_post_meta($post_id, 'sb_agent_id', $agent_id);
+    }
+
+    $sideload_url = admin_url('?sb_sideload_images=run');
+    $view_url     = get_permalink($post_id);
+    $edit_url     = get_edit_post_link($post_id, '');
+
+    wp_die(
+        '<h2>Property imported ✓</h2>' .
+        '<p><strong>' . esc_html($title) . '</strong> (ID ' . $post_id . ')</p>' .
+        '<ul>' .
+        '<li>Status: For sale · Resale · Featured (exclusive)</li>' .
+        '<li>Agent: ' . ($agent_id ? esc_html(get_the_title($agent_id)) . ' (ID ' . $agent_id . ')' : '<strong>NOT FOUND</strong> — assign manually') . '</li>' .
+        '<li>Image URLs queued: ' . count($image_urls) . '</li>' .
+        '</ul>' .
+        '<p><a class="button button-primary" href="' . esc_url($sideload_url) . '">▶ Run image sideloader now</a> &nbsp; ' .
+        '<a class="button" href="' . esc_url($edit_url) . '">Edit property</a> &nbsp; ' .
+        '<a class="button" href="' . esc_url($view_url) . '" target="_blank">View on site</a></p>',
+        'Import complete',
+        ['response' => 200]
+    );
+});
+
 /* ── Fix property status underscores → hyphens — visit /wp-admin/?sb_fix_status=1 ── */
 add_action('admin_init', function () {
     if (!isset($_GET['sb_fix_status']) || !current_user_can('manage_options')) return;
