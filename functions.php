@@ -20,6 +20,7 @@ require_once get_template_directory() . '/inc/sync-featured-status.php';
 require_once get_template_directory() . '/inc/property-submission.php';
 require_once get_template_directory() . '/inc/onboarding.php';
 require_once get_template_directory() . '/inc/seo.php';
+require_once get_template_directory() . '/inc/inquiries.php';
 
 /* ── Disable Gutenberg block editor for pages ── */
 // All page content is managed via custom meta boxes — the block editor is not needed
@@ -627,6 +628,13 @@ function sb_handle_contact_form() {
              . '<p><strong>Subject:</strong> ' . esc_html($subject) . '</p>'
              . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
     wp_mail($to, 'New enquiry from ' . $name, $body, $headers);
+    sb_create_inquiry('contact', [
+        'name'    => $name,
+        'email'   => $email,
+        'phone'   => $phone,
+        'subject' => $subject,
+        'message' => $message,
+    ]);
     wp_redirect(home_url('/contact/?sent=1'));
     exit;
 }
@@ -665,6 +673,13 @@ function sb_ajax_service_inquiry(): void {
              . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
              . '<p><strong>City:</strong> '    . esc_html($city)    . '</p>';
     wp_mail($to, $subject, $body, $headers);
+    sb_create_inquiry('service', [
+        'name'    => $name,
+        'email'   => $email,
+        'phone'   => $phone,
+        'service' => $service,
+        'city'    => $city,
+    ]);
 
     wp_send_json_success(['message' => "Thanks, {$name}! We'll be in touch shortly."]);
 }
@@ -705,6 +720,14 @@ function sb_handle_property_inquiry() {
              . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
              . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
     wp_mail($to, $subject, $body, $headers);
+    sb_create_inquiry('property', [
+        'name'           => $name,
+        'email'          => $email,
+        'phone'          => $phone,
+        'message'        => $message,
+        'property_id'    => $property_id,
+        'property_title' => $title,
+    ]);
 
     wp_redirect(add_query_arg('inquiry', 'sent', $referer));
     exit;
