@@ -713,6 +713,14 @@ function sb_handle_property_inquiry() {
     $to      = 'post@spaniabolig.no';
     $subject = 'New property enquiry: ' . $title;
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
+
+    // CC the property owner (the user who added the listing), if they aren't post@spaniabolig.no themselves
+    $author_id    = (int) get_post_field('post_author', $property_id);
+    $author_email = $author_id ? get_the_author_meta('user_email', $author_id) : '';
+    if ($author_email && strcasecmp($author_email, 'post@spaniabolig.no') !== 0) {
+        $headers[] = 'Cc: ' . $author_email;
+    }
+
     $body    = '<p><strong>Property:</strong> <a href="' . esc_url($url) . '">' . esc_html($title) . '</a></p>'
              . ($ref ? '<p><strong>Reference:</strong> ' . esc_html($ref) . '</p>' : '')
              . '<p><strong>Name:</strong> '    . esc_html($name)    . '</p>'
@@ -720,7 +728,7 @@ function sb_handle_property_inquiry() {
              . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
              . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
     wp_mail($to, $subject, $body, $headers);
-    sb_create_inquiry('property', [
+    $inquiry_id = sb_create_inquiry('property', [
         'name'           => $name,
         'email'          => $email,
         'phone'          => $phone,
@@ -728,6 +736,10 @@ function sb_handle_property_inquiry() {
         'property_id'    => $property_id,
         'property_title' => $title,
     ]);
+    if ($inquiry_id && $author_id) {
+        update_post_meta($inquiry_id, '_sb_inq_owner_id',    $author_id);
+        update_post_meta($inquiry_id, '_sb_inq_owner_email', $author_email);
+    }
 
     wp_redirect(add_query_arg('inquiry', 'sent', $referer));
     exit;
