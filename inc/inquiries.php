@@ -227,18 +227,48 @@ add_action('load-post.php', function () {
     }
 });
 
+/* ── Scope WP Admin Inquiries list to current user (unless admin/editor) ── */
+add_action('pre_get_posts', function ($query) {
+    if (!is_admin() || !$query->is_main_query()) return;
+    if ($query->get('post_type') !== 'sb_inquiry') return;
+    if (current_user_can('edit_others_posts')) return;
+
+    $meta = (array) $query->get('meta_query');
+    $meta[] = ['key' => '_sb_inq_owner_id', 'value' => get_current_user_id(), 'compare' => '='];
+    $query->set('meta_query', $meta);
+});
+
+/* Block non-owners from opening an individual inquiry they don't own */
+add_action('load-post.php', function () {
+    if (!isset($_GET['post'])) return;
+    $post_id = intval($_GET['post']);
+    if (get_post_type($post_id) !== 'sb_inquiry') return;
+    if (current_user_can('edit_others_posts')) return;
+    $owner_id = (int) get_post_meta($post_id, '_sb_inq_owner_id', true);
+    if ($owner_id !== get_current_user_id()) {
+        wp_die('You do not have permission to view this inquiry.', 'Forbidden', ['response' => 403]);
+    }
+});
+
 /* ── Show "New" inquiry count badge in admin menu ── */
 add_action('admin_menu', function () {
     global $menu;
-    $count = (int) (new WP_Query([
+    $args = [
         'post_type'      => 'sb_inquiry',
         'post_status'    => 'publish',
-        'meta_key'       => '_sb_inq_status',
-        'meta_value'     => 'new',
         'posts_per_page' => -1,
         'fields'         => 'ids',
         'no_found_rows'  => true,
-    ]))->found_posts;
+        'meta_query'     => [['key' => '_sb_inq_status', 'value' => 'new', 'compare' => '=']],
+    ];
+    if (!current_user_can('edit_others_posts')) {
+        $args['meta_query'] = [
+            'relation' => 'AND',
+            ['key' => '_sb_inq_status',   'value' => 'new',                'compare' => '='],
+            ['key' => '_sb_inq_owner_id', 'value' => get_current_user_id(), 'compare' => '='],
+        ];
+    }
+    $count = (int) (new WP_Query($args))->found_posts;
 
     if (!$count || !is_array($menu)) return;
 

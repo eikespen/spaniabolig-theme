@@ -14,36 +14,65 @@ if (!current_user_can('edit_posts')) {
 
 get_header();
 
+// Author-scoped: non-admins (authors) only see their own listings + inquiries
+$is_admin_view = current_user_can('edit_others_posts');
+$current_uid   = get_current_user_id();
+
 // Get stats
-function sb_dash_count($meta_key, $meta_value) {
-    $q = new WP_Query(['post_type'=>'property','posts_per_page'=>-1,'fields'=>'ids','meta_query'=>[['key'=>$meta_key,'value'=>$meta_value,'compare'=>'=']]]);
+function sb_dash_count($meta_key, $meta_value, $author_id = 0) {
+    $args = [
+        'post_type'      => 'property',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'meta_query'     => [['key' => $meta_key, 'value' => $meta_value, 'compare' => '=']],
+    ];
+    if ($author_id) $args['author'] = $author_id;
+    $q = new WP_Query($args);
     return $q->found_posts;
 }
-$total_props = wp_count_posts('property')->publish;
-$count_sale  = sb_dash_count('sb_status', 'for-sale');
-$count_sold  = sb_dash_count('sb_status', 'sold');
-$count_rent  = sb_dash_count('sb_status', 'for-rent');
+$author_arg  = $is_admin_view ? 0 : $current_uid;
+$total_props = $is_admin_view
+    ? wp_count_posts('property')->publish
+    : (new WP_Query(['post_type'=>'property','posts_per_page'=>-1,'fields'=>'ids','author'=>$current_uid]))->found_posts;
+$count_sale  = sb_dash_count('sb_status', 'for-sale', $author_arg);
+$count_sold  = sb_dash_count('sb_status', 'sold',     $author_arg);
+$count_rent  = sb_dash_count('sb_status', 'for-rent', $author_arg);
 
-// Inquiry counts
-$count_inq_new = (new WP_Query([
+// Inquiry counts (authors only see inquiries on their own listings)
+$inq_base_args = [
     'post_type'      => 'sb_inquiry',
     'post_status'    => 'publish',
-    'meta_key'       => '_sb_inq_status',
-    'meta_value'     => 'new',
     'posts_per_page' => -1,
     'fields'         => 'ids',
-    'no_found_rows'  => false,
-]))->found_posts;
-$count_inq_total = wp_count_posts('sb_inquiry')->publish ?? 0;
+];
+if (!$is_admin_view) {
+    $inq_base_args['meta_query'] = [['key' => '_sb_inq_owner_id', 'value' => $current_uid, 'compare' => '=']];
+}
+
+$count_inq_total = (new WP_Query($inq_base_args))->found_posts;
+
+$new_args = $inq_base_args;
+$new_args['meta_query'] = $is_admin_view
+    ? [['key' => '_sb_inq_status', 'value' => 'new', 'compare' => '=']]
+    : [
+        'relation' => 'AND',
+        ['key' => '_sb_inq_owner_id', 'value' => $current_uid, 'compare' => '='],
+        ['key' => '_sb_inq_status',   'value' => 'new',         'compare' => '='],
+    ];
+$count_inq_new = (new WP_Query($new_args))->found_posts;
 
 // Recent inquiries (latest 10)
-$recent_inquiries = get_posts([
+$recent_args = [
     'post_type'      => 'sb_inquiry',
     'post_status'    => 'publish',
     'posts_per_page' => 10,
     'orderby'        => 'date',
     'order'          => 'DESC',
-]);
+];
+if (!$is_admin_view) {
+    $recent_args['meta_query'] = [['key' => '_sb_inq_owner_id', 'value' => $current_uid, 'compare' => '=']];
+}
+$recent_inquiries = get_posts($recent_args);
 ?>
 
 <!-- Dashboard Header -->

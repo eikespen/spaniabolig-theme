@@ -510,6 +510,11 @@ function sb_ajax_dash_search() {
     if (!empty($_POST['build_type'])) $args['meta_query'][] = ['key'=>'sb_build_type', 'value'=>sanitize_key($_POST['build_type']),      'compare'=>'='];
     if (!empty($_POST['keyword']))    $args['s'] = sanitize_text_field($_POST['keyword']);
 
+    // Non-admins (authors) only see their own listings
+    if (!current_user_can('edit_others_posts')) {
+        $args['author'] = get_current_user_id();
+    }
+
     $query = new WP_Query($args);
 
     $status_labels = ['for-sale'=>'For Sale','for-rent'=>'For Rent','sold'=>'Sold'];
