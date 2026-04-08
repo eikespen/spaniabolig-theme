@@ -619,7 +619,7 @@ function sb_handle_contact_form() {
         wp_redirect(home_url('/contact/?error=1'));
         exit;
     }
-    $to      = get_option('admin_email');
+    $to      = 'post@spaniabolig.no';
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
     $body    = '<p><strong>Name:</strong> ' . esc_html($name) . '</p>'
              . '<p><strong>Email:</strong> ' . esc_html($email) . '</p>'
@@ -656,7 +656,7 @@ function sb_ajax_service_inquiry(): void {
         wp_send_json_error(['message' => 'Please give your consent to submit this form.'], 422);
     }
 
-    $to      = get_option('admin_email');
+    $to      = 'post@spaniabolig.no';
     $subject = 'New service enquiry from ' . $name;
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
     $body    = '<p><strong>Service:</strong> ' . esc_html($service) . '</p>'
@@ -670,6 +670,57 @@ function sb_ajax_service_inquiry(): void {
 }
 add_action('wp_ajax_sb_service_inquiry',        'sb_ajax_service_inquiry');
 add_action('wp_ajax_nopriv_sb_service_inquiry', 'sb_ajax_service_inquiry');
+
+/* ── Property Inquiry Handler (single-property.php forms) ── */
+function sb_handle_property_inquiry() {
+    $referer = wp_get_referer() ?: home_url('/');
+
+    if (!isset($_POST['sb_inquiry_nonce']) || !wp_verify_nonce($_POST['sb_inquiry_nonce'], 'sb_inquiry')) {
+        wp_redirect(add_query_arg('inquiry', 'error', $referer));
+        exit;
+    }
+
+    $property_id = intval($_POST['property_id'] ?? 0);
+    $name        = sanitize_text_field($_POST['your_name']    ?? '');
+    $email       = sanitize_email($_POST['your_email']        ?? '');
+    $phone       = sanitize_text_field($_POST['your_phone']   ?? '');
+    $message     = sanitize_textarea_field($_POST['your_message'] ?? '');
+
+    if (!$name || !$email || !$property_id) {
+        wp_redirect(add_query_arg('inquiry', 'error', $referer));
+        exit;
+    }
+
+    $title = get_the_title($property_id);
+    $url   = get_permalink($property_id);
+    $ref   = get_post_meta($property_id, 'sb_reference', true);
+
+    $to      = 'post@spaniabolig.no';
+    $subject = 'New property enquiry: ' . $title;
+    $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
+    $body    = '<p><strong>Property:</strong> <a href="' . esc_url($url) . '">' . esc_html($title) . '</a></p>'
+             . ($ref ? '<p><strong>Reference:</strong> ' . esc_html($ref) . '</p>' : '')
+             . '<p><strong>Name:</strong> '    . esc_html($name)    . '</p>'
+             . '<p><strong>Email:</strong> '   . esc_html($email)   . '</p>'
+             . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
+             . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
+    wp_mail($to, $subject, $body, $headers);
+
+    wp_redirect(add_query_arg('inquiry', 'sent', $referer));
+    exit;
+}
+add_action('admin_post_sb_property_inquiry',        'sb_handle_property_inquiry');
+add_action('admin_post_nopriv_sb_property_inquiry', 'sb_handle_property_inquiry');
+
+/* ── Force ALL outgoing mail to post@spaniabolig.no (overrides admin_email everywhere) ── */
+add_filter('wp_mail', function ($args) {
+    $args['to'] = 'post@spaniabolig.no';
+    return $args;
+}, 9999);
+
+add_filter('pre_option_admin_email', function () {
+    return 'post@spaniabolig.no';
+});
 
 /* ── Fix property status underscores → hyphens — visit /wp-admin/?sb_fix_status=1 ── */
 add_action('admin_init', function () {
