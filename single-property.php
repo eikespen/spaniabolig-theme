@@ -14,6 +14,12 @@ $status_key    = str_replace('_', '-', (string) $status);
 $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 'Sold'];
 
 $inquiry_state = isset($_GET['inquiry']) ? sanitize_key($_GET['inquiry']) : '';
+
+// Print view bypass — ?print=1 renders a clean A4 sheet and exits
+if (isset($_GET['print'])) {
+    include get_template_directory() . '/inc/property-print.php';
+    return;
+}
 ?>
 
 <div class="single-property">
@@ -75,7 +81,13 @@ $inquiry_state = isset($_GET['inquiry']) ? sanitize_key($_GET['inquiry']) : '';
                             <?php echo esc_html($status_labels[$status_key] ?? ucwords(str_replace(['-','_'], ' ', $status))); ?>
                         </span>
                     <?php endif; ?>
-                    <h1 class="property-title"><?php the_title(); ?></h1>
+                    <div class="property-title-row">
+                        <h1 class="property-title"><?php the_title(); ?></h1>
+                        <a href="<?php echo esc_url(add_query_arg('print', '1', get_permalink())); ?>" target="_blank" rel="noopener" class="btn-print" title="<?php esc_attr_e('Print property sheet', 'spaniabolig'); ?>">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            <span><?php esc_html_e('Print', 'spaniabolig'); ?></span>
+                        </a>
+                    </div>
                     <?php if ($city) : ?>
                         <p class="property-location">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
