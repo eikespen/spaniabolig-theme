@@ -56,7 +56,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         background: #fff;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
-        font-size: 10px;
+        font-size: 12px;
     }
     .sheet {
         width: 198mm;        /* A4 210mm - 2x6mm margin */
@@ -91,13 +91,13 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     /* Brand banner */
     .ph-banner {
         background: #001d3d;
-        padding: 11px 18px;
+        padding: 13px 20px;
         display: flex; justify-content: space-between; align-items: center;
     }
-    .ph-banner img { height: 30px; width: auto; display: block; }
+    .ph-banner img { height: 34px; width: auto; display: block; }
     .ph-banner .tagline {
-        color: #fff; font-size: 10px;
-        text-transform: uppercase; letter-spacing: 2.5px;
+        color: #fff; font-size: 12px;
+        text-transform: uppercase; letter-spacing: 3px;
         opacity: 0.85;
         font-weight: 500;
     }
@@ -111,35 +111,35 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     }
     .ph-left { flex: 1; min-width: 0; }
     .ph-title {
-        font-size: 22px; font-weight: 800;
-        color: #0b0f19; margin: 0 0 5px; line-height: 1.15;
-        letter-spacing: -0.2px;
+        font-size: 30px; font-weight: 800;
+        color: #0b0f19; margin: 0 0 6px; line-height: 1.1;
+        letter-spacing: -0.4px;
     }
     .ph-address {
-        font-size: 12px; color: #555;
+        font-size: 15px; color: #555;
         margin: 0;
     }
     .ph-right { text-align: right; padding-left: 18px; white-space: nowrap; }
     .ph-price {
-        font-size: 26px; font-weight: 800;
+        font-size: 36px; font-weight: 800;
         color: #001d3d; line-height: 1;
-        letter-spacing: -0.3px;
+        letter-spacing: -0.5px;
     }
     .ph-status {
         display: inline-block;
         background: #001d3d; color: #fff;
-        padding: 4px 11px; border-radius: 4px;
-        font-size: 10px; font-weight: 700;
-        text-transform: uppercase; letter-spacing: 0.7px;
-        margin-top: 6px;
+        padding: 5px 13px; border-radius: 4px;
+        font-size: 12px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.8px;
+        margin-top: 8px;
     }
-    .ph-ref { font-size: 10px; color: #888; margin-top: 5px; letter-spacing: 0.3px; }
+    .ph-ref { font-size: 12px; color: #888; margin-top: 6px; letter-spacing: 0.3px; font-weight: 600; }
 
     /* Main image */
     .p-main-img {
         width: calc(100% - 36px);
-        margin: 0 18px 6px;
-        height: 82mm;
+        margin: 0 18px 5px;
+        height: 72mm;
         object-fit: cover;
         border-radius: 4px;
         display: block;
@@ -150,10 +150,10 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 5px;
-        margin: 0 18px 11px;
+        margin: 0 18px 10px;
     }
     .p-grid img {
-        width: 100%; height: 26mm;
+        width: 100%; height: 22mm;
         object-fit: cover; border-radius: 4px;
         display: block;
     }
@@ -163,68 +163,68 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: 0;
-        margin: 0 18px 12px;
+        margin: 0 18px 10px;
         border: 1px solid #e5e7eb;
         border-radius: 5px;
-        padding: 10px 6px;
+        padding: 12px 6px;
         background: #f9fafb;
     }
     .p-stat { text-align: center; border-right: 1px solid #e5e7eb; padding: 0 6px; }
     .p-stat:last-child { border-right: 0; }
-    .p-stat .v { font-size: 16px; font-weight: 800; color: #001d3d; line-height: 1.1; }
-    .p-stat .l { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.6px; margin-top: 4px; font-weight: 600; }
+    .p-stat .v { font-size: 22px; font-weight: 800; color: #001d3d; line-height: 1.05; }
+    .p-stat .l { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.7px; margin-top: 5px; font-weight: 600; }
 
     /* Body */
     .p-body {
         display: grid;
-        grid-template-columns: 1fr 58mm;
+        grid-template-columns: 1fr 62mm;
         gap: 14px;
         margin: 0 18px 10px;
         flex: 1;
     }
     .p-desc h3, .p-side h3 {
-        font-size: 11px; text-transform: uppercase;
-        letter-spacing: 1.2px; color: #001d3d;
-        margin: 0 0 6px;
+        font-size: 13px; text-transform: uppercase;
+        letter-spacing: 1.3px; color: #001d3d;
+        margin: 0 0 7px;
         border-bottom: 1.5px solid #001d3d;
         padding-bottom: 4px;
         font-weight: 700;
     }
     .p-desc p {
-        font-size: 10.5px; line-height: 1.55; color: #333;
+        font-size: 13px; line-height: 1.5; color: #222;
         margin: 0 0 6px;
         text-align: justify;
     }
     .p-features {
-        columns: 2; column-gap: 16px;
-        font-size: 10px; color: #333;
+        columns: 2; column-gap: 18px;
+        font-size: 12px; color: #222;
         margin: 8px 0 0;
         padding: 0; list-style: none;
     }
-    .p-features li { margin-bottom: 3px; break-inside: avoid; line-height: 1.35; }
+    .p-features li { margin-bottom: 4px; break-inside: avoid; line-height: 1.35; }
     .p-features li::before { content: "✓ "; color: #10b981; font-weight: 700; }
 
     /* Sidebar */
-    .p-side { font-size: 10px; }
+    .p-side { font-size: 12px; }
     .p-agent {
         background: #f9fafb;
         border: 1px solid #e5e7eb;
         border-radius: 5px;
-        padding: 12px 10px;
+        padding: 14px 10px;
         margin-bottom: 10px;
         text-align: center;
     }
     .p-agent img {
-        width: 62px; height: 62px;
+        width: 72px; height: 72px;
         border-radius: 50%; object-fit: cover;
-        margin: 0 auto 6px; display: block;
+        margin: 0 auto 8px; display: block;
         border: 2px solid #fff;
         box-shadow: 0 0 0 1px #e5e7eb;
     }
-    .p-agent .name { font-size: 12px; font-weight: 700; color: #111; }
-    .p-agent .title { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin: 2px 0 6px; font-weight: 600; }
-    .p-agent .phone { font-size: 12px; color: #001d3d; font-weight: 700; margin-top: 3px; }
-    .p-agent .email { font-size: 9.5px; color: #555; word-break: break-all; margin-top: 2px; }
+    .p-agent .name { font-size: 14px; font-weight: 700; color: #111; }
+    .p-agent .title { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.6px; margin: 3px 0 8px; font-weight: 600; }
+    .p-agent .phone { font-size: 15px; color: #001d3d; font-weight: 800; margin-top: 4px; letter-spacing: 0.3px; }
+    .p-agent .email { font-size: 10.5px; color: #555; word-break: break-all; margin-top: 4px; }
 
     .p-qr {
         text-align: center;
@@ -233,22 +233,23 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         border-radius: 5px;
         padding: 10px;
     }
-    .p-qr img { width: 90px; height: 90px; display: block; margin: 0 auto 5px; }
-    .p-qr .cap { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .p-qr img { width: 96px; height: 96px; display: block; margin: 0 auto 5px; }
+    .p-qr .cap { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 
     .p-footer {
         margin-top: auto;
-        padding: 11px 18px;
+        padding: 12px 18px;
         background: #001d3d;
         color: #fff;
         text-align: center;
-        font-size: 11px;
+        font-size: 13px;
         display: flex; justify-content: space-between; align-items: center;
         gap: 16px;
+        font-weight: 500;
     }
-    .p-footer img { height: 24px; width: auto; }
-    .p-footer .contact { flex: 1; text-align: center; opacity: 0.92; letter-spacing: 0.4px; }
-    .p-footer .spacer { width: 48px; }
+    .p-footer img { height: 26px; width: auto; }
+    .p-footer .contact { flex: 1; text-align: center; opacity: 0.95; letter-spacing: 0.4px; }
+    .p-footer .spacer { width: 52px; }
 </style>
 </head>
 <body>
@@ -324,7 +325,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         $content = apply_filters('the_content', get_the_content());
         $plain = wp_strip_all_tags($content);
         $plain = trim(preg_replace('/\s+/', ' ', $plain));
-        $limit = 1200;
+        $limit = 850;
         if (strlen($plain) > $limit) {
             $plain = substr($plain, 0, $limit);
             $dot = strrpos($plain, '. ');
