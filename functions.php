@@ -696,7 +696,7 @@ function sb_handle_property_inquiry() {
     $referer = wp_get_referer() ?: home_url('/');
 
     if (!isset($_POST['sb_inquiry_nonce']) || !wp_verify_nonce($_POST['sb_inquiry_nonce'], 'sb_inquiry')) {
-        wp_redirect(add_query_arg('inquiry', 'error', $referer));
+        wp_redirect(add_query_arg('inquiry', 'error', $referer) . '#enquiry-form');
         exit;
     }
 
@@ -707,7 +707,7 @@ function sb_handle_property_inquiry() {
     $message     = sanitize_textarea_field($_POST['your_message'] ?? '');
 
     if (!$name || !$email || !$property_id) {
-        wp_redirect(add_query_arg('inquiry', 'error', $referer));
+        wp_redirect(add_query_arg('inquiry', 'error', $referer) . '#enquiry-form');
         exit;
     }
 
@@ -769,7 +769,8 @@ function sb_handle_property_inquiry() {
         update_post_meta($inquiry_id, '_sb_inq_cc', implode(', ', $cc_emails));
     }
 
-    wp_redirect(add_query_arg('inquiry', 'sent', $referer));
+    $redirect = add_query_arg('inquiry', 'sent', $referer) . '#enquiry-form';
+    wp_redirect($redirect);
     exit;
 }
 add_action('admin_post_sb_property_inquiry',        'sb_handle_property_inquiry');

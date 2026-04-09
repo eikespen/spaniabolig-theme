@@ -12,6 +12,8 @@ $lat       = get_post_meta($post_id, 'sb_lat', true);
 $lng       = get_post_meta($post_id, 'sb_lng', true);
 $status_key    = str_replace('_', '-', (string) $status);
 $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 'Sold'];
+
+$inquiry_state = isset($_GET['inquiry']) ? sanitize_key($_GET['inquiry']) : '';
 ?>
 
 <div class="single-property">
@@ -221,9 +223,23 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
                         </div>
                     </div>
 
-                    <div class="enquiry-form-wrap">
+                    <div class="enquiry-form-wrap" id="enquiry-form">
                         <h3><?php esc_html_e('Enquire About This Property', 'spaniabolig'); ?></h3>
-                        <form class="enquiry-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                        <?php if ($inquiry_state === 'sent') : ?>
+                            <div class="inquiry-success" role="status">
+                                <div class="inquiry-success__icon" aria-hidden="true">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                </div>
+                                <h4><?php esc_html_e('Thank you — your message has been sent!', 'spaniabolig'); ?></h4>
+                                <p><?php esc_html_e('One of our agents will get in touch with you as soon as possible. In the meantime, feel free to browse our other listings.', 'spaniabolig'); ?></p>
+                            </div>
+                        <?php elseif ($inquiry_state === 'error') : ?>
+                            <div class="inquiry-error" role="alert">
+                                <p><?php esc_html_e('Sorry, something went wrong. Please check your details and try again.', 'spaniabolig'); ?></p>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($inquiry_state !== 'sent') : ?>
+                        <form class="enquiry-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>#enquiry-form">
                             <input type="hidden" name="action" value="sb_property_inquiry">
                             <input type="hidden" name="property_id" value="<?php echo $post_id; ?>">
                             <?php wp_nonce_field('sb_inquiry', 'sb_inquiry_nonce'); ?>
@@ -235,6 +251,7 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
                             <textarea name="your_message" rows="4"><?php echo esc_textarea('Hello, I am interested in ' . get_the_title() . '. Please send me more information.'); ?></textarea>
                             <button type="submit" class="btn btn-primary btn-block"><?php esc_html_e('Request Information', 'spaniabolig'); ?></button>
                         </form>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -274,8 +291,20 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
 
                     <hr class="agent-card__divider">
 
-                    <h3 class="agent-card__form-title"><?php esc_html_e('Interested in this property?', 'spaniabolig'); ?></h3>
-                    <form class="contact-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                    <h3 class="agent-card__form-title" id="agent-inquiry-form"><?php esc_html_e('Interested in this property?', 'spaniabolig'); ?></h3>
+                    <?php if ($inquiry_state === 'sent') : ?>
+                        <div class="inquiry-success inquiry-success--compact" role="status">
+                            <div class="inquiry-success__icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            </div>
+                            <p><strong><?php esc_html_e('Message sent!', 'spaniabolig'); ?></strong><br><?php esc_html_e('We will get back to you shortly.', 'spaniabolig'); ?></p>
+                        </div>
+                    <?php elseif ($inquiry_state === 'error') : ?>
+                        <div class="inquiry-error" role="alert">
+                            <p><?php esc_html_e('Something went wrong. Please try again.', 'spaniabolig'); ?></p>
+                        </div>
+                    <?php else : ?>
+                    <form class="contact-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>#agent-inquiry-form">
                         <input type="hidden" name="action" value="sb_property_inquiry">
                         <input type="hidden" name="property_id" value="<?php echo $post_id; ?>">
                         <?php wp_nonce_field('sb_inquiry', 'sb_inquiry_nonce'); ?>
@@ -285,6 +314,7 @@ $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 
                         <textarea name="your_message" rows="3"><?php echo esc_textarea('Hello, I am interested in ' . get_the_title() . '.'); ?></textarea>
                         <button type="submit" class="btn btn-primary btn-block"><?php esc_html_e('Send Inquiry', 'spaniabolig'); ?></button>
                     </form>
+                    <?php endif; ?>
                 </div>
             </aside>
         </div>
