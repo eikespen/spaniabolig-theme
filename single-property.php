@@ -1,5 +1,14 @@
-<?php get_header(); the_post();
+<?php
+the_post();
 $post_id   = get_the_ID();
+
+// Print view bypass — ?print=1 renders a clean A4 sheet WITHOUT the site header/footer
+if (isset($_GET['print'])) {
+    include get_template_directory() . '/inc/property-print.php';
+    return;
+}
+
+get_header();
 $agent     = sb_get_property_agent($post_id);
 $price     = get_post_meta($post_id, 'sb_price', true);
 $bedrooms  = get_post_meta($post_id, 'sb_bedrooms', true);
@@ -14,12 +23,6 @@ $status_key    = str_replace('_', '-', (string) $status);
 $status_labels = ['for-sale' => 'For Sale', 'for-rent' => 'For Rent', 'sold' => 'Sold'];
 
 $inquiry_state = isset($_GET['inquiry']) ? sanitize_key($_GET['inquiry']) : '';
-
-// Print view bypass — ?print=1 renders a clean A4 sheet and exits
-if (isset($_GET['print'])) {
-    include get_template_directory() . '/inc/property-print.php';
-    return;
-}
 ?>
 
 <div class="single-property">
