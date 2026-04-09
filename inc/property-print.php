@@ -80,6 +80,20 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     .print-toolbar .close-link { background: transparent; color: #fff; text-decoration: underline; }
     @media print { .print-toolbar { display: none; } }
 
+    /* Brand banner */
+    .ph-banner {
+        background: #001d3d;
+        margin: 0 -20px 16px;
+        padding: 14px 24px;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .ph-banner img { height: 36px; width: auto; display: block; }
+    .ph-banner .tagline {
+        color: #fff; font-size: 11px;
+        text-transform: uppercase; letter-spacing: 2px;
+        opacity: 0.85;
+    }
+
     /* Header */
     .ph {
         border-bottom: 3px solid #001d3d;
@@ -213,12 +227,17 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     .p-qr .url { font-size: 9px; color: #001d3d; word-break: break-all; margin-top: 4px; }
 
     .p-footer {
-        margin-top: 16px;
-        padding-top: 10px;
-        border-top: 1px solid #e5e7eb;
+        margin: 16px -20px 0;
+        padding: 14px 24px;
+        background: #001d3d;
+        color: #fff;
         text-align: center;
-        font-size: 10px; color: #888;
+        font-size: 11px;
+        display: flex; justify-content: space-between; align-items: center;
+        gap: 16px;
     }
+    .p-footer img { height: 26px; width: auto; }
+    .p-footer .contact { flex: 1; text-align: center; opacity: 0.9; }
 </style>
 </head>
 <body>
@@ -232,9 +251,13 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     </div>
 </div>
 
+<div class="ph-banner">
+    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/logo-white.svg'); ?>" alt="Spaniabolig">
+    <div class="tagline">Real Estate · Costa Blanca</div>
+</div>
+
 <header class="ph">
     <div class="ph-left">
-        <div class="ph-brand">Spaniabolig</div>
         <h1 class="ph-title"><?php echo esc_html(get_the_title()); ?></h1>
         <?php if ($address || $city) : ?>
             <p class="ph-address">📍 <?php echo esc_html($address ?: $city); ?></p>
@@ -336,7 +359,9 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
 </div>
 
 <footer class="p-footer">
-    spaniabolig.no &nbsp;·&nbsp; +34 696 039 621 &nbsp;·&nbsp; post@spaniabolig.no
+    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/logo-white.svg'); ?>" alt="Spaniabolig">
+    <div class="contact">spaniabolig.no &nbsp;·&nbsp; +34 696 039 621 &nbsp;·&nbsp; post@spaniabolig.no</div>
+    <div style="width:26px;"></div>
 </footer>
 
 </div>
