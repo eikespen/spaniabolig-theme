@@ -936,6 +936,89 @@ add_action('admin_init', function () {
     );
 });
 
+/* ── Assign May-Lise as agent on all Exclusive (featured) properties — visit /wp-admin/?sb_assign_maylise_exclusives=1 ── */
+add_action('admin_init', function () {
+    if (!isset($_GET['sb_assign_maylise_exclusives']) || !current_user_can('manage_options')) return;
+
+    // Find May-Lise's agent post
+    $agents = get_posts([
+        'post_type'      => 'sb_agent',
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+        's'              => 'May-Lise',
+        'fields'         => 'ids',
+    ]);
+    if (!$agents) {
+        $agents = get_posts([
+            'post_type'      => 'sb_agent',
+            'posts_per_page' => 1,
+            'post_status'    => 'publish',
+            's'              => 'Gundersen',
+            'fields'         => 'ids',
+        ]);
+    }
+    $agent_id = $agents[0] ?? 0;
+    if (!$agent_id) {
+        wp_die('Could not find May-Lise Gundersen as an sb_agent. Create the agent first.');
+    }
+
+    // All featured / exclusive properties
+    $props = get_posts([
+        'post_type'      => 'property',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'fields'         => 'ids',
+        'meta_query'     => [['key' => 'sb_featured', 'value' => '1', 'compare' => '=']],
+    ]);
+
+    $dry_run = !isset($_GET['confirm']);
+    $changed = [];
+    $skipped = [];
+
+    foreach ($props as $pid) {
+        $current = (int) get_post_meta($pid, 'sb_agent_id', true);
+        if ($current === (int) $agent_id) {
+            $skipped[] = $pid;
+            continue;
+        }
+        $changed[] = [
+            'id'    => $pid,
+            'title' => get_the_title($pid),
+            'from'  => $current ? get_the_title($current) : '(none)',
+        ];
+        if (!$dry_run) {
+            update_post_meta($pid, 'sb_agent_id', $agent_id);
+        }
+    }
+
+    $agent_name = get_the_title($agent_id);
+    $agent_email = get_post_meta($agent_id, 'sb_agent_email', true);
+
+    $html  = '<h2>Exclusive properties → ' . esc_html($agent_name) . '</h2>';
+    $html .= '<p><strong>Agent:</strong> ' . esc_html($agent_name) . ' (ID ' . $agent_id . ') · ' . esc_html($agent_email) . '</p>';
+    $html .= '<p><strong>Total exclusive properties:</strong> ' . count($props) . '</p>';
+    $html .= '<p><strong>Already assigned:</strong> ' . count($skipped) . '</p>';
+    $html .= '<p><strong>' . ($dry_run ? 'Would change' : 'Changed') . ':</strong> ' . count($changed) . '</p>';
+
+    if ($changed) {
+        $html .= '<table style="width:100%;border-collapse:collapse;margin-top:16px;"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid #ccc;">Property</th><th style="text-align:left;padding:6px;border-bottom:1px solid #ccc;">Previous agent</th></tr></thead><tbody>';
+        foreach ($changed as $row) {
+            $html .= '<tr><td style="padding:6px;border-bottom:1px solid #eee;"><a href="' . esc_url(get_edit_post_link($row['id'])) . '">' . esc_html($row['title']) . '</a></td><td style="padding:6px;border-bottom:1px solid #eee;">' . esc_html($row['from']) . '</td></tr>';
+        }
+        $html .= '</tbody></table>';
+    }
+
+    if ($dry_run && $changed) {
+        $confirm_url = add_query_arg(['sb_assign_maylise_exclusives' => '1', 'confirm' => '1'], admin_url());
+        $html .= '<p style="margin-top:20px;"><a href="' . esc_url($confirm_url) . '" class="button button-primary">✓ Confirm and apply to ' . count($changed) . ' propert' . (count($changed) === 1 ? 'y' : 'ies') . '</a></p>';
+        $html .= '<p style="color:#646970;">This is a dry run. Nothing has been changed yet. Click above to apply.</p>';
+    } elseif (!$dry_run) {
+        $html .= '<p style="margin-top:20px;color:#00a32a;"><strong>✓ Done.</strong></p>';
+    }
+
+    wp_die($html, 'Assign agent to exclusives', ['response' => 200]);
+});
+
 /* ── Fix property status underscores → hyphens — visit /wp-admin/?sb_fix_status=1 ── */
 add_action('admin_init', function () {
     if (!isset($_GET['sb_fix_status']) || !current_user_can('manage_options')) return;
