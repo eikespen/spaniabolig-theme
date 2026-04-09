@@ -786,6 +786,15 @@ add_filter('pre_option_admin_email', function () {
     return 'post@spaniabolig.no';
 });
 
+/* ── Professional From name/address on all outgoing mail ── */
+add_filter('wp_mail_from', function ($email) {
+    return 'post@spaniabolig.no';
+}, 9999);
+
+add_filter('wp_mail_from_name', function ($name) {
+    return 'Spaniabolig';
+}, 9999);
+
 /* ── One-shot import: Stunning Villa with Sea Views in Quesada — visit /wp-admin/?sb_import_villa_quesada=1 ── */
 add_action('admin_init', function () {
     if (!isset($_GET['sb_import_villa_quesada']) || !current_user_can('manage_options')) return;
