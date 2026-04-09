@@ -216,17 +216,24 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         margin-bottom: 10px;
         text-align: center;
     }
-    .p-agent img {
+    .p-agent .p-agent-mark {
         width: 72px; height: 72px;
-        border-radius: 50%; object-fit: cover;
-        margin: 0 auto 8px; display: block;
-        border: 2px solid #fff;
-        box-shadow: 0 0 0 1px #e5e7eb;
+        border-radius: 50%;
+        background: #001d3d;
+        margin: 0 auto 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px;
     }
-    .p-agent .name { font-size: 14px; font-weight: 700; color: #111; }
-    .p-agent .title { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.6px; margin: 3px 0 8px; font-weight: 600; }
-    .p-agent .phone { font-size: 15px; color: #001d3d; font-weight: 800; margin-top: 4px; letter-spacing: 0.3px; }
-    .p-agent .email { font-size: 10.5px; color: #555; word-break: break-all; margin-top: 4px; }
+    .p-agent .p-agent-mark img {
+        width: 100%; height: auto; display: block;
+    }
+    .p-agent .name { font-size: 16px; font-weight: 800; color: #001d3d; letter-spacing: 0.3px; }
+    .p-agent .title { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.6px; margin: 3px 0 10px; font-weight: 600; }
+    .p-agent .phone { font-size: 15px; color: #001d3d; font-weight: 800; margin-top: 6px; letter-spacing: 0.3px; }
+    .p-agent .email { font-size: 11px; color: #444; word-break: break-all; margin-top: 4px; }
+    .p-agent .web { font-size: 11px; color: #001d3d; font-weight: 700; margin-top: 3px; }
 
     .p-qr {
         text-align: center;
@@ -348,21 +355,16 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     </div>
 
     <aside class="p-side">
-        <h3>Contact Agent</h3>
+        <h3>Contact Us</h3>
         <div class="p-agent">
-            <?php if (!empty($agent['photo_url'])) : ?>
-                <img src="<?php echo esc_url($agent['photo_url']); ?>" alt="">
-            <?php endif; ?>
-            <div class="name"><?php echo esc_html($agent['name'] ?? 'Spaniabolig'); ?></div>
-            <?php if (!empty($agent['title'])) : ?>
-                <div class="title"><?php echo esc_html($agent['title']); ?></div>
-            <?php endif; ?>
-            <?php if (!empty($agent['phone'])) : ?>
-                <div class="phone">📞 <?php echo esc_html($agent['phone']); ?></div>
-            <?php endif; ?>
-            <?php if (!empty($agent['email'])) : ?>
-                <div class="email"><?php echo esc_html($agent['email']); ?></div>
-            <?php endif; ?>
+            <div class="p-agent-mark">
+                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/logo-white.svg'); ?>" alt="Spaniabolig">
+            </div>
+            <div class="name">Spaniabolig</div>
+            <div class="title">Real Estate · Costa Blanca</div>
+            <div class="phone">📞 +34 681 914 891</div>
+            <div class="email">post@spaniabolig.no</div>
+            <div class="web">spaniabolig.no</div>
         </div>
 
         <div class="p-qr">
@@ -374,7 +376,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
 
 <footer class="p-footer">
     <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/logo-white.svg'); ?>" alt="Spaniabolig">
-    <div class="contact">spaniabolig.no &nbsp;·&nbsp; +34 696 039 621 &nbsp;·&nbsp; post@spaniabolig.no</div>
+    <div class="contact">spaniabolig.no &nbsp;·&nbsp; +34 681 914 891 &nbsp;·&nbsp; post@spaniabolig.no</div>
     <div class="spacer"></div>
 </footer>
 
