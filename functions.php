@@ -610,6 +610,68 @@ function sb_format_price($price) {
     return '€ ' . number_format((float)$price, 0, ',', ' ');
 }
 
+/* ── Shared: branded HTML email template ── */
+function sb_render_inquiry_email($data) {
+    $site  = 'Spaniabolig';
+    $brand = '#001d3d';
+
+    $rows = '';
+    $row = function ($label, $value) use (&$rows) {
+        if ($value === '' || $value === null) return;
+        $rows .= '<tr>'
+              . '<td style="padding:10px 14px;background:#f6f7f9;border:1px solid #e5e7eb;font-weight:600;color:#374151;width:140px;">' . esc_html($label) . '</td>'
+              . '<td style="padding:10px 14px;border:1px solid #e5e7eb;color:#111827;">' . $value . '</td>'
+              . '</tr>';
+    };
+
+    if (!empty($data['property'])) {
+        $prop_html = !empty($data['property_url'])
+            ? '<a href="' . esc_url($data['property_url']) . '" style="color:' . $brand . ';text-decoration:none;">' . esc_html($data['property']) . '</a>'
+            : esc_html($data['property']);
+        $row('Property', $prop_html);
+    }
+    if (!empty($data['reference'])) $row('Reference',  esc_html($data['reference']));
+    if (!empty($data['service']))   $row('Service',    esc_html($data['service']));
+    if (!empty($data['subject']))   $row('Subject',    esc_html($data['subject']));
+    if (!empty($data['name']))      $row('Name',       esc_html($data['name']));
+    if (!empty($data['email']))     $row('Email',      '<a href="mailto:' . esc_attr($data['email']) . '" style="color:' . $brand . ';text-decoration:none;">' . esc_html($data['email']) . '</a>');
+    if (!empty($data['phone']))     $row('Phone',      '<a href="tel:' . esc_attr(preg_replace('/\s+/', '', $data['phone'])) . '" style="color:' . $brand . ';text-decoration:none;">' . esc_html($data['phone']) . '</a>');
+    if (!empty($data['city']))      $row('City',       esc_html($data['city']));
+    if (!empty($data['message']))   $row('Message',    nl2br(esc_html($data['message'])));
+
+    $reply_btn = '';
+    if (!empty($data['email'])) {
+        $reply_subject = rawurlencode('Re: ' . ($data['property'] ?? 'Your inquiry'));
+        $reply_btn = '<tr><td style="padding:24px 14px 0;text-align:center;">'
+                   . '<a href="mailto:' . esc_attr($data['email']) . '?subject=' . $reply_subject . '" '
+                   . 'style="display:inline-block;background:' . $brand . ';color:#fff;text-decoration:none;padding:12px 28px;border-radius:6px;font-weight:600;font-size:14px;">Reply to ' . esc_html($data['name'] ?? 'inquiry') . '</a>'
+                   . '</td></tr>';
+    }
+
+    $intro = !empty($data['intro']) ? $data['intro'] : 'You have received a new inquiry.';
+
+    return '<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;">'
+        . '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f4f6;padding:32px 16px;">'
+        . '<tr><td align="center">'
+        . '<table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">'
+        . '<tr><td style="background:' . $brand . ';padding:28px 32px;text-align:center;">'
+        . '<h1 style="margin:0;color:#fff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">' . esc_html($site) . '</h1>'
+        . '</td></tr>'
+        . '<tr><td style="padding:32px;">'
+        . '<h2 style="margin:0 0 8px;font-size:18px;color:#111827;">' . esc_html($data['heading'] ?? 'New Inquiry') . '</h2>'
+        . '<p style="margin:0 0 24px;color:#4b5563;font-size:15px;line-height:1.6;">' . $intro . '</p>'
+        . '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-size:14px;">'
+        . $rows
+        . $reply_btn
+        . '</table>'
+        . '</td></tr>'
+        . '<tr><td style="background:#f9fafb;padding:20px 32px;text-align:center;color:#6b7280;font-size:12px;border-top:1px solid #e5e7eb;">'
+        . 'This message was sent via the contact form on <a href="' . esc_url(home_url('/')) . '" style="color:' . $brand . ';text-decoration:none;">spaniabolig.no</a>.'
+        . '</td></tr>'
+        . '</table>'
+        . '</td></tr></table></body></html>';
+}
+
 /* ── Contact Form Handler ── */
 function sb_handle_contact_form() {
     if (!isset($_POST['sb_contact_nonce']) || !wp_verify_nonce($_POST['sb_contact_nonce'], 'sb_contact')) {
@@ -627,12 +689,17 @@ function sb_handle_contact_form() {
     }
     $to      = 'post@spaniabolig.no';
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
-    $body    = '<p><strong>Name:</strong> ' . esc_html($name) . '</p>'
-             . '<p><strong>Email:</strong> ' . esc_html($email) . '</p>'
-             . '<p><strong>Phone:</strong> ' . esc_html($phone) . '</p>'
-             . '<p><strong>Subject:</strong> ' . esc_html($subject) . '</p>'
-             . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
-    wp_mail($to, 'New enquiry from ' . $name, $body, $headers);
+    $body    = sb_render_inquiry_email([
+        'heading' => 'New Contact Inquiry',
+        'intro'   => sprintf('You have received a new contact inquiry from <strong>%s</strong>.', esc_html($name)),
+        'name'    => $name,
+        'email'   => $email,
+        'phone'   => $phone,
+        'subject' => $subject,
+        'message' => $message,
+    ]);
+    $email_subject = sprintf('Inquiry from %s – %s', $name, $subject ?: 'General enquiry');
+    wp_mail($to, $email_subject, $body, $headers);
     sb_create_inquiry('contact', [
         'name'    => $name,
         'email'   => $email,
@@ -670,13 +737,17 @@ function sb_ajax_service_inquiry(): void {
     }
 
     $to      = 'post@spaniabolig.no';
-    $subject = 'New service enquiry from ' . $name;
+    $subject = sprintf('Inquiry from %s – %s', $name, $service);
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
-    $body    = '<p><strong>Service:</strong> ' . esc_html($service) . '</p>'
-             . '<p><strong>Name:</strong> '    . esc_html($name)    . '</p>'
-             . '<p><strong>Email:</strong> '   . esc_html($email)   . '</p>'
-             . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
-             . '<p><strong>City:</strong> '    . esc_html($city)    . '</p>';
+    $body    = sb_render_inquiry_email([
+        'heading' => 'New Service Inquiry',
+        'intro'   => sprintf('You have received a new service inquiry from <strong>%s</strong>.', esc_html($name)),
+        'service' => $service,
+        'name'    => $name,
+        'email'   => $email,
+        'phone'   => $phone,
+        'city'    => $city,
+    ]);
     wp_mail($to, $subject, $body, $headers);
     sb_create_inquiry('service', [
         'name'    => $name,
@@ -716,7 +787,7 @@ function sb_handle_property_inquiry() {
     $ref   = get_post_meta($property_id, 'sb_reference', true);
 
     $to      = 'post@spaniabolig.no';
-    $subject = 'New property enquiry: ' . $title;
+    $subject = sprintf('Inquiry from %s – %s', $name, $title);
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
 
     // Collect CC recipients: the assigned agent AND the listing author, de-duped, skipping post@spaniabolig.no
@@ -742,12 +813,17 @@ function sb_handle_property_inquiry() {
         $headers[] = 'Cc: ' . $cc;
     }
 
-    $body    = '<p><strong>Property:</strong> <a href="' . esc_url($url) . '">' . esc_html($title) . '</a></p>'
-             . ($ref ? '<p><strong>Reference:</strong> ' . esc_html($ref) . '</p>' : '')
-             . '<p><strong>Name:</strong> '    . esc_html($name)    . '</p>'
-             . '<p><strong>Email:</strong> '   . esc_html($email)   . '</p>'
-             . '<p><strong>Phone:</strong> '   . esc_html($phone)   . '</p>'
-             . '<p><strong>Message:</strong><br>' . nl2br(esc_html($message)) . '</p>';
+    $body = sb_render_inquiry_email([
+        'heading'      => 'New Property Inquiry',
+        'intro'        => sprintf('You have received a new inquiry from <strong>%s</strong> regarding one of your listings.', esc_html($name)),
+        'property_url' => $url,
+        'property'     => $title,
+        'reference'    => $ref,
+        'name'         => $name,
+        'email'        => $email,
+        'phone'        => $phone,
+        'message'      => $message,
+    ]);
     wp_mail($to, $subject, $body, $headers);
     $inquiry_id = sb_create_inquiry('property', [
         'name'           => $name,
