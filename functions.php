@@ -719,11 +719,27 @@ function sb_handle_property_inquiry() {
     $subject = 'New property enquiry: ' . $title;
     $headers = ['Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $name . ' <' . $email . '>'];
 
-    // CC the property owner (the user who added the listing), if they aren't post@spaniabolig.no themselves
+    // Collect CC recipients: the assigned agent AND the listing author, de-duped, skipping post@spaniabolig.no
+    $cc_emails = [];
+
+    $agent_id    = (int) get_post_meta($property_id, 'sb_agent_id', true);
+    $agent_email = $agent_id ? get_post_meta($agent_id, 'sb_agent_email', true) : '';
+    if ($agent_email && is_email($agent_email)) {
+        $cc_emails[] = $agent_email;
+    }
+
     $author_id    = (int) get_post_field('post_author', $property_id);
     $author_email = $author_id ? get_the_author_meta('user_email', $author_id) : '';
-    if ($author_email && strcasecmp($author_email, 'post@spaniabolig.no') !== 0) {
-        $headers[] = 'Cc: ' . $author_email;
+    if ($author_email && is_email($author_email)) {
+        $cc_emails[] = $author_email;
+    }
+
+    // De-dupe and drop the primary recipient
+    $cc_emails = array_values(array_unique(array_filter($cc_emails, function ($e) {
+        return strcasecmp($e, 'post@spaniabolig.no') !== 0;
+    })));
+    foreach ($cc_emails as $cc) {
+        $headers[] = 'Cc: ' . $cc;
     }
 
     $body    = '<p><strong>Property:</strong> <a href="' . esc_url($url) . '">' . esc_html($title) . '</a></p>'
@@ -744,6 +760,13 @@ function sb_handle_property_inquiry() {
     if ($inquiry_id && $author_id) {
         update_post_meta($inquiry_id, '_sb_inq_owner_id',    $author_id);
         update_post_meta($inquiry_id, '_sb_inq_owner_email', $author_email);
+    }
+    if ($inquiry_id && $agent_id) {
+        update_post_meta($inquiry_id, '_sb_inq_agent_id',    $agent_id);
+        update_post_meta($inquiry_id, '_sb_inq_agent_email', $agent_email);
+    }
+    if ($inquiry_id && !empty($cc_emails)) {
+        update_post_meta($inquiry_id, '_sb_inq_cc', implode(', ', $cc_emails));
     }
 
     wp_redirect(add_query_arg('inquiry', 'sent', $referer));

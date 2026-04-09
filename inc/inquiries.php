@@ -158,6 +158,9 @@ function sb_render_inquiry_details($post) {
     $prop_id     = (int) get_post_meta($post->ID, '_sb_inq_property_id', true);
     $owner_id    = (int) get_post_meta($post->ID, '_sb_inq_owner_id', true);
     $owner_email = get_post_meta($post->ID, '_sb_inq_owner_email', true);
+    $agent_id    = (int) get_post_meta($post->ID, '_sb_inq_agent_id', true);
+    $agent_email = get_post_meta($post->ID, '_sb_inq_agent_email', true);
+    $cc_list     = get_post_meta($post->ID, '_sb_inq_cc', true);
     $ip          = get_post_meta($post->ID, '_sb_inq_ip', true);
 
     $row = function ($label, $value) {
@@ -173,14 +176,24 @@ function sb_render_inquiry_details($post) {
     if ($prop_id) {
         $row('Property', '<a href="' . esc_url(get_edit_post_link($prop_id)) . '">' . esc_html(get_the_title($prop_id)) . '</a> · <a href="' . esc_url(get_permalink($prop_id)) . '" target="_blank">view</a>');
     }
+    if ($agent_id) {
+        $agent_name = get_the_title($agent_id);
+        $agent_str  = esc_html($agent_name);
+        if ($agent_email) {
+            $agent_str .= ' · <a href="mailto:' . esc_attr($agent_email) . '">' . esc_html($agent_email) . '</a>';
+        }
+        $row('Agent', $agent_str);
+    }
     if ($owner_id) {
         $owner_name = get_the_author_meta('display_name', $owner_id);
         $owner_str  = esc_html($owner_name);
         if ($owner_email) {
             $owner_str .= ' · <a href="mailto:' . esc_attr($owner_email) . '">' . esc_html($owner_email) . '</a>';
         }
-        $owner_str .= ' <span style="color:#646970;">(CC\'d on the email)</span>';
         $row('Listing owner', $owner_str);
+    }
+    if ($cc_list) {
+        $row('CC recipients', esc_html($cc_list));
     }
     $row('Service',  esc_html($service));
     $row('City',     esc_html($city));
