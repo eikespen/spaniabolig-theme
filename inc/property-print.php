@@ -362,7 +362,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
             </div>
             <div class="name">Spaniabolig</div>
             <div class="title">Real Estate · Costa Blanca</div>
-            <div class="phone">📞 +34 681 914 891</div>
+            <div class="phone">📞 +47 472 02 414</div>
             <div class="email">post@spaniabolig.no</div>
             <div class="web">spaniabolig.no</div>
         </div>
@@ -376,7 +376,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
 
 <footer class="p-footer">
     <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/logo-white.svg'); ?>" alt="Spaniabolig">
-    <div class="contact">spaniabolig.no &nbsp;·&nbsp; +34 681 914 891 &nbsp;·&nbsp; post@spaniabolig.no</div>
+    <div class="contact">spaniabolig.no &nbsp;·&nbsp; +47 472 02 414 &nbsp;·&nbsp; post@spaniabolig.no</div>
     <div class="spacer"></div>
 </footer>
 
