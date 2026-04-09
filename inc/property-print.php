@@ -47,7 +47,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?php echo esc_html(get_the_title() . ' — ' . get_bloginfo('name')); ?></title>
 <style>
-    @page { size: A4; margin: 12mm; }
+    @page { size: A4; margin: 6mm; }
     * { box-sizing: border-box; }
     html, body {
         margin: 0; padding: 0;
@@ -56,18 +56,26 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         background: #fff;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+        font-size: 10px;
     }
     .sheet {
-        max-width: 210mm;
+        width: 198mm;        /* A4 210mm - 2x6mm margin */
+        max-width: 198mm;
         margin: 0 auto;
-        padding: 18px 20px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    @media print {
+        html, body { width: 198mm; }
+        .sheet { height: 285mm; overflow: hidden; page-break-after: avoid; page-break-inside: avoid; } /* A4 297mm - 2x6mm */
+        .sheet > * { page-break-inside: avoid; }
     }
     .print-toolbar {
         position: sticky; top: 0;
         background: #001d3d; color: #fff;
         padding: 12px 20px;
         display: flex; justify-content: space-between; align-items: center;
-        margin: -18px -20px 18px;
         z-index: 10;
     }
     .print-toolbar button, .print-toolbar a {
@@ -83,22 +91,21 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     /* Brand banner */
     .ph-banner {
         background: #001d3d;
-        margin: 0 -20px 16px;
-        padding: 14px 24px;
+        padding: 7px 14px;
         display: flex; justify-content: space-between; align-items: center;
     }
-    .ph-banner img { height: 36px; width: auto; display: block; }
+    .ph-banner img { height: 22px; width: auto; display: block; }
     .ph-banner .tagline {
-        color: #fff; font-size: 11px;
-        text-transform: uppercase; letter-spacing: 2px;
+        color: #fff; font-size: 9px;
+        text-transform: uppercase; letter-spacing: 1.5px;
         opacity: 0.85;
     }
 
     /* Header */
     .ph {
-        border-bottom: 3px solid #001d3d;
-        padding-bottom: 12px;
-        margin-bottom: 16px;
+        border-bottom: 2px solid #001d3d;
+        padding: 8px 14px 6px;
+        margin-bottom: 8px;
         display: flex; justify-content: space-between; align-items: flex-start;
     }
     .ph-left { flex: 1; }
@@ -109,47 +116,47 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         margin-bottom: 6px;
     }
     .ph-title {
-        font-size: 24px; font-weight: 800;
-        color: #111; margin: 0 0 6px; line-height: 1.15;
+        font-size: 17px; font-weight: 800;
+        color: #111; margin: 0 0 3px; line-height: 1.15;
     }
     .ph-address {
-        font-size: 13px; color: #555;
+        font-size: 11px; color: #555;
         margin: 0;
     }
-    .ph-right { text-align: right; padding-left: 20px; }
+    .ph-right { text-align: right; padding-left: 14px; }
     .ph-price {
-        font-size: 28px; font-weight: 800;
+        font-size: 20px; font-weight: 800;
         color: #001d3d; line-height: 1;
     }
     .ph-status {
         display: inline-block;
         background: #001d3d; color: #fff;
-        padding: 4px 12px; border-radius: 4px;
-        font-size: 11px; font-weight: 700;
+        padding: 3px 10px; border-radius: 4px;
+        font-size: 10px; font-weight: 700;
         text-transform: uppercase; letter-spacing: 0.5px;
-        margin-top: 6px;
+        margin-top: 4px;
     }
-    .ph-ref { font-size: 11px; color: #888; margin-top: 6px; }
+    .ph-ref { font-size: 10px; color: #888; margin-top: 4px; }
 
     /* Main image */
     .p-main-img {
-        width: 100%;
-        height: 95mm;
+        width: calc(100% - 28px);
+        margin: 0 14px 4px;
+        height: 60mm;
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: 3px;
         display: block;
-        margin-bottom: 8px;
     }
 
     /* Grid */
     .p-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
-        margin-bottom: 16px;
+        gap: 4px;
+        margin: 0 14px 8px;
     }
     .p-grid img {
-        width: 100%; height: 32mm;
+        width: 100%; height: 20mm;
         object-fit: cover; border-radius: 3px;
         display: block;
     }
@@ -158,85 +165,85 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
     .p-stats {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
-        margin-bottom: 16px;
+        gap: 6px;
+        margin: 0 14px 8px;
         border: 1px solid #e5e7eb;
-        border-radius: 4px;
-        padding: 12px;
+        border-radius: 3px;
+        padding: 6px;
         background: #f9fafb;
     }
     .p-stat { text-align: center; }
-    .p-stat .v { font-size: 18px; font-weight: 700; color: #001d3d; line-height: 1; }
-    .p-stat .l { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 4px; }
+    .p-stat .v { font-size: 13px; font-weight: 700; color: #001d3d; line-height: 1; }
+    .p-stat .l { font-size: 8px; color: #666; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 2px; }
 
     /* Body */
     .p-body {
         display: grid;
-        grid-template-columns: 1fr 60mm;
-        gap: 16px;
+        grid-template-columns: 1fr 52mm;
+        gap: 10px;
+        margin: 0 14px 8px;
     }
     .p-desc h3, .p-side h3 {
-        font-size: 13px; text-transform: uppercase;
+        font-size: 10px; text-transform: uppercase;
         letter-spacing: 1px; color: #001d3d;
-        margin: 0 0 8px;
-        border-bottom: 2px solid #001d3d;
-        padding-bottom: 4px;
+        margin: 0 0 4px;
+        border-bottom: 1.5px solid #001d3d;
+        padding-bottom: 2px;
     }
     .p-desc p {
-        font-size: 11px; line-height: 1.5; color: #333;
-        margin: 0 0 8px;
+        font-size: 9px; line-height: 1.4; color: #333;
+        margin: 0 0 4px;
     }
     .p-features {
-        columns: 2; column-gap: 16px;
-        font-size: 11px; color: #333;
-        margin: 8px 0 0;
+        columns: 2; column-gap: 12px;
+        font-size: 9px; color: #333;
+        margin: 6px 0 0;
         padding: 0; list-style: none;
     }
-    .p-features li { margin-bottom: 3px; break-inside: avoid; }
+    .p-features li { margin-bottom: 2px; break-inside: avoid; }
     .p-features li::before { content: "✓ "; color: #10b981; font-weight: 700; }
 
     /* Sidebar */
-    .p-side { font-size: 11px; }
+    .p-side { font-size: 10px; }
     .p-agent {
         background: #f9fafb;
         border: 1px solid #e5e7eb;
         border-radius: 4px;
-        padding: 12px;
-        margin-bottom: 12px;
+        padding: 8px;
+        margin-bottom: 8px;
         text-align: center;
     }
     .p-agent img {
-        width: 60px; height: 60px;
+        width: 48px; height: 48px;
         border-radius: 50%; object-fit: cover;
-        margin: 0 auto 6px; display: block;
+        margin: 0 auto 4px; display: block;
     }
-    .p-agent .name { font-size: 13px; font-weight: 700; color: #111; }
-    .p-agent .title { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.3px; margin: 2px 0 6px; }
-    .p-agent .phone { font-size: 12px; color: #001d3d; font-weight: 600; }
-    .p-agent .email { font-size: 11px; color: #555; word-break: break-all; }
+    .p-agent .name { font-size: 11px; font-weight: 700; color: #111; }
+    .p-agent .title { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 0.3px; margin: 1px 0 4px; }
+    .p-agent .phone { font-size: 11px; color: #001d3d; font-weight: 600; }
+    .p-agent .email { font-size: 9px; color: #555; word-break: break-all; }
 
     .p-qr {
         text-align: center;
         background: #f9fafb;
         border: 1px solid #e5e7eb;
         border-radius: 4px;
-        padding: 12px;
+        padding: 8px;
     }
-    .p-qr img { width: 90px; height: 90px; display: block; margin: 0 auto 6px; }
-    .p-qr .cap { font-size: 10px; color: #666; }
-    .p-qr .url { font-size: 9px; color: #001d3d; word-break: break-all; margin-top: 4px; }
+    .p-qr img { width: 68px; height: 68px; display: block; margin: 0 auto 4px; }
+    .p-qr .cap { font-size: 9px; color: #666; }
 
     .p-footer {
-        margin: 16px -20px 0;
-        padding: 14px 24px;
+        margin-top: auto;
+        padding: 8px 14px;
         background: #001d3d;
         color: #fff;
         text-align: center;
-        font-size: 11px;
+        font-size: 10px;
         display: flex; justify-content: space-between; align-items: center;
-        gap: 16px;
+        gap: 14px;
     }
-    .p-footer img { height: 26px; width: auto; }
+    .p-footer img { height: 20px; width: auto; }
     .p-footer .contact { flex: 1; text-align: center; opacity: 0.9; }
 </style>
 </head>
@@ -311,22 +318,22 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         <h3>Description</h3>
         <?php
         $content = apply_filters('the_content', get_the_content());
-        // Strip tags except <p>, <br>, and truncate to ~1200 chars for a single page
-        $content = strip_tags($content, '<p><br>');
-        if (strlen(wp_strip_all_tags($content)) > 1400) {
-            $plain = wp_strip_all_tags($content);
-            $plain = substr($plain, 0, 1400);
-            $plain = substr($plain, 0, strrpos($plain, '. ') + 1);
-            echo '<p>' . esc_html($plain) . '</p>';
-        } else {
-            echo $content;
+        $plain = wp_strip_all_tags($content);
+        $plain = trim(preg_replace('/\s+/', ' ', $plain));
+        $limit = 700;
+        if (strlen($plain) > $limit) {
+            $plain = substr($plain, 0, $limit);
+            $dot = strrpos($plain, '. ');
+            if ($dot !== false) $plain = substr($plain, 0, $dot + 1);
+            $plain .= '…';
         }
+        echo '<p>' . esc_html($plain) . '</p>';
         ?>
 
         <?php if (!empty($features)) : ?>
-            <h3 style="margin-top:12px;">Features</h3>
+            <h3 style="margin-top:8px;">Features</h3>
             <ul class="p-features">
-                <?php foreach (array_slice($features, 0, 12) as $feat) : ?>
+                <?php foreach (array_slice($features, 0, 8) as $feat) : ?>
                     <li><?php echo esc_html($feat); ?></li>
                 <?php endforeach; ?>
             </ul>
