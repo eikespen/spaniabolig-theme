@@ -47,7 +47,7 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?php echo esc_html(get_the_title() . ' — ' . get_bloginfo('name')); ?></title>
 <style>
-    @page { size: A4; margin: 6mm; }
+    @page { size: A4; margin: 0; }
     * { box-sizing: border-box; }
     html, body {
         margin: 0; padding: 0;
@@ -59,16 +59,18 @@ $qr_url  = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . $q
         font-size: 12px;
     }
     .sheet {
-        width: 198mm;        /* A4 210mm - 2x6mm margin */
-        max-width: 198mm;
+        width: 210mm;
+        max-width: 210mm;
+        min-height: 297mm;
         margin: 0 auto;
-        padding: 0;
+        padding: 6mm 0;
         display: flex;
         flex-direction: column;
+        background: #fff;
     }
     @media print {
-        html, body { width: 198mm; }
-        .sheet { height: 285mm; overflow: hidden; page-break-after: avoid; page-break-inside: avoid; } /* A4 297mm - 2x6mm */
+        html, body { width: 210mm; background: #fff; }
+        .sheet { height: 297mm; overflow: hidden; page-break-after: avoid; page-break-inside: avoid; }
         .sheet > * { page-break-inside: avoid; }
     }
     .print-toolbar {
